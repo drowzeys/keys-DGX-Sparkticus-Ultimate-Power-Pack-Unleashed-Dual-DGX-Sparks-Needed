@@ -2,9 +2,11 @@
 
 ---
 
-## ⭐⭐⭐ PRIMARY CREDIT — Tony (tonyd2wild)
+## ⭐⭐⭐ PRIMARY CREDIT & CONTRIBUTOR — Tony (tonyd2wild)
 
 # Dual-serve exists because of Tony.
+
+**Listed contributor:** **[@tonyd2wild](https://github.com/tonyd2wild)** — see **[CONTRIBUTORS.md](../CONTRIBUTORS.md)**.
 
 **[Tony / tonyd2wild](https://github.com/tonyd2wild)** designed, measured, and published the
 **dual DGX Spark co-tenancy factory**: full-context DeepSeek-V4-Flash **and** two MiniMax-H3
@@ -48,10 +50,11 @@ These are **extensions on Tony’s dual-serve foundation**, not a replacement:
 | Add-on | Credit scope |
 |--------|----------------|
 | Ablit DSV4F 0731 L10–35 λ3.5 anchorstock dual-boot env | keyspark / this fork |
-| Heretic TE wiring + enhanced graph (Sage/Sol/Spectrum/FBC/ESRGAN) | keyspark wiring; component authors below |
+| Heretic TE + quality graph (Sage, Sol-engine/SolAttn, Triton, Spectrum **audio fix**, FBC, Motion Context, ESRGAN) | keyspark wiring; authors below — [H3_QUALITY_STACK.md](./H3_QUALITY_STACK.md) |
 | **Live serve: 888k (lucky) @ util 0.76** | keyspark — **room for H3 to shine** (Tony’s co-tenancy util discipline, deliberately lowered from ~0.78 / not pushed to 0.85) |
 | Parallel quality FLF / talking-head span pool scripts | keyspark campaign scripts |
 | **Master-K0 multishot parallel** (KFs matched to K0; short spans vs long-gen hallucination) | keyspark production logic — [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md) |
+| **Turbo LoRA rejected for quality** | Decision: dense path only; Turbo kept experimental — not production quality |
 | Stock vs ablit+heretic performance tables | keyspark measurements + Tony baselines preserved |
 
 If dual-serve co-tenancy is useful to you, **Tony owns that win.**
@@ -69,10 +72,11 @@ If dual-serve co-tenancy is useful to you, **Tony owns that win.**
 | Spectrum MiniMax H3 | Spectrum / ComfyUI-Spectrum-MiniMax-H3 authors |
 | Sol-Attn / FBC Blackwell ports | Sol-Attn / port authors |
 | ComfyUI | Comfy Org |
-| MiniMax-H3 Turbo LoRA | [larryvrh/MiniMax-H3-Turbo-Lora](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora) + [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo) |
-| ComfyUI-fixed pruned Turbo weights | [QrusherZA/H3_Turbo_ComfyUI](https://huggingface.co/QrusherZA/H3_Turbo_ComfyUI) |
-| Dual-sampler Turbo quality recipe | [@ANe5s](https://huggingface.co/ANe5s) [discussion #21](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora/discussions/21) |
-| H3 Motion Context | [NikoDemon80/ComfyUI-H3-Motion-Context](https://github.com/NikoDemon80/ComfyUI-H3-Motion-Context) |
+| NVIDIA Sol-engine / SolAttn + Triton (GB10) | Sol-engine lineage + kijai SolAttn Triton ports + Blackwell tree |
+| Spectrum MiniMax H3 **v0.2.1 audio fix** (`offline_smoothing_replay`) | Spectrum / ComfyUI-Spectrum-MiniMax-H3 authors |
+| SageAttention + KJ `PathchSageAttentionKJ` | SageAttention + KJNodes |
+| H3 Motion Context (continuation) | [NikoDemon80/ComfyUI-H3-Motion-Context](https://github.com/NikoDemon80/ComfyUI-H3-Motion-Context) |
+| MiniMax-H3 Turbo LoRA (**not quality path**) | [larryvrh](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora) / [QrusherZA](https://huggingface.co/QrusherZA/H3_Turbo_ComfyUI) / [@ANe5s](https://huggingface.co/ANe5s) — experimental speed only |
 
 ---
 

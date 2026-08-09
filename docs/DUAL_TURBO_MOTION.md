@@ -1,6 +1,17 @@
-# Dual Turbo sampling + Motion Context (high quality multishot)
+# Dual Turbo sampling + Motion Context notes
 
-## 1. Dual-sampler Turbo quality ([@ANe5s discussion #21](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora/discussions/21))
+> ## ⚠️ Power Pack quality decision
+>
+> **Turbo LoRA / few-step dual-sampler is NOT the quality path.**  
+> Dense **20-step** + Spectrum **audio fix** + Sol-engine/SolAttn/Sage/FBC is production.  
+> Keep `H3_TURBO=0` and `H3_DUAL_TURBO=0` for deliverables.  
+> → **[H3_QUALITY_STACK.md](./H3_QUALITY_STACK.md)**
+>
+> Material below is retained for **speed experiments only**.
+
+---
+
+## 1. Dual-sampler Turbo (historical / speed) ([@ANe5s discussion #21](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora/discussions/21))
 
 Two-stage few-step sampling keeps Turbo speed while reducing artifacts:
 

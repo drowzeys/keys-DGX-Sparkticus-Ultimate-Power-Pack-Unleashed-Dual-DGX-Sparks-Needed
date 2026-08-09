@@ -1,6 +1,9 @@
 # keys-DGX-Sparkticus Utimate Power Pack Unleashed  
 ## (Dual DGX-Sparks Needed)
 
+**Contributors:** **[@tonyd2wild](https://github.com/tonyd2wild)** (Tony — dual-serve foundation) · [@drowzeys](https://github.com/drowzeys) (Power Pack)  
+Full list: **[CONTRIBUTORS.md](CONTRIBUTORS.md)** · shout-out: **[docs/CREDITS.md](docs/CREDITS.md)**
+
 ---
 
 ## ⭐ HUGE CREDIT — Tony made dual-serve possible
@@ -43,9 +46,10 @@ Keyspark dual-boot specialization only:
 |--------|--------|
 | **Ablit DSV4F 0731** | L10–35 λ3.5 `wo_b` anchorstock · ~**−2%** decode vs stock |
 | **Heretic H3 TE** | `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
-| **Enhanced H3 graph** | Sage → Sol-Attn → Spectrum **v0.2.1** → FBC → RealESRGAN |
+| **Quality H3 stack** | **Sage** → **NVIDIA Sol-engine / SolAttn + Triton** → **Spectrum v0.2.1 audio fix** → **FBC** → optional **Motion Context** → ESRGAN — [H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md) |
 | **888k @ util 0.76** (lucky profile) | See callout below — room for H3 to shine |
-| Parallel quality video scripts | `h3-talkinghead` / `h3-spans` / dual-FLF on two nodes |
+| Master-K0 multishot parallel | Anti long-gen hallucination — [PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md) |
+| **Not quality:** Turbo LoRA | Few-step turbo is **speed-only**; **do not use for quality deliverables** |
 | Performance tables | Stock vs ablit+heretic — [docs/PERFORMANCE_STOCK_VS_ABLIT_HERETIC.md](docs/PERFORMANCE_STOCK_VS_ABLIT_HERETIC.md) |
 
 > *“Based on Tony’s [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory).”*  
@@ -84,8 +88,9 @@ http://10.100.10.2:8888/v1
 | **DSV4F DSpark 0731 abliterated** | L10–35 anchorstock, TP=2, API `:8888` |
 | **Context** | **888k lucky** (`max_model_len=909312`) |
 | **GPU mem util** | **0.76** — makes room for **heretic H3** to shine (fleet hard cap **0.85**) |
-| H3 | ComfyUI 0.31.1 on both nodes `:8188` · **heretic TE** |
-| Spectrum | **v0.2.1**, `offline_smoothing_replay=true` default |
+| H3 | ComfyUI 0.31.1 · **heretic TE** · Sage + Sol-engine/SolAttn/Triton + Spectrum **audio fix** + FBC + Motion Context |
+| Spectrum | **v0.2.1**, `offline_smoothing_replay=true` (**audio fix**) |
+| Turbo LoRA | **Off for quality** (dense 20-step path only) |
 | H3 soft VRAM | `--reserve-vram 48 --vram-headroom 10 --disable-pinned-memory` |
 
 Env: `deploy/keyspark/env.ablit-cotenancy-888k-u076`
@@ -113,6 +118,8 @@ bash deploy/keyspark/status.sh
 | [docs/KEYSPARK_RESULTS.md](docs/KEYSPARK_RESULTS.md) | Full measured tables (Tony baselines + keyspark) |
 | [docs/AGENT_ONESHOT_RECIPE.md](docs/AGENT_ONESHOT_RECIPE.md) | Agent bring-up recipe |
 | [docs/H3_VIDEO_CAMPAIGN_HANDOFF.md](docs/H3_VIDEO_CAMPAIGN_HANDOFF.md) | H3 parallel / RAM laws |
+| **[docs/PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md)** | **Multishot KFs → master K0** (anti-hallucination parallel) |
+| **[docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md)** | Sol-engine, Spectrum audio fix, Motion Context, Sage, Triton; **no Turbo for quality** |
 | **[Upstream factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)** | **Tony — dual-serve origin** |
 
 ## H3 video (orchestrator)
