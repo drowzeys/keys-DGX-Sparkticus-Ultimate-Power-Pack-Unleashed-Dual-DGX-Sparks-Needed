@@ -80,12 +80,15 @@ def main():
     tasks = []
     for si, sc in enumerate(plan["scenes"]):
         for j, sp in enumerate(sc["spans"]):
+            pronoun = plan.get("pronoun", "she")  # she/he/they for JC vs male plans
+            poss = {"she": "her", "he": "his", "they": "their"}.get(pronoun, "her")
+            subj = {"she": "She", "he": "He", "they": "They"}.get(pronoun, "She")
             prompt = (f"{style} {nat} {NOTEXT} "
                       f"Use <Picture 1> as the person: keep this exact same face and identity, {wardrobe}. "
                       f"{sc['setting']} {sp.get('motion','slow subtle motion')}, looking directly at the "
                       f"camera, talking casually to the viewer with natural lip-sync. "
-                      f"Audio: quiet natural room tone and his natural, warm, human speaking voice "
-                      f"(not synthetic, not robotic). He says out loud, conversationally: {sp['line']}")
+                      f"Audio: quiet natural room tone and {poss} natural, warm, human speaking voice "
+                      f"(not synthetic, not robotic). {subj} says out loud, conversationally: {sp['line']}")
             tasks.append({"si": si, "prompt": prompt, "prefix": f"{runid}_s{si}_{j}",
                           "seed": seed0 + 1 + len(tasks), "dest": OUT/f"{runid}_s{si}_{j}.mp4"})
     print(f"run {runid}: {len(tasks)} talking spans ({L}f) across {len(nodes)} nodes", flush=True)

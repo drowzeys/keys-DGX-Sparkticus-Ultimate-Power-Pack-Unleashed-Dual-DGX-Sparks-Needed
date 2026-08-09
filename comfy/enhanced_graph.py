@@ -58,10 +58,11 @@ def _sol_attn(model_ref: list, sol_tau: float) -> dict[str, Any]:
 
 
 def _spectrum_inputs(model_ref: list) -> dict[str, Any]:
-    """Spectrum MiniMax H3 v0.1.8 preliminary defaults (safe + MC-compatible).
+    """Spectrum MiniMax H3 v0.2.1 quality defaults (audio fix + MC-compatible).
 
     degree=1, warmup_steps=1, tail_actual_steps=1, bootstrap_first_forecast=True.
-    Aggressive degree=4 must keep bootstrap_first_forecast=False (v0.1.8).
+    offline_smoothing_replay=True is the v0.2.1 **audio fix** (anti stutter/degraded speech).
+    Aggressive degree=4 must keep bootstrap_first_forecast=False.
     """
     return {
         "model": model_ref,
@@ -77,6 +78,8 @@ def _spectrum_inputs(model_ref: list) -> dict[str, Any]:
         "debug": False,
         "history_storage": "system_ram",
         "bootstrap_first_forecast": True,
+        "offline_smoothing_replay": True,  # Spectrum v0.2.1 audio fix
+        "audio_blend_weight": 0,
     }
 
 

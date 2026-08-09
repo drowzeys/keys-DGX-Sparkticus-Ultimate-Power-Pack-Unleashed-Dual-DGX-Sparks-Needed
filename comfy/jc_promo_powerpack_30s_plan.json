@@ -1,0 +1,58 @@
+{
+  "identity_portrait_png": "/home/keyspark/Videos/jc_promo_powerpack_30s/face_ref.png",
+  "pronoun": "she",
+  "style": "Photorealistic live-action cinema, 35mm film grain, natural anamorphic lens, 24fps, 180 degree shutter. Closed department store aisle at night, soft fluorescent light, red-and-white logo bokeh. No cartoon, no text, no subtitles, no watermark.",
+  "nat_skin": "NATURAL SKIN TEXTURE with visible pores and fine freckle detail, real human skin, no waxy or plastic or CGI look.",
+  "width": 576,
+  "height": 768,
+  "span_len": 73,
+  "seed": 42042,
+  "wardrobe": "wearing the same white ribbed tank top throughout, young Jennifer Connelly look — luminous GREEN eyes, dark chestnut wavy hair, fair skin",
+  "scenes": [
+    {
+      "setting": "Closed department store aisle at night, soft fluorescent light, red-and-white logo bokeh behind her. Handheld vlog framing, intimate distance.",
+      "spans": [
+        {
+          "line": "Hey.",
+          "motion": "slow languid motion; she holds the camera with green eyes, subtle head tilt toward lens"
+        },
+        {
+          "line": "I want you to get keys DGX Sparkticus Utimate Power Pack Unleashed.",
+          "motion": "turns slightly for a look-back smile then faces camera again, soft hair movement"
+        },
+        {
+          "line": "Dual DGX Sparks needed.",
+          "motion": "leans a little closer, eyes locked on lens, gentle handheld sway"
+        },
+        {
+          "line": "Running both DeepSeek Version Four Flash and MiniMax H three abliterated.",
+          "motion": "small hand gesture near chest, natural blink, continuous eye contact"
+        },
+        {
+          "line": "With all the speed upgrades — Sol engine, Spectrum audio, Sage, Sol attention.",
+          "motion": "slow nod emphasizing words, subtle shoulder shift, warm expression"
+        },
+        {
+          "line": "Multi-shot, seamless transition, master keyframe parallel on two Sparks.",
+          "motion": "soft smile building, calm breathing visible, still looking at camera"
+        },
+        {
+          "line": "Because that is what I want.",
+          "motion": "intimate close framing, earnest eyes, slight lean in"
+        },
+        {
+          "line": "And… is this what you want in return?",
+          "motion": "playful curious look, small head tilt, natural lip finish"
+        },
+        {
+          "line": "Mmm.",
+          "motion": "blows a soft kiss toward the camera, eyes half-lidded then open"
+        },
+        {
+          "line": "Come get it.",
+          "motion": "holds a warm lingering smile after the kiss, green eyes bright, gentle hold"
+        }
+      ]
+    }
+  ]
+}
