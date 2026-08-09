@@ -44,7 +44,7 @@ Keyspark dual-boot specialization only:
 | **Ablit DSV4F 0731** | L10–35 λ3.5 `wo_b` anchorstock · ~**−2%** decode vs stock |
 | **Heretic H3 TE** | `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
 | **Enhanced H3 graph** | Sage → Sol-Attn → Spectrum **v0.2.1** → FBC → RealESRGAN |
-| **888k @ util 0.76** profile | Extra H3 headroom vs 1M@0.78 |
+| **888k @ util 0.76** (lucky profile) | See callout below — room for H3 to shine |
 | Parallel quality video scripts | `h3-talkinghead` / `h3-spans` / dual-FLF on two nodes |
 | Performance tables | Stock vs ablit+heretic — [docs/PERFORMANCE_STOCK_VS_ABLIT_HERETIC.md](docs/PERFORMANCE_STOCK_VS_ABLIT_HERETIC.md) |
 
@@ -53,14 +53,37 @@ Keyspark dual-boot specialization only:
 
 ---
 
+## 🍀 Live serve knobs — DSV4F DSpark **0731 abliterated** @ **888k** / util **0.76**
+
+> **This is the Power Pack default dual-serve profile (measured live).**
+
+| Knob | Value | Why |
+|------|-------|-----|
+| Model | **DSV4F Flash 0731 abliterated** (`deepseek-v4-flash-0731-ablit-l10-35-anchorstock`) | L10–35 λ3.5 champion ablit · DSpark TP=2 |
+| Context | **888k** (`max_model_len=**909312**`) | **Lucky number 888** — long context without the full 1M KV tax |
+| GPU mem util | **0.76** | **Deliberately under Tony’s ~0.78 / fleet 0.85** so **H3 has room to shine** on the same two Sparks |
+| Env file | `deploy/keyspark/env.ablit-cotenancy-888k-u076` | `MAX_MODEL_LEN=909312` · `GPU_MEMORY_UTILIZATION=0.76` |
+
+**Do not “optimize” this back to 1M @ 0.85** on co-tenant boxes — that steals UMA from heretic H3 video and invites OOM.
+
+```text
+# served API (head)
+http://10.100.10.2:8888/v1
+# models.id  → deepseek-v4-flash-0731-ablit-l10-35-anchorstock
+# max_model_len → 909312   (888k lucky)
+# gpu_memory_utilization → 0.76   (H3 headroom)
+```
+
+---
+
 ## Validated live profile (keyspark lab)
 
 | Layer | Setting |
 |-------|---------|
 | Nodes | `.2` head + `.3` worker only (never steal a 3rd for co-tenancy) |
-| DS4 | ablit L10–35 anchorstock, TP=2, API `:8888` |
-| Context | **888k** (`max_model_len=909312`) |
-| GPU util | **0.76** (Tony’s co-tenancy idea; we slightly lower for H3 headroom; fleet hard cap **0.85**) |
+| **DSV4F DSpark 0731 abliterated** | L10–35 anchorstock, TP=2, API `:8888` |
+| **Context** | **888k lucky** (`max_model_len=909312`) |
+| **GPU mem util** | **0.76** — makes room for **heretic H3** to shine (fleet hard cap **0.85**) |
 | H3 | ComfyUI 0.31.1 on both nodes `:8188` · **heretic TE** |
 | Spectrum | **v0.2.1**, `offline_smoothing_replay=true` default |
 | H3 soft VRAM | `--reserve-vram 48 --vram-headroom 10 --disable-pinned-memory` |
@@ -97,14 +120,39 @@ bash deploy/keyspark/status.sh
 | Script | Role |
 |--------|------|
 | `comfy/h3-talkinghead.py` | Face-locked ref2va, parallel across 2 nodes |
-| `comfy/h3-spans.py` | FLF multishot + master-parallel keyframes |
+| `comfy/h3-spans.py` | FLF multishot + **master-K0** keyframes (default) |
 | `comfy/h3-parallel.py` | Independent clip fan-out |
 | `comfy/jc_baseline_continuous_powerpack.py` | ~30s continuous promo (names this pack) |
+
+### Why multishot + master **K0** (not one long sequential gen)
+
+Long single-shot / sequential generation **hallucinates** over time: identity drift, wardrobe
+morph, lighting walk, prompt forgetfulness, and lip/scene collapse past ~short spans. That is
+why continuous ~30s (719f) is a quality *reference* path, not the production co-tenant default.
+
+**Power Pack production logic** (addressed in our pipelines):
+
+1. **Plan multiple keyframes** (K0, K1, … Kn) up front — each is a hard identity/scene pin.  
+2. **Match every later keyframe to master K0** (`--kf-mode master-parallel`, default in `h3-spans.py`):  
+   - **K0** renders first (serial) and locks the look.  
+   - **K1…Kn** generate **rooted in K0** (same face/wardrobe/look anchor), then fan across both Sparks **in parallel**.  
+3. **Spans are FLF2V** between consecutive KFs (`first=K[i]`, `last=K[i+1]`) so cuts are seamless and each arm stays short (≤**73f** with ESRGAN under DS4 co-tenancy).  
+4. **Worker-per-node task pool** runs independent spans on `.2` ‖ `.3` — high fidelity **and** ~2× wall on the heavy phase.
+
+| Approach | Fidelity | Dual-node parallel? | Failure mode |
+|----------|----------|---------------------|--------------|
+| One long sequential gen (large continuous) | Degrades with length | No (one box) | **Long-gen hallucination**, OOM under co-tenancy |
+| Serial KF chain (each KF←prev) | Better, but drift accumulates | Weak | Chain drift K0→Kn |
+| **Multishot KFs matched to master K0 + parallel spans** | **High** — all KFs share K0 look | **Yes** | Short spans; memory per span |
+
+Talking-head path (`h3-talkinghead.py`) uses the same idea with **ref2va + one locked face** (K0-equivalent portrait) and parallel independent spans.
+
+Details: [docs/PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md)
 
 ### Co-tenancy RAM law
 
 - With DS4 co-resident: **≤73 frames** per span with inline ESRGAN (56f default). **90f OOMs → reboot.**
-- Continuous ~719f is a quality reference — not safe under full dual-serve load.
+- Continuous ~719f is a quality reference — not safe under full dual-serve load; prefer **multishot + master K0**.
 - One heavy job per Spark (`H3_FLEET_CONCURRENCY=2`).
 
 ## License

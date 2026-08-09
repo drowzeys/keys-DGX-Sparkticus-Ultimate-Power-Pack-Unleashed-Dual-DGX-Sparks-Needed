@@ -39,10 +39,14 @@ On **two** DGX Sparks:
 | Service | Endpoint | Must show |
 |---------|----------|-----------|
 | DS4 ablit OpenAI API | `http://10.100.10.2:8888/v1/models` | `deepseek-v4-flash-0731-ablit-l10-35-anchorstock` |
+| **Context** | same `/v1/models` → `max_model_len` | **909312 = 888k (lucky number)** |
+| **GPU mem util** | env `GPU_MEMORY_UTILIZATION` | **0.76** — **room for H3 to shine** (do not raise to 0.85 on co-tenant) |
 | H3 Comfy heretic | `http://10.100.10.2:8188/system_stats` | HTTP 200 |
 | H3 Comfy heretic | `http://10.100.10.3:8188/system_stats` | HTTP 200 |
 | Video path | `bash deploy/keyspark/run_quality_parallel.sh` | writes ~10 s mp4 under `~/Videos/` |
 
+**Power Pack default serve:** DSV4F DSpark **0731 abliterated** @ **888k** + util **0.76**  
+(`deploy/keyspark/env.ablit-cotenancy-888k-u076`).  
 **Fleet H3 concurrency = 2** = one heavy job per node, both nodes at once.  
 **Never** schedule two full FLF jobs on a single Spark under DS4 co-tenancy.
 
@@ -62,8 +66,10 @@ SSH as `keyspark@10.100.10.2` / `keyspark@10.100.10.3` (passwordless assumed).
 ## 2. Hard rules (violation = broken stack)
 
 1. **DS4 first, H3 second.** Wait until `/v1/models` is healthy before any Comfy launch.
-2. **`GPU_MEMORY_UTILIZATION=0.78`** for this co-tenancy profile.  
-   Fleet hard cap **0.85** (keyspark GB10 OOM policy). **Never raise above 0.85.** Prefer 0.78–0.85. Do not squeeze past 0.85 for more ctx/seqs.
+2. **Power Pack util = `GPU_MEMORY_UTILIZATION=0.76`** with **`MAX_MODEL_LEN=909312` (888k lucky)**  
+   so **heretic H3 has room to shine** on the same two Sparks.  
+   Tony’s original factory often uses ~0.78 @ 1M; we intentionally trade a bit of ctx/KV budget for H3.  
+   Fleet hard cap **0.85** — **never raise above 0.85.** Do not squeeze past 0.85 for more ctx/seqs.
 3. H3 flags: **`--disable-pinned-memory` only**. Do **not** pass `--reserve-vram` while co-tenanting.
 4. Teardown order: **stop H3 on both nodes → then stop DS4**.
 5. Spectrum requires **ComfyUI ≥ 0.30.1** (`time_shift_slope`). On 0.30.0 set Spectrum off or upgrade.
@@ -121,8 +127,14 @@ If missing, run `bash deploy/keyspark/setup_h3_enhanced.sh` (copies heretic TE, 
 ```bash
 cd ~/ds4-h3-video-gen-factory
 
-# Default STACK=ablit → env.ablit-cotenancy
+# Power Pack default: DSV4F 0731 ablit @ 888k (lucky) + util 0.76 → H3 headroom
+export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy-888k-u076
+export STACK=ablit
 bash deploy/keyspark/bringup.sh
+
+# Classic 1M @ 0.78 ablit (less H3 headroom):
+# export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy
+# bash deploy/keyspark/bringup.sh
 
 # Stock 0731 instead:
 # STACK=stock bash deploy/keyspark/bringup.sh
@@ -144,8 +156,12 @@ bash deploy/keyspark/bringup.sh
 
 ```bash
 bash deploy/keyspark/status.sh
-curl -s http://10.100.10.2:8888/v1/models | jq '.data[].id'
-# expect: deepseek-v4-flash-0731-ablit-l10-35-anchorstock
+curl -s http://10.100.10.2:8888/v1/models | jq '.data[0] | {id, max_model_len}'
+# expect:
+#   id: deepseek-v4-flash-0731-ablit-l10-35-anchorstock
+#   max_model_len: 909312   # 888k lucky
+# env must show GPU_MEMORY_UTILIZATION=0.76 (H3 room to shine)
+grep GPU_MEMORY_UTILIZATION ~/DeepSeek-v4-Flash-DSpark-2x-DGX-Spark-0731/.env.dspark
 curl -sf http://10.100.10.2:8188/system_stats >/dev/null && echo H3.2_OK
 curl -sf http://10.100.10.3:8188/system_stats >/dev/null && echo H3.3_OK
 ```

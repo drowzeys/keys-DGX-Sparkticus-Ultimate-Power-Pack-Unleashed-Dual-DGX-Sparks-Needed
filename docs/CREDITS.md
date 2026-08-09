@@ -49,8 +49,9 @@ These are **extensions on Tony’s dual-serve foundation**, not a replacement:
 |--------|----------------|
 | Ablit DSV4F 0731 L10–35 λ3.5 anchorstock dual-boot env | keyspark / this fork |
 | Heretic TE wiring + enhanced graph (Sage/Sol/Spectrum/FBC/ESRGAN) | keyspark wiring; component authors below |
-| 888k @ util 0.76 co-tenancy profile | keyspark lab knob on Tony’s util discipline |
+| **Live serve: 888k (lucky) @ util 0.76** | keyspark — **room for H3 to shine** (Tony’s co-tenancy util discipline, deliberately lowered from ~0.78 / not pushed to 0.85) |
 | Parallel quality FLF / talking-head span pool scripts | keyspark campaign scripts |
+| **Master-K0 multishot parallel** (KFs matched to K0; short spans vs long-gen hallucination) | keyspark production logic — [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md) |
 | Stock vs ablit+heretic performance tables | keyspark measurements + Tony baselines preserved |
 
 If dual-serve co-tenancy is useful to you, **Tony owns that win.**

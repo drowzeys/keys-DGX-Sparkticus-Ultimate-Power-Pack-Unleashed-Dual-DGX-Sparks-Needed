@@ -1,9 +1,9 @@
-# Live status — DS4-0731 **ABLIT** + MiniMax H3 **heretic TE** dual-boot
+# Live status — DSV4F DSpark 0731 **ABLIT** + MiniMax H3 **heretic TE** dual-boot
 
-**Updated:** 2026-08-07  
-**Profile:** `STACK=ablit` · H3 fleet **concurrency=2** · quality-first video default  
+**Updated:** 2026-08-08  
+**Profile:** Power Pack · H3 fleet **concurrency=2** · multishot **master-K0** video default  
 
-**Upstream credit:** co-tenancy factory by **[Tony / tonyd2wild](https://github.com/tonyd2wild)** —  
+**Upstream credit:** dual-serve co-tenancy by **[Tony / tonyd2wild](https://github.com/tonyd2wild)** —  
 [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory). See [docs/CREDITS.md](../../docs/CREDITS.md).
 
 ## Stack: dual-boot
@@ -13,18 +13,22 @@
 | DS4 head (TP0) | `.2` spark-7552 | `http://10.100.10.2:8888/v1` | **ablit L10–35 λ3.5** |
 | DS4 worker (TP1) | `.3` spark-0060 | headless | same |
 | served model | | `deepseek-v4-flash-0731-ablit-l10-35-anchorstock` | |
+| **Context** | | **`max_model_len=909312` (888k lucky)** | not full 1M on co-tenant |
+| **GPU mem util** | | **0.76** | **room for heretic H3 to shine** |
 | H3 Comfy (arm A) | `.2` | `http://10.100.10.2:8188` | heretic TE + Spectrum |
 | H3 Comfy (arm B) | `.3` | `http://10.100.10.3:8188` | heretic TE + Spectrum |
 | Hermes gateway | `.4` spark-13b3 | system unit | points at `.2:8888` |
 
 ## Config
 
-- DS4 env: `deploy/keyspark/env.ablit-cotenancy` → `$RECIPE/.env.dspark`
+- DS4 env: `deploy/keyspark/env.ablit-cotenancy-888k-u076` → `$RECIPE/.env.dspark`  
+  (`MAX_MODEL_LEN=909312`, `GPU_MEMORY_UTILIZATION=0.76`)
 - Profile: `profile.ablit-heretic-dual.env` (video jobs)
-- Weights: `dsv4f-0731-ablit-l10-35-anchorstock` (util **0.78**, 1M ctx, k=5)
-- H3 TE: `text_encoders/qwen3vl_…_awq.safetensors` → symlink → `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors`
+- Weights: `dsv4f-0731-ablit-l10-35-anchorstock`
+- H3 TE: symlink → `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` (**heretic**)
 - Hermes: `~/.hermes/config.yaml` `model.base_url=http://10.100.10.2:8888/v1`
-- Video: `run_quality_parallel.sh` → `keyframe_dual_flf.py` (H3_QUALITY_ID=1)
+- Video: **multishot KFs matched to master K0** + parallel short spans  
+  (`h3-spans.py --kf-mode master-parallel`, `h3-talkinghead.py`) — see [PARALLEL_MASTER_K0.md](../../docs/PARALLEL_MASTER_K0.md)
 
 ## Measured at ablit bring-up
 

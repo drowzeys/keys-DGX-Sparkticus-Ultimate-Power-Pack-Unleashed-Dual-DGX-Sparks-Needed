@@ -29,16 +29,19 @@ Based on [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4
 | Layer | **Stock dual-serve** | **Power Pack (ablit + heretic)** |
 |-------|----------------------|----------------------------------|
 | DS4 weights | Stock DSV4F **0731** | **Ablit L10–35 λ3.5** `…-ablit-l10-35-anchorstock` |
-| DS4 serve | DSpark TP=2, util ~0.78 | Same DSpark/MTP path; util **0.76–0.78** (888k profile uses **0.76**) |
+| DS4 serve | DSpark TP=2, util ~0.78, often 1M ctx | Same DSpark/MTP path; **Power Pack live = 888k (lucky) @ util 0.76** so **H3 has room to shine** |
 | H3 TE | Stock MiniMax Qwen3-VL TE | **Heretic** `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
 | H3 stack | Basic co-tenancy / partial Sol | **Sage → Sol-Attn → Spectrum v0.2.1 → FBC** + soft VRAM pin |
 | Video out | Often native / ~832×480 | **RealESRGAN ×2** (e.g. 864×480 → **1728×960**) |
 | Product | Full speed, refusals intact | **Refusal bypass + better video/audio**, minimal DS4 speed tax |
 
-Live Power Pack model id (when up):
+Live Power Pack serve (DSV4F DSpark **0731 abliterated** — when up):
 
 ```text
-deepseek-v4-flash-0731-ablit-l10-35-anchorstock
+model id:                 deepseek-v4-flash-0731-ablit-l10-35-anchorstock
+max_model_len:            909312          # 888k — lucky number
+gpu_memory_utilization:   0.76            # under 0.78/0.85 → room for heretic H3 to shine
+env:                      deploy/keyspark/env.ablit-cotenancy-888k-u076
 ```
 
 ---
@@ -144,6 +147,13 @@ Templates: `h3-r2v-heretic-enhanced.json`, `jc-baseline-workflow-api.json`, `jc-
 
 ## 3. Dual-node parallel cuts **video creation** time
 
+### 3.0 Fidelity reason we parallelize multishot (not one long gen)
+
+Large **sequential / continuous** generations **hallucinate** over long horizons (identity drift,
+prompt collapse). Production path is **multishot keyframes matched to master K0**, then short
+FLF spans in parallel on both Sparks — higher fidelity **and** lower wall clock than one long
+sample. Full write-up: **[PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md)**.
+
 Heavy phase = two ~5 s arms. Sequential sums; parallel takes the **max**.
 
 | Mode | Wall (same ~10 s story) | Res | Stack |
@@ -183,7 +193,7 @@ Talking-head / multi-span pipelines (`h3-talkinghead.py`, `h3-spans.py`):
 | Does active H3 render slow DS4? | Yes, a lot (C1 ~89 → ~41 with 1 render) — **schedule** chat vs video |
 | Is heretic H3 “free”? | Not free wall-clock; pays for **4× pixels + audio/quality stack** |
 | How do we still finish video faster? | **Two Sparks, one job each**, parallel arms/spans → **~2×** on the heavy phase |
-| Live Power Pack profile | Ablit + heretic · **888k @ util 0.76** (headroom for H3) |
+| Live Power Pack profile | **DSV4F DSpark 0731 abliterated** · **888k (lucky)** · util **0.76** · heretic H3 (room for H3 to shine) |
 
 ---
 
