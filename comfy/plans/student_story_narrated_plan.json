@@ -1,0 +1,83 @@
+{
+  "identity_prompt": "A friendly college student in his early twenties, short dark hair, light stubble, wearing a grey hoodie over a t-shirt, a backpack on one shoulder, expressive and enthusiastic.",
+  "style": "Photorealistic live-action cinema, 35mm film grain, natural lens, 24fps, modern tech-vlog aesthetic, crisp and clean. No cartoon, no subtitles, no watermark.",
+  "lighting": "bright clean retail and modern-home lighting, cool white highlights with warm accents, shallow depth of field",
+  "tone": "upbeat, aspirational, exciting, energetic maker story",
+  "audio_bed": "light upbeat electronic background music, soft room tone",
+  "width": 576,
+  "height": 768,
+  "kf_frames": 9,
+  "span_len": 90,
+  "seed": 7000,
+  "keyframes": [
+    {
+      "prompt": "the student stands in a bright electronics superstore aisle (Microcenter-style), shelves of computer hardware and glowing boxes behind him, looking around excited"
+    },
+    {
+      "prompt": "the student in the store aisle lifts a small compact NVIDIA DGX Spark desktop AI computer box off the shelf, eyes wide with excitement, reading the box"
+    },
+    {
+      "prompt": "the student at the store checkout counter, two identical small NVIDIA DGX Spark boxes and a thick ConnectX-7 network cable on the counter, tapping his card to pay"
+    },
+    {
+      "prompt": "the student walking out through the store's glass doors into a sunny parking lot, carrying a shopping bag with the two boxes, grinning"
+    },
+    {
+      "prompt": "the student at a tidy home desk, unboxing two small NVIDIA DGX Spark computers side by side, packing foam around, monitor glowing behind"
+    },
+    {
+      "prompt": "close on two small NVIDIA DGX Spark computers side by side on the desk, a thick ConnectX-7 cable plugged between their ports, status LEDs glowing green"
+    },
+    {
+      "prompt": "the student at the desk, a large monitor showing a dark terminal booting a dual-serve AI stack with glowing green text and two model status panels lighting up"
+    },
+    {
+      "prompt": "the monitor shows a split screen: an AI chat agent on the left and two AI video-generation previews rendering side by side on the right, the student leaning in amazed, face lit by the screen"
+    },
+    {
+      "prompt": "the student holding up his phone showing a social media (X-style) post of his AI-generated videos, floating like and reward notification badges popping around it, a big proud smile, glowing desk setup behind"
+    }
+  ],
+  "spans": [
+    {
+      "motion": "slow push-in as the student scans the shelves and steps forward reaching toward the hardware",
+      "audio": "store ambience, faint beeps, upbeat music swelling",
+      "say": "I walked into Microcenter looking for serious AI horsepower."
+    },
+    {
+      "motion": "he lifts the DGX Spark box and turns it in his hands, reading it, nodding",
+      "audio": "soft box handling, an excited breath",
+      "say": "The dee-gee-ex Spark. A desktop AI supercomputer."
+    },
+    {
+      "motion": "he sets two boxes and the cable on the counter and taps his card, a confirmation beep",
+      "audio": "counter chatter, card terminal beep, register chime",
+      "say": "So I grabbed two, plus a CX seven cable to link them."
+    },
+    {
+      "motion": "he pushes through the glass doors into sunlight, bag in hand, walking toward camera",
+      "audio": "door chime, footsteps, outdoor air, music lifting",
+      "say": "Two dee-gee-ex Sparks. Time to build."
+    },
+    {
+      "motion": "at the desk he lifts the two Sparks from the box and sets them side by side",
+      "audio": "cardboard and foam, satisfied hum",
+      "say": "Got them both set up on my desk."
+    },
+    {
+      "motion": "hands plug the ConnectX-7 cable between the two units; the LEDs blink to steady green",
+      "audio": "a soft click, a quiet electronic power-up tone",
+      "say": "Linked with the cable for true dual Spark serving."
+    },
+    {
+      "motion": "he hits enter and the terminal boots, green text scrolling, two panels lighting up",
+      "audio": "keyboard clack, a rising boot chime",
+      "say": "Loaded the Keys Unleashed dual serve stack."
+    },
+    {
+      "motion": "the split screen comes alive with a chat agent and two video previews rendering in parallel while he watches, then he raises his phone showing the posted video with reward badges popping",
+      "audio": "soft UI chimes, notification pops, triumphant upbeat music",
+      "say": "DeepSeek and two MiniMax H3s in parallel. I'm an X creator now."
+    }
+  ]
+}

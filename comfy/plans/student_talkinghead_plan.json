@@ -1,0 +1,64 @@
+{
+  "identity_portrait_png": "./face_ref.png",
+  "style": "Photorealistic live-action cinema, 35mm film grain, natural lens, 24fps, modern tech-vlog look. No cartoon, no subtitles, no watermark.",
+  "nat_skin": "NATURAL SKIN TEXTURE with visible pores and fine detail, real human skin, no waxy or plastic or CGI look.",
+  "width": 576,
+  "height": 768,
+  "span_len": 73,
+  "seed": 9100,
+  "scenes": [
+    {
+      "setting": "He is in a bright electronics superstore aisle (Microcenter-style), shelves of computer hardware behind him.",
+      "spans": [
+        {
+          "line": "I saved up for months for this."
+        },
+        {
+          "line": "The dee-gee-ex Spark, right here at Microcenter."
+        },
+        {
+          "line": "I am grabbing two of them."
+        },
+        {
+          "line": "Plus a CX seven cable to link them."
+        }
+      ]
+    },
+    {
+      "setting": "He is at a tidy home desk with two small NVIDIA DGX Spark computers set up side by side behind him.",
+      "spans": [
+        {
+          "line": "Got them both set up on my desk."
+        },
+        {
+          "line": "Linked with the cable, true dual Spark."
+        },
+        {
+          "line": "Loaded the Keys Unleashed dual serve stack."
+        },
+        {
+          "line": "DeepSeek Version Four Flash, and MiniMax H3."
+        }
+      ]
+    },
+    {
+      "setting": "He is at the desk, a large monitor behind him showing two AI video previews rendering in parallel.",
+      "spans": [
+        {
+          "line": "Two H3s rendering in parallel, live."
+        },
+        {
+          "line": "My Hermes agent makes the videos."
+        },
+        {
+          "line": "I post them, and they take off."
+        },
+        {
+          "line": "Now I am an X creator, earning rewards."
+        }
+      ]
+    }
+  ],
+  "wardrobe": "wearing the same grey zip-up hoodie over a white t-shirt throughout",
+  "_note": "Set identity_portrait_png to your local face ref PNG before running."
+}

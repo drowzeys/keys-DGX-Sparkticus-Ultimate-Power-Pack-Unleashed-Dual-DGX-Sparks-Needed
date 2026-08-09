@@ -1,0 +1,258 @@
+{
+  "6": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "13": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "11": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+    }
+  },
+  "24": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    }
+  },
+  "104": {
+    "class_type": "MiniMaxH3ImageToVideo",
+    "inputs": {
+      "clip": [
+        "13",
+        0
+      ],
+      "vae": [
+        "11",
+        0
+      ],
+      "prompt": "integrated_multimodal_description: Photorealistic live-action cinema, 35mm film grain,\nnatural anamorphic lens, 24fps, 180\u00b0 shutter. Closed department store aisle at night, soft\nfluorescent light, red-and-white logo bokeh. No cartoon, no text, no subtitles, no watermark.\n\nIdentity: young Jennifer Connelly \u2014 luminous GREEN eyes, dark chestnut wavy hair, fair skin with\nreal pores, white ribbed tank top. Portrait 576x768. Slow languid motion.\n\nONE continuous shot (~30s). She holds camera with green eyes, turns for a look-back smile, then\nfaces camera and speaks clearly with natural lip-sync (soft American voice, natural not synthetic):\n\"I want you to get the keys version of the dual DGX Spark running both DeepSeek Version Four Flash\nand MiniMax H3 abliterated with all the speed upgrades, multi-shot, seamless transition, turbo dual\nsampling \u2014 because that is what I want. And\u2026 is this what you want in return?\"\nThen she blows a kiss to camera and holds a warm smile.\n\noverall_soundscape: continuous quiet store hum, her clear natural speech, soft kiss, breath.\nNo music score. non_diegetic_music: N/A",
+      "width": 576,
+      "height": 768,
+      "length": 719,
+      "first_frame": [
+        "105",
+        0
+      ]
+    }
+  },
+  "15": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 42044
+    }
+  },
+  "105": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "jc_baseline_face.png",
+      "upload": "image"
+    },
+    "is_changed": [
+      "2673e19913a2a13d6ee2e5235499453e1d4d672a779afc98c8f95f62b54413a9"
+    ]
+  },
+  "sage": {
+    "class_type": "PathchSageAttentionKJ",
+    "inputs": {
+      "model": [
+        "6",
+        0
+      ],
+      "sage_attention": "auto",
+      "allow_compile": false
+    }
+  },
+  "sol": {
+    "class_type": "SolAttnPatch",
+    "inputs": {
+      "model": [
+        "sage",
+        0
+      ],
+      "tau": 1.3,
+      "start_percent": 0.2,
+      "end_percent": 0.9,
+      "min_tokens": 4096,
+      "int8_qk": true,
+      "sink_conditioning": "exact_kv_and_rows",
+      "morton": false,
+      "morton_curve": "2d_frame",
+      "verbose": false,
+      "use_tma": true
+    }
+  },
+  "spec": {
+    "class_type": "SpectrumApplyMiniMaxH3",
+    "inputs": {
+      "model": [
+        "sol",
+        0
+      ],
+      "enabled": true,
+      "blend_weight": 0.5,
+      "degree": 1,
+      "ridge_lambda": 0.1,
+      "window_size": 2.0,
+      "flex_window": 0.75,
+      "warmup_steps": 1,
+      "tail_actual_steps": 1,
+      "max_history": 8,
+      "debug": false,
+      "history_storage": "system_ram",
+      "bootstrap_first_forecast": true,
+      "offline_smoothing_replay": true
+    }
+  },
+  "fbc": {
+    "class_type": "H3FirstBlockCache",
+    "inputs": {
+      "model": [
+        "spec",
+        0
+      ],
+      "threshold": 0.08,
+      "start_step": 3,
+      "end_dense_steps": 2,
+      "max_consecutive_skips": 2
+    }
+  },
+  "9": {
+    "class_type": "BasicScheduler",
+    "inputs": {
+      "model": [
+        "fbc",
+        0
+      ],
+      "scheduler": "simple",
+      "steps": 20,
+      "denoise": 1.0
+    }
+  },
+  "17": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "res_multistep"
+    }
+  },
+  "16": {
+    "class_type": "BasicGuider",
+    "inputs": {
+      "model": [
+        "fbc",
+        0
+      ],
+      "conditioning": [
+        "104",
+        0
+      ]
+    }
+  },
+  "14": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "15",
+        0
+      ],
+      "guider": [
+        "16",
+        0
+      ],
+      "sampler": [
+        "17",
+        0
+      ],
+      "sigmas": [
+        "9",
+        0
+      ],
+      "latent_image": [
+        "104",
+        1
+      ]
+    }
+  },
+  "10": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "14",
+        0
+      ],
+      "vae": [
+        "11",
+        0
+      ]
+    }
+  },
+  "23": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "samples": [
+        "14",
+        0
+      ],
+      "vae": [
+        "24",
+        0
+      ]
+    }
+  },
+  "60": {
+    "class_type": "UpscaleModelLoader",
+    "inputs": {
+      "model_name": "RealESRGAN_x2plus.pth"
+    }
+  },
+  "61": {
+    "class_type": "ImageUpscaleWithModel",
+    "inputs": {
+      "upscale_model": [
+        "60",
+        0
+      ],
+      "image": [
+        "10",
+        0
+      ]
+    }
+  },
+  "91": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "61",
+        0
+      ],
+      "audio": [
+        "23",
+        0
+      ],
+      "fps": 24.0
+    }
+  },
+  "92": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "91",
+        0
+      ],
+      "filename_prefix": "video/jc_baseline_continuous",
+      "format": "auto",
+      "codec": "auto"
+    }
+  }
+}

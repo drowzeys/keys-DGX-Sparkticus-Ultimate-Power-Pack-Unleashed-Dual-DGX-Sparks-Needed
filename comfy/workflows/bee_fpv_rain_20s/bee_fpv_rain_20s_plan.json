@@ -1,0 +1,60 @@
+{
+  "style": "Live-action, cinematic, photoreal first-person bee POV, 35mm film grain, 24fps, 180 degree shutter. Macro naturalism, shallow depth of field, wings buzz implied by motion, no cartoon, no text, no subtitles, no watermark.",
+  "lighting": "Natural outdoor daylight evolving from bright sun over wildflowers to overcast rain under forest canopy, then soft post-rain sun glints on wet leaves",
+  "tone": "Immersive, continuous flight, organic and tactile, slightly magical realism without CGI plastic look",
+  "audio_bed": "Continuous soft wing buzz, outdoor air, leaves and petals brushing past. Physical rain and wet foliage when raining. No dialogue.",
+  "width": 864,
+  "height": 480,
+  "kf_frames": 9,
+  "span_len": 73,
+  "seed": 77801,
+  "keyframes": [
+    {
+      "prompt": "First-person view from a honeybee flying low over a sunlit wildflower meadow, colorful blooms filling the lower frame, open sky above, forward flight, pollen haze, crisp macro detail"
+    },
+    {
+      "prompt": "First-person bee view deeper in the flower field, denser blooms and petals rushing past, more saturated color, continuous forward flight, same bee-scale POV"
+    },
+    {
+      "prompt": "First-person bee view approaching a forest edge, wildflowers thinning, green tree trunks and canopy ahead, still sunny, continuous flight path"
+    },
+    {
+      "prompt": "First-person bee view entering the forest understory, first raindrops visible on leaves and in the air, sky darkening to soft overcast, continuous flight"
+    },
+    {
+      "prompt": "First-person bee view flying through steady rain under wet forest canopy, rain streaks, dripping leaves, darker cooler light, continuous forward motion"
+    },
+    {
+      "prompt": "First-person bee view as rain eases, sparse drops, wet leaves gleaming, light returning through canopy gaps, continuous flight"
+    },
+    {
+      "prompt": "First-person bee view after rain, drying leaves with sparkling droplets, soft sun shafts, clearer air, smooth continuous flight through moist forest and flower edge"
+    }
+  ],
+  "spans": [
+    {
+      "motion": "Begin in Picture 1 framing and continuously fly forward deeper into the flower field toward Picture 2. Gentle push in with small amplitude at slow speed, petals and stems sliding past the sides of frame, stable first-person bee path, no jump cuts.",
+      "audio": "Soft wing buzz and air through flowers, light petal brushes."
+    },
+    {
+      "motion": "Continue uninterrupted first-person flight from Picture 2 denser blooms toward the forest edge composition of Picture 3. Truck slightly with small amplitude at slow speed as color and greenery increase, keep continuous FPV orientation.",
+      "audio": "Wing buzz, breeze, denser foliage rustle."
+    },
+    {
+      "motion": "Fly from sunny field edge Picture 3 into forest approach Picture 4. Observable darkening sky and first raindrops appear mid-path, camera holds continuous FPV with small amplitude tracking. Progressively match Picture 4 wet-leaf rain onset.",
+      "audio": "First sparse rain ticks on leaves under wing buzz."
+    },
+    {
+      "motion": "Continuous flight from light rain onset Picture 4 into full rain under canopy Picture 5. Rain density increases, wet streaks and dripping leaves, cool light. Single continuous shot path narrowing to Picture 5 pose and framing.",
+      "audio": "Steady rain on canopy and leaves, wing buzz through wet air."
+    },
+    {
+      "motion": "Fly continuously from heavy rain Picture 5 as rain lightens toward Picture 6. Fewer drops, more light through canopy, wet leaves still heavy with water. Continuous FPV without cuts.",
+      "audio": "Rain thinning, drips from leaves, softer wing buzz."
+    },
+    {
+      "motion": "Continue from clearing rain Picture 6 to post-rain drying Picture 7. Sun glints on drying droplets, air clearer, smooth continuous bee flight, settle into final Picture 7 framing and lighting.",
+      "audio": "Residual drips, gentle breeze, soft wing buzz, no rain roar."
+    }
+  ]
+}

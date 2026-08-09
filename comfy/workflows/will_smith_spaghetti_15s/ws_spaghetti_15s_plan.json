@@ -1,0 +1,39 @@
+{
+  "identity_portrait_png": "./ws_face.png",
+  "pronoun": "he",
+  "style": "Photorealistic live-action cinema, 35mm film grain, natural lens, 24fps. Will Smith (exact same face as Picture 1) at a dining table with a plate of spaghetti and tomato sauce. Soft kitchen light. No cartoon, no text, no subtitles, no watermark. NATURAL SKIN TEXTURE with visible pores.",
+  "nat_skin": "NATURAL SKIN TEXTURE with visible pores, real human skin, no waxy plastic CGI look.",
+  "width": 576,
+  "height": 768,
+  "span_len": 73,
+  "seed": 424242,
+  "wardrobe": "wearing the same casual dark t-shirt throughout, Will Smith likeness locked",
+  "scenes": [
+    {
+      "setting": "He sits at a simple dining table with a full plate of spaghetti with tomato sauce and a fork, continuous same kitchen scene.",
+      "spans": [
+        {
+          "line": "Mmm, this is good.",
+          "motion": "twirls spaghetti on a fork, lifts a bite toward his mouth, continuous eating motion"
+        },
+        {
+          "line": "Spaghetti night.",
+          "motion": "takes a bite, chews, slight smile, sauce on fork, steam faintly rising"
+        },
+        {
+          "line": "Can't stop.",
+          "motion": "twirls another forkful, leans slightly forward, natural chewing, eye contact with camera"
+        },
+        {
+          "line": "Just one more bite.",
+          "motion": "eats another mouthful, soft laugh, keeps the same plate and table framing"
+        },
+        {
+          "line": "Alright, that was perfect.",
+          "motion": "finishes a bite, sets fork near plate, warm smile to camera, continuous hold"
+        }
+      ]
+    }
+  ],
+  "_note": "Set identity_portrait_png to your local face ref PNG before running."
+}

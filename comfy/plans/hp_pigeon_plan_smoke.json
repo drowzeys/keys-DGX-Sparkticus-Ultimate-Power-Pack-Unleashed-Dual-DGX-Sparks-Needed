@@ -1,0 +1,40 @@
+{
+  "identity_prompt": "A young wizard boy about eleven, round wire-rim glasses, tousled dark hair, grey knitted jumper under a black open robe.",
+  "style": "Photorealistic live-action cinema, 35mm film grain, natural anamorphic lens, 24fps, 180 degree shutter. No cartoon, no text, no subtitles, no watermark.",
+  "lighting": "warm golden-hour sunlight in an ancient stone castle courtyard, soft long shadows",
+  "tone": "wistful and wondrous, cinematic, gently muted warm palette",
+  "audio_bed": "continuous soft courtyard ambience, gentle breeze, distant birdsong, no music",
+  "width": 576,
+  "height": 768,
+  "kf_frames": 9,
+  "span_len": 56,
+  "seed": 4242,
+  "keyframes": [
+    {
+      "prompt": "the boy stands facing camera in the courtyard, arm relaxed at his side, calm"
+    },
+    {
+      "prompt": "the boy holds his forearm out, a grey pigeon just settling onto it, both steady"
+    },
+    {
+      "prompt": "the boy raises a wooden wand, the pigeon lifting off his arm mid-wingbeat"
+    },
+    {
+      "prompt": "the boy laughs, a soft glowing light circling above as the pigeon wheels overhead"
+    }
+  ],
+  "spans": [
+    {
+      "motion": "slow push-in; the boy lifts his forearm as a pigeon flutters down to land",
+      "audio": "soft wing flutter easing to gentle cooing"
+    },
+    {
+      "motion": "static hold then he begins to raise a wand; the pigeon tenses and lifts off",
+      "audio": "gentle cooing, then sudden wing beats"
+    },
+    {
+      "motion": "gentle tilt up following the bird; a warm magical glow trails it as he laughs",
+      "audio": "wing beats, soft magical shimmer, a delighted laugh"
+    }
+  ]
+}

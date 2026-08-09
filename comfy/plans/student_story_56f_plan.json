@@ -1,0 +1,123 @@
+{
+  "identity_prompt": "A friendly college student in his early twenties, short dark hair, light stubble, grey hoodie over a t-shirt, expressive and enthusiastic.",
+  "style": "Photorealistic live-action cinema, 35mm film grain, natural lens, 24fps, modern tech-vlog aesthetic, crisp and clean. No cartoon, no subtitles, no watermark.",
+  "lighting": "bright clean retail and modern-home lighting, cool highlights with warm accents, shallow depth of field",
+  "tone": "upbeat, aspirational, energetic maker story",
+  "audio_bed": "light upbeat electronic background music, soft room tone",
+  "width": 576,
+  "height": 768,
+  "kf_frames": 9,
+  "span_len": 56,
+  "seed": 8200,
+  "keyframes": [
+    {
+      "prompt": "the student in a bright Microcenter electronics aisle, shelves of hardware, looking around"
+    },
+    {
+      "prompt": "the student spots a small NVIDIA DGX Spark box on the shelf, eyes widening with excitement"
+    },
+    {
+      "prompt": "close on the student lifting the compact NVIDIA DGX Spark box off the shelf, reading it"
+    },
+    {
+      "prompt": "the student carrying two DGX Spark boxes toward the checkout counter"
+    },
+    {
+      "prompt": "the student at the checkout tapping his card, two boxes and a thick ConnectX-7 cable on the counter"
+    },
+    {
+      "prompt": "the student walking out the store's glass doors into a sunny parking lot with a shopping bag"
+    },
+    {
+      "prompt": "the student at a tidy home desk opening the boxes, foam and packaging around"
+    },
+    {
+      "prompt": "two small NVIDIA DGX Spark computers placed side by side on the desk"
+    },
+    {
+      "prompt": "hands plugging a thick ConnectX-7 cable between the two DGX Spark units"
+    },
+    {
+      "prompt": "close on the two units, cable connected, status LEDs glowing steady green"
+    },
+    {
+      "prompt": "the student at the keyboard, a monitor showing a dark terminal booting a dual-serve AI stack with green text"
+    },
+    {
+      "prompt": "the monitor shows two AI model panels and two AI video previews rendering side by side in parallel"
+    },
+    {
+      "prompt": "the student holding his phone showing a social post of his AI videos with reward badges popping, big proud smile"
+    },
+    {
+      "prompt": "the student grinning proudly at his glowing dual-Spark desk setup, phone in hand"
+    }
+  ],
+  "spans": [
+    {
+      "motion": "slow push-in as he scans the shelves",
+      "audio": "ambient matching the scene",
+      "say": "I walked into Microcenter looking for real AI power."
+    },
+    {
+      "motion": "he turns and steps toward the shelf, reaching",
+      "audio": "ambient matching the scene",
+      "say": "And there it was, right on the shelf."
+    },
+    {
+      "motion": "he lifts the box and turns it in his hands",
+      "audio": "ambient matching the scene",
+      "say": "The dee-gee-ex Spark. A desktop AI supercomputer."
+    },
+    {
+      "motion": "he walks toward the counter carrying two boxes",
+      "audio": "ambient matching the scene",
+      "say": "So I grabbed two of them."
+    },
+    {
+      "motion": "he taps his card, a confirmation beep",
+      "audio": "ambient matching the scene",
+      "say": "Plus a CX seven cable to link them together."
+    },
+    {
+      "motion": "he pushes through the doors into sunlight, walking to camera",
+      "audio": "ambient matching the scene",
+      "say": "Best money I have ever spent."
+    },
+    {
+      "motion": "he pulls the units out of the boxes",
+      "audio": "ambient matching the scene",
+      "say": "Got home and opened them up."
+    },
+    {
+      "motion": "he sets the second unit down beside the first",
+      "audio": "ambient matching the scene",
+      "say": "Two dee-gee-ex Sparks, side by side."
+    },
+    {
+      "motion": "his hands push the cable connector into the port",
+      "audio": "ambient matching the scene",
+      "say": "Connected with the cable."
+    },
+    {
+      "motion": "the LEDs blink then hold steady green",
+      "audio": "ambient matching the scene",
+      "say": "True dual Spark, running live."
+    },
+    {
+      "motion": "he presses enter, green text scrolls, panels light up",
+      "audio": "ambient matching the scene",
+      "say": "Loaded the Keys Unleashed dual serve stack."
+    },
+    {
+      "motion": "the two video previews come alive rendering in parallel",
+      "audio": "ambient matching the scene",
+      "say": "DeepSeek and two MiniMax H3s, in parallel."
+    },
+    {
+      "motion": "he raises his phone, reward badges pop around the post",
+      "audio": "ambient matching the scene",
+      "say": "Now I am an X creator, earning rewards."
+    }
+  ]
+}

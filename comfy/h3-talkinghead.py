@@ -14,10 +14,22 @@ import argparse, importlib.util, json, subprocess, threading, time
 from pathlib import Path
 from types import SimpleNamespace
 
-_spec = importlib.util.spec_from_file_location("h3weld", str(Path.home()/"comfy"/"h3-weld.py"))
+_HERE = Path(__file__).resolve().parent
+_SEARCH = [_HERE, _HERE / "scripts", Path.home() / "comfy"]
+
+
+def _find(name: str) -> Path:
+    for base in _SEARCH:
+        cand = base / name
+        if cand.is_file():
+            return cand
+    raise FileNotFoundError(f"{name} not found in {[str(s) for s in _SEARCH]}")
+
+
+_spec = importlib.util.spec_from_file_location("h3weld", str(_find("h3-weld.py")))
 W = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(W)
 
-R2V_TPL = json.loads((Path.home()/"comfy"/"h3-r2v-heretic-enhanced.json").read_text())
+R2V_TPL = json.loads(_find("h3-r2v-heretic-enhanced.json").read_text())
 R = "136"  # MiniMaxH3ReferenceToVideo
 
 
@@ -67,7 +79,7 @@ def main():
         args_ns = SimpleNamespace(te="keep", width=W_, height=H_)
         pp = (f"{style} {nat}\n{plan['identity_prompt']} Facing camera, calm neutral expression, "
               f"evenly lit studio portrait.")
-        port_tpl = json.loads((Path.home()/"comfy"/"jc-noupscale-api.json").read_text())
+        port_tpl = json.loads(_find("jc-noupscale-api.json").read_text())
         W.wait_and_fetch(nodes[0], W.submit(nodes[0], W.base_clip(port_tpl, args_ns, pp, 9, seed0, f"{runid}_port")),
                          OUT/f"{runid}_port.mp4", timeout=1800, tag="portrait")
         subprocess.run(["ffmpeg","-y","-loglevel","error","-sseof","-0.12","-i",str(OUT/f"{runid}_port.mp4"),

@@ -123,16 +123,27 @@ bash deploy/keyspark/status.sh
 | **[docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md)** | Sol-engine, Spectrum audio fix, Motion Context, Sage, Triton; **no Turbo for quality** |
 | **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** | **Planned: multi-node parallel processing** (2→5 Sparks, long arms) |
 | **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** | Capacity test plan (Phases A–D) — vehicle for future N-node work |
+| **[comfy/workflows/README.md](comfy/workflows/README.md)** | **Latest workflow packages** (bee, JC, spaghetti + engines) |
 | **[Upstream factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)** | **Tony — dual-serve origin** |
 
-## H3 video (orchestrator)
+## H3 video (orchestrator + latest workflows)
 
 | Script | Role |
 |--------|------|
 | `comfy/h3-talkinghead.py` | Face-locked ref2va, parallel across 2 nodes |
-| `comfy/h3-spans.py` | FLF multishot + **master-K0** keyframes (default) |
+| `comfy/h3-spans.py` | FLF multishot + **master-K0** keyframes (default) + MiniMax prompt guide |
+| `comfy/h3_prompt_guide.py` | Official MiniMax H3 prompt builder |
 | `comfy/h3-parallel.py` | Independent clip fan-out |
 | `comfy/jc_baseline_continuous_powerpack.py` | ~30s continuous promo (names this pack) |
+
+**Packaged workflows** (plans + one-shot runners) — see **[comfy/workflows/README.md](comfy/workflows/README.md)**:
+
+| Package | Path | Proven |
+|---------|------|--------|
+| Bee FPV rain ~20s | `comfy/workflows/bee_fpv_rain_20s/` | dual `0808_231552` 18s |
+| JC Power Pack promo ~30s | `comfy/workflows/jc_promo_powerpack_30s/` | dual `0808_220007` 30s |
+| Will Smith spaghetti ~15s | `comfy/workflows/will_smith_spaghetti_15s/` | multishot path |
+| Extra plans | `comfy/plans/` | student story, HP pigeon, … |
 
 ### Why multishot + master **K0** (not one long sequential gen)
 
