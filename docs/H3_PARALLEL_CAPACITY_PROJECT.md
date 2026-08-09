@@ -3,7 +3,8 @@
 **Saved:** 2026-08-09  
 **Status:** **FUTURE WORK — paused; test later this week** (do not run 5-node farm until scheduled)  
 **Owner:** keyspark lab  
-**Roadmap home:** [FUTURE_WORK.md](./FUTURE_WORK.md) (multi-node parallel processing enabled path)
+**Roadmap home:** [FUTURE_WORK.md](./FUTURE_WORK.md)  
+**Published design:** [FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md) — **~1 h film / day on 5 Sparks is possible** + summary tables
 
 This document is the **measurement vehicle** for Power Pack future work: take dual-node
 parallel (already shipping) and scale **N Sparks** + longer solo arms without dropping quality.
@@ -89,7 +90,10 @@ t_wall      ≈ W_waves × t_arm + t_KF + t_stitch
 | 2 | 124 | ~50 h | ~2 days |
 | **5** | **50** | **~20 h** | **~18–28 h** (incl. KF/stitch/retry) |
 
-**Rule of thumb (5× H3, full quality):** ~**1 hour of finished film per ~1 calendar day**.
+**Rule of thumb (5× H3, full quality):** ~**1 hour of finished film per ~1 calendar day is possible**.
+
+Full published design + Tables A–G (daily capacity, wall-by-nodes, arm grid, proven anchors, sensitivity):  
+→ **[FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md)**
 
 ---
 

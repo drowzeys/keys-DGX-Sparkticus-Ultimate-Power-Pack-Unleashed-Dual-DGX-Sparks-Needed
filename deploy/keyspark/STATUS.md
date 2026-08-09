@@ -29,7 +29,8 @@
 - Hermes: `~/.hermes/config.yaml` `model.base_url=http://10.100.10.2:8888/v1`
 - Video: **multishot KFs matched to master K0** + parallel short spans  
   (`h3-spans.py --kf-mode master-parallel`, `h3-talkinghead.py`) — see [PARALLEL_MASTER_K0.md](../../docs/PARALLEL_MASTER_K0.md)  
-- **Future work:** multi-node parallel scale-out (2→5 Sparks, long solo arms) — [FUTURE_WORK.md](../../docs/FUTURE_WORK.md) · capacity plan [H3_PARALLEL_CAPACITY_PROJECT.md](../../docs/H3_PARALLEL_CAPACITY_PROJECT.md)
+- **5-node design published:** ~**1 h film / day is possible** — [FIVE_NODE_PARALLEL_HOUR_FILM.md](../../docs/FIVE_NODE_PARALLEL_HOUR_FILM.md)  
+- Roadmap / capacity test: [FUTURE_WORK.md](../../docs/FUTURE_WORK.md) · [H3_PARALLEL_CAPACITY_PROJECT.md](../../docs/H3_PARALLEL_CAPACITY_PROJECT.md)
 
 ## Measured at ablit bring-up
 

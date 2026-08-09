@@ -121,8 +121,9 @@ bash deploy/keyspark/status.sh
 | [docs/H3_VIDEO_CAMPAIGN_HANDOFF.md](docs/H3_VIDEO_CAMPAIGN_HANDOFF.md) | H3 parallel / RAM laws |
 | **[docs/PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md)** | **Multishot KFs → master K0** (anti-hallucination parallel) |
 | **[docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md)** | Sol-engine, Spectrum audio fix, Motion Context, Sage, Triton; **no Turbo for quality** |
-| **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** | **Planned: multi-node parallel processing** (2→5 Sparks, long arms) |
-| **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** | Capacity test plan (Phases A–D) — vehicle for future N-node work |
+| **[docs/FIVE_NODE_PARALLEL_HOUR_FILM.md](docs/FIVE_NODE_PARALLEL_HOUR_FILM.md)** | **5-node design: ~1 h film / day is possible** + summary tables |
+| **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** | Multi-node parallel roadmap (2→5 Sparks, long arms) |
+| **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** | Capacity test plan (Phases A–D) |
 | **[comfy/workflows/README.md](comfy/workflows/README.md)** | **Latest workflow packages** (bee, JC, spaghetti + engines) |
 | **[Upstream factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)** | **Tony — dual-serve origin** |
 
@@ -186,16 +187,29 @@ See upstream factory license where applicable. Model weights are **not** redistr
 This Power Pack is a keyspark specialization (ablit + heretic + parallel quality).  
 ⭐ [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)
 
-## Future work — multi-node parallel processing
+## Five-node parallel — **~1 hour of film per day is possible**
 
-**Dual-node parallel is enabled today** (master-K0 multishot across `.2` ‖ `.3`).  
-**Next:** scale the **same** quality path across **more Sparks** and longer solo arms.
+> **Design published:** on **5× DGX Spark**, full-quality MiniMax-H3 multishot  
+> (master-K0 / face-lock, one heavy job per node, **no Turbo**) can produce about  
+> **one hour of finished film every calendar day**.
 
-| Track | Status | Detail |
-|-------|--------|--------|
-| Dual-node parallel (co-tenant ≤73f) | ✅ **Enabled / proven** | `h3-spans.py`, `h3-talkinghead.py`, fleet concurrency=2 |
-| N-node scale-out (3–5 Sparks) | 🔜 **Future work** | Generalize node list; wall ≈ `ceil(N_spans/nodes)×t_arm` |
-| Solo-H3 long arms (~362f / 20 steps) | 🔜 **Future work** | DS4 paused / free UMA; measure `t_arm` first |
-| Hour-scale film on 5× H3 | 🔜 **Future work** | ~247 spans class → ~1 day wall (planning only until measured) |
+| Nodes | Waves for 1 h film (~247 × 350f arms) | Est. wall @ ~24 min/arm | Finished film / ~24 h day |
+|------:|--------------------------------------:|------------------------:|-------------------------:|
+| 1 | 247 | multi-day | ~0.2 h |
+| 2 | 124 | ~2 days | ~0.5 h |
+| **5** | **50** | **~18–28 h** | **~1.0 h** |
 
-Full plan: **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** · test vehicle: **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** (paused — run later this week).
+```text
+t_wall ≈ ceil(N_spans / N_nodes) × t_arm + t_KF + t_stitch
+# 1 h @ 350f → ~247 spans → 50 waves on 5 nodes → ~20 h (+ overhead → day-class)
+```
+
+| Track | Status |
+|-------|--------|
+| Dual-node parallel (co-tenant ≤73f) | ✅ **Proven** (JC 30s, bee 18s, …) |
+| 5-node hour-film design + tables | ✅ **Published** — [FIVE_NODE_PARALLEL_HOUR_FILM.md](docs/FIVE_NODE_PARALLEL_HOUR_FILM.md) |
+| Phase A measure `t_arm` @ 362f/20 solo | 🔜 later this week |
+| Live 5-node overnight 1 h job | 🔜 after Phase A |
+
+Full design + **Tables A–G**: **[docs/FIVE_NODE_PARALLEL_HOUR_FILM.md](docs/FIVE_NODE_PARALLEL_HOUR_FILM.md)**  
+Roadmap: [FUTURE_WORK.md](docs/FUTURE_WORK.md) · test plan: [H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)

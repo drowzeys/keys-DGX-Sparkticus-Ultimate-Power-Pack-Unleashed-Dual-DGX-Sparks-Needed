@@ -1,8 +1,20 @@
 # Future work — multi-node parallel processing
 
 **Status:** **Planned / enabled path** — design locked; full N-node farm **not yet measured**  
+**Published design:** [FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md) — **~1 h film / day on 5 Sparks is possible**  
 **Primary vehicle:** [H3_PARALLEL_CAPACITY_PROJECT.md](./H3_PARALLEL_CAPACITY_PROJECT.md)  
 **Last updated:** 2026-08-09  
+
+---
+
+## Headline (published)
+
+| Nodes | 1 h film wall (planning) | Film per calendar day |
+|------:|-------------------------:|----------------------:|
+| 2 | ~2 days | ~0.5 h |
+| **5** | **~18–28 h** | **~1.0 h** |
+
+Summary tables A–G: **[FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md)**
 
 ---
 
@@ -53,13 +65,14 @@ Quality does **not** change with more nodes — only how many arms finish per wa
 
 ### Planning numbers (until measured)
 
-| Nodes | ~1 h film @ 350f-class arms | Est. wall class |
-|------:|----------------------------:|-----------------|
-| 1 | ~247 spans | multi-day |
-| 2 | ~124 waves | ~2 days |
-| **5** | **~50 waves** | **~18–28 h** (1 calendar day class) |
+| Nodes | Waves for ~247 spans | Est. wall @ ~24 min/arm | Film / day |
+|------:|---------------------:|------------------------:|-----------:|
+| 1 | 247 | multi-day | ~0.2 h |
+| 2 | 124 | ~2 days | ~0.5 h |
+| **5** | **50** | **~18–28 h** | **~1.0 h** |
 
-Rule of thumb once validated: **~1 hour finished full-quality film per ~1 calendar day on 5× H3**.
+Rule of thumb: **~1 hour finished full-quality film per ~1 calendar day on 5× H3 is possible.**  
+Full summary tables: [FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md).
 
 ### Design principles (already decided)
 
@@ -96,6 +109,7 @@ N-node scale-out is keyspark future work **on top of** that foundation, not a re
 
 | Doc | Role |
 |-----|------|
+| **[FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md)** | **Published 5-node design + hour/day claim + tables A–G** |
 | [H3_PARALLEL_CAPACITY_PROJECT.md](./H3_PARALLEL_CAPACITY_PROJECT.md) | Detailed phases, formulas, results log |
 | [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md) | Fidelity model (why multishot, not one long gen) |
 | [H3_QUALITY_STACK.md](./H3_QUALITY_STACK.md) | Quality path (no Turbo) |

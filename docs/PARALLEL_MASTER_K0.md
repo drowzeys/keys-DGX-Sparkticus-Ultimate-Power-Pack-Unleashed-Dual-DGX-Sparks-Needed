@@ -109,16 +109,19 @@ Do not force 1M @ 0.85 on co-tenant boxes if you want this multishot path stable
 ## Future work — multi-node parallel processing
 
 **Today:** dual-node parallel is **enabled** (`--nodes .2,.3`, one heavy job per Spark).  
-**Next (planned):** same master-K0 multishot model on **3–5 Sparks**, plus solo-H3 long arms
-(~362f / 20 steps) when DS4 is not co-resident.
+**Published design:** same master-K0 model on **5 Sparks** → **~1 hour of finished film per day is possible**.
 
 ```text
 t_wall ≈ ceil(N_spans / N_nodes) × t_arm + t_KF + t_stitch
 ```
 
-Quality stays per-arm; more nodes only cut waves. Full roadmap and capacity phases:
+| Nodes | 1 h film wall (planning) | Film / day |
+|------:|-------------------------:|-----------:|
+| 2 | ~2 days | ~0.5 h |
+| **5** | **~18–28 h** | **~1.0 h** |
 
-→ **[FUTURE_WORK.md](./FUTURE_WORK.md)** · **[H3_PARALLEL_CAPACITY_PROJECT.md](./H3_PARALLEL_CAPACITY_PROJECT.md)**
+→ **[FIVE_NODE_PARALLEL_HOUR_FILM.md](./FIVE_NODE_PARALLEL_HOUR_FILM.md)** (design + summary tables)  
+→ [FUTURE_WORK.md](./FUTURE_WORK.md) · [H3_PARALLEL_CAPACITY_PROJECT.md](./H3_PARALLEL_CAPACITY_PROJECT.md)
 
 ---
 
