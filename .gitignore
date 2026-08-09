@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+*.safetensors
+*.pth
+*.pt
+*.mp4
+*.png
+*.jpg
+logs/
+.venv/
