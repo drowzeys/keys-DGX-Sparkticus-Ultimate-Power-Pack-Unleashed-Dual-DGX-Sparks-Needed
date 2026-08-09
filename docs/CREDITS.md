@@ -1,56 +1,85 @@
 # Credits & shout-outs
 
-## Tony — original DS4 × H3 Video Gen Factory
+---
 
-**This project is a keyspark fork of Tony’s work. Full credit for the video factory
-goes to [tonyd2wild](https://github.com/tonyd2wild).**
+## ⭐⭐⭐ PRIMARY CREDIT — Tony (tonyd2wild)
+
+# Dual-serve exists because of Tony.
+
+**[Tony / tonyd2wild](https://github.com/tonyd2wild)** designed, measured, and published the
+**dual DGX Spark co-tenancy factory**: full-context DeepSeek-V4-Flash **and** two MiniMax-H3
+ComfyUI instances on the **same two boxes**, at the same time, with agents still usable.
+
+### Star & cite first
 
 | | |
 |--|--|
-| **Upstream repo** | **[tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)** |
-| **Author** | [Tony (tonyd2wild)](https://github.com/tonyd2wild) |
+| **Upstream factory** | **https://github.com/tonyd2wild/ds4-h3-video-gen-factory** |
+| **Author** | **[tonyd2wild](https://github.com/tonyd2wild)** (Tony) |
+| **DS4 0731 2× Spark recipe** | [DeepSeek-v4-Flash-0731-DSpark 1M NVFP4-KV 2x DGX Spark](https://github.com/tonyd2wild/DeepSeek-v4-Flash-0731-DSpark-1M-NVFP4-KV-2x-DGX-Spark) |
 
-Tony’s factory is the foundation of everything here:
+### What Tony made possible (do not re-attribute)
 
-- Dual MiniMax H3 on two DGX Sparks **alongside** full 1M-context DeepSeek-V4-Flash  
-- The **DS4-first, then H3** co-tenancy rule (and why reverse order fails)  
-- `GPU_MEMORY_UTILIZATION=0.78` profile, `--disable-pinned-memory`, no fake “video mode”  
-- Co-tenancy benches: DS4 alone / +1 H3 render / +2 H3 renders (C1–C6)  
-- The long-form write-up, banner, and “second render is nearly free” analysis  
-- The idea that agents keep answering while video runs  
+Without Tony’s factory, this Power Pack has no dual-serve spine:
 
-If you use this fork, **star and credit the upstream**:
+1. **Co-tenancy as a product** — not “video mode” that kills the LLM, and not “LLM mode” that kills video  
+2. **Hard start order:** DS4 loads first → H3 second (and teardown reverse)  
+3. **Memory discipline:** util ~**0.78**, H3 **`--disable-pinned-memory`**, one heavy job per Spark  
+4. **Published benches:** DS4 alone / +1 H3 render / +2 H3 renders (C1–C6) — so operators know the tax  
+5. **Operator narrative:** second concurrent render is cheaper; idle H3 tax is livable; contention is real  
+6. **Scripts & write-up** others (including this fork) stand on  
 
-→ https://github.com/tonyd2wild/ds4-h3-video-gen-factory
+### Required wording (copy-paste)
 
-### Related Tony recipes (DS4 base)
+Use this in READMEs, tweets, videos, and agent summaries:
 
-- [DeepSeek-v4-Flash-0731-DSpark 1M NVFP4-KV, 2x DGX Spark](https://github.com/tonyd2wild/DeepSeek-v4-Flash-0731-DSpark-1M-NVFP4-KV-2x-DGX-Spark) — DS4 deployment this stack sits on  
+> **Based on Tony’s dual-serve factory:**  
+> [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)  
+> Dual DS4 + dual MiniMax-H3 on two DGX Sparks was made possible by **tonyd2wild**.
 
-## What this keyspark fork adds (not a replacement)
+**Always shout out Tony by name when sharing results from this tree.**
 
-Extensions **on top of** Tony’s factory, not instead of it:
+---
 
-- Abliterated DSV4F 0731 dual-boot env (`env.ablit-cotenancy`)  
-- Heretic TE + enhanced H3 graph (Sage / Sol / Spectrum / FBC / RealESRGAN)  
-- Quality-first parallel dual-FLF video path (`deploy/keyspark/`)  
-- Agent one-shot recipe + published pre/post speed tables for this lab  
+## What this keyspark Power Pack adds (fork delta only)
+
+These are **extensions on Tony’s dual-serve foundation**, not a replacement:
+
+| Add-on | Credit scope |
+|--------|----------------|
+| Ablit DSV4F 0731 L10–35 λ3.5 anchorstock dual-boot env | keyspark / this fork |
+| Heretic TE wiring + enhanced graph (Sage/Sol/Spectrum/FBC/ESRGAN) | keyspark wiring; component authors below |
+| 888k @ util 0.76 co-tenancy profile | keyspark lab knob on Tony’s util discipline |
+| Parallel quality FLF / talking-head span pool scripts | keyspark campaign scripts |
+| Stock vs ablit+heretic performance tables | keyspark measurements + Tony baselines preserved |
+
+If dual-serve co-tenancy is useful to you, **Tony owns that win.**
+
+---
 
 ## Other components (as used)
 
 | Piece | Credit |
 |-------|--------|
-| DeepSeek-V4-Flash / DSpark serving | DeepSeek + Anemll DSpark image / lab recipes Tony and others publish |
+| Dual-serve co-tenancy factory | **Tony / [tonyd2wild](https://github.com/tonyd2wild)** ⭐ |
+| DeepSeek-V4-Flash / DSpark serving | DeepSeek + Anemll `dspark-vllm-gx10` + Tony’s 0731 recipes |
 | MiniMax H3 | MiniMax |
-| Heretic TE / Sol-Engine / Spectrum / SolAttn ports | respective authors; wired here for dual-Spark heretic stack |
+| Heretic MiniMax-H3 TE (NVFP4) | [sakamakismile/Qwen3-VL-32B-Heretic-MiniMax-H3-NVFP4](https://huggingface.co/sakamakismile/Qwen3-VL-32B-Heretic-MiniMax-H3-NVFP4) (and related heretic projects) |
+| Spectrum MiniMax H3 | Spectrum / ComfyUI-Spectrum-MiniMax-H3 authors |
+| Sol-Attn / FBC Blackwell ports | Sol-Attn / port authors |
 | ComfyUI | Comfy Org |
-| **MiniMax-H3 Turbo LoRA** (few-step 4–8) | **[larryvrh/MiniMax-H3-Turbo-Lora](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora)** + **[ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo)** |
-| **ComfyUI-fixed pruned Turbo weights** | **[QrusherZA/H3_Turbo_ComfyUI](https://huggingface.co/QrusherZA/H3_Turbo_ComfyUI)** (prefix/adaln fix for pruned bases; QrusherZA asks not to take credit for the Turbo training itself) |
-| **Dual-sampler Turbo quality recipe** | **[@ANe5s](https://huggingface.co/ANe5s)** — [discussion #21](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora/discussions/21) (ckpt850@1.0 rough → ckpt500@0.7 refine) |
-| **H3 Motion Context** (audio+motion chain) | **[NikoDemon80/ComfyUI-H3-Motion-Context](https://github.com/NikoDemon80/ComfyUI-H3-Motion-Context)** |
+| MiniMax-H3 Turbo LoRA | [larryvrh/MiniMax-H3-Turbo-Lora](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora) + [ComfyUI-MiniMax-H3-Turbo](https://github.com/Larryvrh/ComfyUI-MiniMax-H3-Turbo) |
+| ComfyUI-fixed pruned Turbo weights | [QrusherZA/H3_Turbo_ComfyUI](https://huggingface.co/QrusherZA/H3_Turbo_ComfyUI) |
+| Dual-sampler Turbo quality recipe | [@ANe5s](https://huggingface.co/ANe5s) [discussion #21](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora/discussions/21) |
+| H3 Motion Context | [NikoDemon80/ComfyUI-H3-Motion-Context](https://github.com/NikoDemon80/ComfyUI-H3-Motion-Context) |
 
 ---
 
-**Bottom line:** Tony built the video factory and proved dual H3 + full DS4 co-tenancy.  
-This fork is a keyspark dual-boot specialization (ablit + heretic + parallel quality path).  
-**Always shout out Tony when you share results from this tree.**
+## Bottom line
+
+| Role | Who |
+|------|-----|
+| **Made dual-serve possible** | **Tony (tonyd2wild)** |
+| Specialization (ablit + heretic + parallel quality) | keyspark Power Pack |
+
+⭐ **https://github.com/tonyd2wild/ds4-h3-video-gen-factory**
