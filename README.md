@@ -171,3 +171,7 @@ See upstream factory license where applicable. Model weights are **not** redistr
 **Bottom line:** **Tony (tonyd2wild) made dual-serve DS4 + dual H3 on two DGX Sparks possible.**  
 This Power Pack is a keyspark specialization (ablit + heretic + parallel quality).  
 ⭐ [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)
+
+## Capacity project (paused)
+
+See [docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md) — 2→5 node multishot @ ~350f / 20 steps; test later this week.
