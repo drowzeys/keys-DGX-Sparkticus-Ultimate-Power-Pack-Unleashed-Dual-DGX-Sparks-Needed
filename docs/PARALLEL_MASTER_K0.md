@@ -106,7 +106,24 @@ Do not force 1M @ 0.85 on co-tenant boxes if you want this multishot path stable
 
 ---
 
+## Future work — multi-node parallel processing
+
+**Today:** dual-node parallel is **enabled** (`--nodes .2,.3`, one heavy job per Spark).  
+**Next (planned):** same master-K0 multishot model on **3–5 Sparks**, plus solo-H3 long arms
+(~362f / 20 steps) when DS4 is not co-resident.
+
+```text
+t_wall ≈ ceil(N_spans / N_nodes) × t_arm + t_KF + t_stitch
+```
+
+Quality stays per-arm; more nodes only cut waves. Full roadmap and capacity phases:
+
+→ **[FUTURE_WORK.md](./FUTURE_WORK.md)** · **[H3_PARALLEL_CAPACITY_PROJECT.md](./H3_PARALLEL_CAPACITY_PROJECT.md)**
+
+---
+
 ## Credit
 
 - Dual-serve co-tenancy (two Sparks, DS4 + dual H3): **Tony / tonyd2wild** — [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)  
 - Master-K0 multishot parallel fidelity logic + heretic/ablit Power Pack wiring: keyspark  
+ 

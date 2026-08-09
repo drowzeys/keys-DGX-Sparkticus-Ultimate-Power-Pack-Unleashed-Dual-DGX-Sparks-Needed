@@ -28,7 +28,8 @@
 - H3 TE: symlink → `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` (**heretic**)
 - Hermes: `~/.hermes/config.yaml` `model.base_url=http://10.100.10.2:8888/v1`
 - Video: **multishot KFs matched to master K0** + parallel short spans  
-  (`h3-spans.py --kf-mode master-parallel`, `h3-talkinghead.py`) — see [PARALLEL_MASTER_K0.md](../../docs/PARALLEL_MASTER_K0.md)
+  (`h3-spans.py --kf-mode master-parallel`, `h3-talkinghead.py`) — see [PARALLEL_MASTER_K0.md](../../docs/PARALLEL_MASTER_K0.md)  
+- **Future work:** multi-node parallel scale-out (2→5 Sparks, long solo arms) — [FUTURE_WORK.md](../../docs/FUTURE_WORK.md) · capacity plan [H3_PARALLEL_CAPACITY_PROJECT.md](../../docs/H3_PARALLEL_CAPACITY_PROJECT.md)
 
 ## Measured at ablit bring-up
 

@@ -1,8 +1,12 @@
-# H3 parallel capacity project — save for later this week
+# H3 parallel capacity project — multi-node scale-out
 
 **Saved:** 2026-08-09  
-**Status:** **PAUSED — test later this week** (do not run 5-node farm until scheduled)  
+**Status:** **FUTURE WORK — paused; test later this week** (do not run 5-node farm until scheduled)  
 **Owner:** keyspark lab  
+**Roadmap home:** [FUTURE_WORK.md](./FUTURE_WORK.md) (multi-node parallel processing enabled path)
+
+This document is the **measurement vehicle** for Power Pack future work: take dual-node
+parallel (already shipping) and scale **N Sparks** + longer solo arms without dropping quality.
 
 ---
 
@@ -10,10 +14,10 @@
 
 Measure and document **how long and how fast** high-quality MiniMax-H3 video can be produced with:
 
-- **Multishot parallel** processing  
+- **Multishot parallel** processing (**enabled today on 2 nodes**)  
 - **Per arm ≈ 350 frames** (snap to H3 grid **345** or **362**), **20 steps**  
 - Full **quality stack** (not Turbo)  
-- Variable node counts: **2 Sparks (now)** → **5 Sparks (later)**  
+- Variable node counts: **2 Sparks (now)** → **5 Sparks (future work)**  
 
 Secondary: confirm solo-H3 continuous ceilings when **DSV4F is down** (~100 GiB free UMA per box).
 
@@ -164,4 +168,4 @@ Target after restore: ablit **888k** / util **0.76** + heretic dual H3.
 
 ## 9. One-liner for next agent
 
-> **Paused capacity project:** free DS4 → measure 362f/20-step arm time → scale multishot length as `N×(F/24)` with wall `ceil(N/nodes)×t_arm`. Co-tenant default stays ≤73f. Five Sparks ≈ one day wall per hour of full-quality film. Dual-serve credit: tonyd2wild. Power Pack + bee workflow already saved on `.2`/`.3`.
+> **Future work (multi-node parallel):** dual-node path is enabled; scale-out is paused. Free DS4 → measure 362f/20-step arm time → scale multishot length as `N×(F/24)` with wall `ceil(N/nodes)×t_arm`. Co-tenant default stays ≤73f. Five Sparks ≈ one day wall per hour of full-quality film. Dual-serve credit: tonyd2wild. Roadmap: docs/FUTURE_WORK.md.

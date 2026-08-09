@@ -24,7 +24,7 @@ Everything below is **in** the Power Pack dual-Spark heretic H3 path (production
 | 7 | **Motion continuation** | ✅ | `ComfyUI-H3-Motion-Context` (NikoDemon80) — optional on multishot audio bed |
 | 8 | **H3FirstBlockCache (FBC)** | ✅ | In sol-attn Blackwell package |
 | 9 | **Heretic TE** | ✅ | `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
-| 10 | **Master-K0 multishot parallel** | ✅ | Short spans vs long-gen hallucination — [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md) |
+| 10 | **Master-K0 multishot parallel** | ✅ dual / 🔜 N-node | Short spans vs long-gen hallucination — [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md); scale-out [FUTURE_WORK.md](./FUTURE_WORK.md) |
 | 11 | **RealESRGAN ×2** | ✅ | Inline upscale on quality graphs |
 | ❌ | **Turbo LoRA / few-step** | **Not quality** | May be installed; **do not use** for deliverables |
 

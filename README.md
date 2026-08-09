@@ -51,6 +51,7 @@ Keyspark dual-boot specialization only:
 | Master-K0 multishot parallel | Anti long-gen hallucination — [PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md) |
 | **Not quality:** Turbo LoRA | Few-step turbo is **speed-only**; **do not use for quality deliverables** |
 | Performance tables | Stock vs ablit+heretic — [docs/PERFORMANCE_STOCK_VS_ABLIT_HERETIC.md](docs/PERFORMANCE_STOCK_VS_ABLIT_HERETIC.md) |
+| **Future:** N-node parallel scale-out | Multi-Spark farm (2 → 5), long solo arms — [FUTURE_WORK.md](docs/FUTURE_WORK.md) |
 
 > *“Based on Tony’s [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory).”*  
 > Always include that line in demos, READMEs, and agent summaries.
@@ -120,6 +121,8 @@ bash deploy/keyspark/status.sh
 | [docs/H3_VIDEO_CAMPAIGN_HANDOFF.md](docs/H3_VIDEO_CAMPAIGN_HANDOFF.md) | H3 parallel / RAM laws |
 | **[docs/PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md)** | **Multishot KFs → master K0** (anti-hallucination parallel) |
 | **[docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md)** | Sol-engine, Spectrum audio fix, Motion Context, Sage, Triton; **no Turbo for quality** |
+| **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** | **Planned: multi-node parallel processing** (2→5 Sparks, long arms) |
+| **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** | Capacity test plan (Phases A–D) — vehicle for future N-node work |
 | **[Upstream factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)** | **Tony — dual-serve origin** |
 
 ## H3 video (orchestrator)
@@ -172,6 +175,16 @@ See upstream factory license where applicable. Model weights are **not** redistr
 This Power Pack is a keyspark specialization (ablit + heretic + parallel quality).  
 ⭐ [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)
 
-## Capacity project (paused)
+## Future work — multi-node parallel processing
 
-See [docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md) — 2→5 node multishot @ ~350f / 20 steps; test later this week.
+**Dual-node parallel is enabled today** (master-K0 multishot across `.2` ‖ `.3`).  
+**Next:** scale the **same** quality path across **more Sparks** and longer solo arms.
+
+| Track | Status | Detail |
+|-------|--------|--------|
+| Dual-node parallel (co-tenant ≤73f) | ✅ **Enabled / proven** | `h3-spans.py`, `h3-talkinghead.py`, fleet concurrency=2 |
+| N-node scale-out (3–5 Sparks) | 🔜 **Future work** | Generalize node list; wall ≈ `ceil(N_spans/nodes)×t_arm` |
+| Solo-H3 long arms (~362f / 20 steps) | 🔜 **Future work** | DS4 paused / free UMA; measure `t_arm` first |
+| Hour-scale film on 5× H3 | 🔜 **Future work** | ~247 spans class → ~1 day wall (planning only until measured) |
+
+Full plan: **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** · test vehicle: **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** (paused — run later this week).
