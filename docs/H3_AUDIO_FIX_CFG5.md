@@ -40,6 +40,10 @@ CFG runs two forward passes per step — expect roughly **2× sampling time**. U
 
 h3.c produces clean speech at **CFG ≡ 1** (it has no guidance machinery). With schedule, weights, VAE, and token ids all verified identical, the remaining candidates are second-order TE differences (hidden-state layer selection, attention-mask handling for short prompts) between h3.c's `h3_text_encode_bf16` and Comfy's `text_encoders/minimax.py`. If that delta is found and fixed, CFG could return to 1.0 and reclaim the 2× speed. Until then, CFG 5.0 is the production setting for any audio-bearing render.
 
+## Expect per-seed variation in speech onset
+
+Even with CFG 5, speech quality varies take-to-take: roughly 1 in 3 seeds renders a slurred or weak utterance (observed on torch 2.13.0 nodes; the same seed can render clean on a torch 2.12.1 box — kernel-level nondeterminism, not a config error). **Re-roll the seed on a bad take.** Judge takes by ear — spectrograms cannot distinguish clean speech from fluent gibberish.
+
 ## Prompt tips for speech
 
 No special grounding syntax exists (prompts are raw-tokenized, unwrapped). But explicit structure measurably helps content adherence, especially under CFG: give the voice a concrete line, e.g.
