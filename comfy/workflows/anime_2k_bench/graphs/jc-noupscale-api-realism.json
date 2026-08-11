@@ -67,7 +67,7 @@
   "class_type": "PathchSageAttentionKJ",
   "inputs": {
    "model": [
-    "6",
+    "200",
     0
    ],
    "sage_attention": "auto",
@@ -235,6 +235,17 @@
    "filename_prefix": "video/jc_baseline_continuous",
    "format": "auto",
    "codec": "auto"
+  }
+ },
+ "200": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "lora_name": "h3-realism-people-t2v-i2v-r2v.safetensors",
+   "strength_model": 1.0
   }
  }
 }

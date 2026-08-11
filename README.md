@@ -46,7 +46,9 @@ Keyspark dual-boot specialization only:
 |--------|--------|
 | **Ablit DSV4F 0731** | L10–35 λ3.5 `wo_b` anchorstock · ~**−2%** decode vs stock |
 | **Heretic H3 TE** | `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
-| **Quality H3 stack** | **Sage** → **NVIDIA Sol-engine / SolAttn + Triton** → **Spectrum v0.2.1 audio fix** → **FBC** → optional **Motion Context** → ESRGAN — [H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md) |
+| **Quality H3 stack** | **Sage** → **NVIDIA Sol-engine / SolAttn + Triton** → **Spectrum v0.2.1 audio fix** → **FBC** → **Motion Context / Contex-Loop / MultiRef** → ESRGAN — [H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md) |
+| **2K via upscale + parallel** | Native **704×1280** → ESRGAN×2 → ~**1408×2560**; master-K0 dual-Spark — [H3_UPGRADES_2K.md](docs/H3_UPGRADES_2K.md) · [anime_2k_bench](comfy/workflows/anime_2k_bench/) |
+| **Realism-People LoRA** (optional) | `h3-realism-people-t2v-i2v-r2v` · `REALISM=1` on anime bench |
 | **888k @ util 0.76** (lucky profile) | See callout below — room for H3 to shine |
 | Master-K0 multishot parallel | Anti long-gen hallucination — [PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md) |
 | **Not quality:** Turbo LoRA | Few-step turbo is **speed-only**; **do not use for quality deliverables** |
@@ -121,10 +123,12 @@ bash deploy/keyspark/status.sh
 | [docs/H3_VIDEO_CAMPAIGN_HANDOFF.md](docs/H3_VIDEO_CAMPAIGN_HANDOFF.md) | H3 parallel / RAM laws |
 | **[docs/PARALLEL_MASTER_K0.md](docs/PARALLEL_MASTER_K0.md)** | **Multishot KFs → master K0** (anti-hallucination parallel) |
 | **[docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md)** | Sol-engine, Spectrum audio fix, Motion Context, Sage, Triton; **no Turbo for quality** |
+| **[docs/H3_UPGRADES_2K.md](docs/H3_UPGRADES_2K.md)** | **2K upscale path, parallel multishot, A/V fixes, Contex-Loop, realism** |
 | **[docs/FIVE_NODE_PARALLEL_HOUR_FILM.md](docs/FIVE_NODE_PARALLEL_HOUR_FILM.md)** | **5-node design: ~1 h film / day is possible** + summary tables |
 | **[docs/FUTURE_WORK.md](docs/FUTURE_WORK.md)** | Multi-node parallel roadmap (2→5 Sparks, long arms) |
 | **[docs/H3_PARALLEL_CAPACITY_PROJECT.md](docs/H3_PARALLEL_CAPACITY_PROJECT.md)** | Capacity test plan (Phases A–D) |
-| **[comfy/workflows/README.md](comfy/workflows/README.md)** | **Latest workflow packages** (bee, JC, spaghetti + engines) |
+| **[comfy/workflows/README.md](comfy/workflows/README.md)** | **Latest workflow packages** (anime 2K, bee, JC, spaghetti + engines) |
+| **[comfy/workflows/anime_2k_bench/](comfy/workflows/anime_2k_bench/)** | **Start here for dual-Spark 2K (upscale) + sample final** |
 | **[Upstream factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)** | **Tony — dual-serve origin** |
 
 ## H3 video (orchestrator + latest workflows)
@@ -142,6 +146,7 @@ bash deploy/keyspark/status.sh
 | Package | Path | Proven |
 |---------|------|--------|
 | Bee FPV rain ~20s | `comfy/workflows/bee_fpv_rain_20s/` | dual `0808_231552` 18s |
+| **Anime 2K bench** (parallel + ESRGAN) | `comfy/workflows/anime_2k_bench/` | dual `0811_012837` · 704×1280 → ×2 |
 | JC Power Pack promo ~30s | `comfy/workflows/jc_promo_powerpack_30s/` | dual `0808_220007` 30s |
 | Will Smith spaghetti ~15s | `comfy/workflows/will_smith_spaghetti_15s/` | multishot path |
 | Extra plans | `comfy/plans/` | student story, HP pigeon, … |

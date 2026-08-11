@@ -21,11 +21,14 @@ Everything below is **in** the Power Pack dual-Spark heretic H3 path (production
 | 4 | **Sage node** (`PathchSageAttentionKJ`) | ✅ | `sageattention==1.0.6`, `sage_attention=auto` via KJNodes — **never** `--use-sage-attention` CLI |
 | 5 | **Spectrum update** | ✅ | `ComfyUI-Spectrum-MiniMax-H3` **v0.2.1** |
 | 6 | **Audio fix** | ✅ | Spectrum `offline_smoothing_replay=**true**` (v0.2.1 default + forced in templates/graphs) |
-| 7 | **Motion continuation** | ✅ | `ComfyUI-H3-Motion-Context` (NikoDemon80) — optional on multishot audio bed |
+| 7 | **Motion continuation** | ✅ | `ComfyUI-H3-Motion-Context` (NikoDemon80) — multishot audio bed |
+| 7b | **Contex-Loop + MultiRef** | ✅ install | `ComfyUI-MiniMaxH3-Contex-Loop` v0.3.8 · `ComfyUI-H3-Motion-Context-MultiRef` — scene loops / custom KF; **restart Comfy after install** |
+| 7c | **NKD Preview Tools** | ✅ install | Timeline / popup / scrub viewer (UI) |
 | 8 | **H3FirstBlockCache (FBC)** | ✅ | In sol-attn Blackwell package |
 | 9 | **Heretic TE** | ✅ | `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
 | 10 | **Master-K0 multishot parallel** | ✅ dual / 🔜 N-node | Short spans vs long-gen hallucination — [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md); scale-out [FUTURE_WORK.md](./FUTURE_WORK.md) |
-| 11 | **RealESRGAN ×2** | ✅ | Inline upscale on quality graphs |
+| 11 | **RealESRGAN ×2 → delivery 2K** | ✅ | Native e.g. **704×1280** → ×2 **~1408×2560** — [H3_UPGRADES_2K.md](./H3_UPGRADES_2K.md) · [anime_2k_bench](../comfy/workflows/anime_2k_bench/) |
+| 12 | **Realism-People LoRA** (optional) | ✅ opt | `h3-realism-people-t2v-i2v-r2v.safetensors` · trigger `r34l1sm` · A/B on int8 DiT |
 | ❌ | **Turbo LoRA / few-step** | **Not quality** | May be installed; **do not use** for deliverables |
 
 Live Comfy `object_info` on both Sparks should show:  
@@ -130,12 +133,16 @@ export H3_TURBO=0 H3_DUAL_TURBO=0
   ComfyUI-Spectrum-MiniMax-H3/     # v0.2.1 audio fix
   ComfyUI-KJNodes/                 # Sage PathchSageAttentionKJ
   ComfyUI-H3-Motion-Context/       # motion continuation
+  ComfyUI-H3-Motion-Context-MultiRef/  # MultiRef + custom keyframes
+  ComfyUI-MiniMaxH3-Contex-Loop/   # scene loop / checkpoint / A/V chain
+  ComfyUI-NKD-Preview-Tools/       # timeline + preview UI
   ComfyUI-H3-Multishot/
   ComfyUI-MiniMax-H3-Turbo/        # optional — NOT quality default
   comfyui-videohelpersuite/
 ```
 
-Setup: `bash deploy/keyspark/setup_h3_enhanced.sh`
+Setup: `bash deploy/keyspark/setup_h3_enhanced.sh`  
+2K parallel sample: `bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh`
 
 ---
 
@@ -173,8 +180,12 @@ Expect **offline_smoothing_replay default = True**.
 | Dual-serve | **Tony / tonyd2wild** (contributor) |
 | NVIDIA Sol-engine | NVIDIA Sol Engine / H3 on-device work |
 | SolAttn + Triton | kijai / Triton ports + Blackwell packaging |
-| Spectrum audio fix | Spectrum MiniMax H3 v0.2.1 authors |
+| Spectrum audio fix | Spectrum MiniMax H3 v0.2.1 authors (xmarre) |
 | Sage | SageAttention + KJNodes |
 | Motion Context | NikoDemon80 |
+| Contex-Loop | ethanfel (+ Niko lineage) |
+| Motion Context MultiRef | seitanism |
+| NKD Preview | Nekodificador |
 | Heretic TE | sakamakismile et al. |
 | Turbo (not quality) | larryvrh / QrusherZA / ANe5s — experimental only |
+| 2K upscale path | Power Pack anime_2k_bench (ESRGAN×2) |

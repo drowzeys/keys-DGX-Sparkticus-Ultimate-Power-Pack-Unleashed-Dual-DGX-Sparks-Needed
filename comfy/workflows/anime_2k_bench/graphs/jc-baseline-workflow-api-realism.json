@@ -67,7 +67,7 @@
   "class_type": "PathchSageAttentionKJ",
   "inputs": {
    "model": [
-    "6",
+    "200",
     0
    ],
    "sage_attention": "auto",
@@ -211,11 +211,30 @@
    ]
   }
  },
+ "60": {
+  "class_type": "UpscaleModelLoader",
+  "inputs": {
+   "model_name": "RealESRGAN_x2plus.pth"
+  }
+ },
+ "61": {
+  "class_type": "ImageUpscaleWithModel",
+  "inputs": {
+   "upscale_model": [
+    "60",
+    0
+   ],
+   "image": [
+    "10",
+    0
+   ]
+  }
+ },
  "91": {
   "class_type": "CreateVideo",
   "inputs": {
    "images": [
-    "10",
+    "61",
     0
    ],
    "audio": [
@@ -235,6 +254,17 @@
    "filename_prefix": "video/jc_baseline_continuous",
    "format": "auto",
    "codec": "auto"
+  }
+ },
+ "200": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "lora_name": "h3-realism-people-t2v-i2v-r2v.safetensors",
+   "strength_model": 1.0
   }
  }
 }

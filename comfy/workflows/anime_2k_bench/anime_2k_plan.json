@@ -1,0 +1,19 @@
+{
+  "identity_prompt": "A cute anime boy with short messy black hair and colorful hair clips, wearing an oversized patchwork jacket with mismatched fabric squares, dark shorts, loose white socks and chunky sneakers, a small orange shoulder bag across his chest.",
+  "style": "Flat 2D pop-art anime illustration, sticker-collage aesthetic, paper-cutout textures, bold flat colors, thick clean lineart, graphic shapes scattered in the scene. No text, no subtitles, no captions, no watermark, no letters.",
+  "lighting": "orange and teal sunset sky, warm glow from neon kanji signs, soft flat cel shading",
+  "tone": "playful, energetic, stylish urban pop, bold graphic composition",
+  "audio_bed": "gentle city ambience, distant traffic hum, soft footsteps, no music",
+  "width": 704, "height": 1280, "kf_frames": 9, "span_len": 39, "seed": 4242,
+  "keyframes": [
+    {"prompt": "the boy stands full-body at the far side of a zebra crossing facing the camera, pedestrians with teal umbrellas behind him, tall buildings with pink and red signs framing the street"},
+    {"prompt": "the boy is mid-crossing, centered, one foot forward in a confident stride, traffic lights and telephone poles on both sides, graphic stars on the asphalt"},
+    {"prompt": "the boy reaches the near side of the crossing, framed slightly larger, a stylized shopping street with round paper lanterns and awnings behind him"},
+    {"prompt": "the boy stands close to the camera in full body, arms relaxed, glowing street lamps and teal arrows painted on the road around him, sunset clouds above"}
+  ],
+  "spans": [
+    {"motion": "the boy walks toward the camera across the crossing, camera dollies backward smoothly at his pace, umbrellas drifting past behind him", "audio": "soft footsteps on asphalt, distant crosswalk chime"},
+    {"motion": "he keeps walking toward the camera with a relaxed swing of his arms, camera continues the backward dolly, lanterns swaying gently", "audio": "footsteps, faint chatter of pedestrians"},
+    {"motion": "he slows to a stop close to the camera and looks up at the sunset sky with a small smile, camera settles", "audio": "footsteps easing to silence, soft wind"}
+  ]
+}

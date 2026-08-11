@@ -9,5 +9,7 @@ __pycache__/
 *.mp4
 *.png
 *.jpg
+# allow small workflow sample media
+!comfy/workflows/**/sample/**
 logs/
 .venv/

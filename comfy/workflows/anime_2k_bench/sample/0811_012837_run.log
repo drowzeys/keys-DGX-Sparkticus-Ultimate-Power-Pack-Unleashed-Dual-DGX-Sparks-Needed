@@ -1,0 +1,22 @@
+START 1786426117
+run 0811_012837: 4 keyframes -> 3 spans @704x1280, nodes 10.100.10.1:8188+10.100.10.5:8188
+[plan] identity ref...
+  [identity] done in 96s -> 0811_012837_id.mp4
+  [kf0] done in 168s -> 0811_012837_kf0.mp4
+[plan] kf0 planned (master); generating 3 more (mode=master-parallel)...
+  [kf1] done in 160s -> 0811_012837_kf1.mp4
+  kf1 planned
+  [kf2] done in 168s -> 0811_012837_kf2.mp4
+  kf2 planned
+  [kf3] done in 168s -> 0811_012837_kf3.mp4
+  kf3 planned
+[render] 3 spans in parallel...
+  [span1] done in 272s -> 0811_012837_span1.mp4
+  [span0] done in 296s -> 0811_012837_span0.mp4
+  [span2] done in 264s -> 0811_012837_span2.mp4
+[render] 3 spans done in 8.9 min (serial would be ~13+ min)
+
+DONE: /home/keyspark/Videos/h3-benchmark/spans-anime2k/0811_012837_final.mp4  (4.8s, 3.5 MB)
+total wall: 18.8 min  (4 kf plan + 3 parallel spans)
+keyframes: /home/keyspark/Videos/h3-benchmark/spans-anime2k/0811_012837_kf0.png, /home/keyspark/Videos/h3-benchmark/spans-anime2k/0811_012837_kf1.png, /home/keyspark/Videos/h3-benchmark/spans-anime2k/0811_012837_kf2.png, /home/keyspark/Videos/h3-benchmark/spans-anime2k/0811_012837_kf3.png
+END 1786427248 rc=0

@@ -16,8 +16,16 @@ See **[docs/CREDITS.md](docs/CREDITS.md)** for the full shout-out.
 
 | GitHub | Role |
 |--------|------|
-| **[@drowzeys](https://github.com/drowzeys)** / keyspark | Ablit DSV4F 0731 dual-boot, heretic H3 quality stack, 888k@0.76 profile, master-K0 multishot parallel, docs |
+| **[@drowzeys](https://github.com/drowzeys)** / keyspark | Ablit DSV4F 0731 dual-boot, heretic H3 quality stack, 888k@0.76 profile, master-K0 multishot parallel, 2K upscale bench, docs |
 
 ## Upstream component authors (not all listed as repo collaborators)
 
-See [docs/CREDITS.md](docs/CREDITS.md) and [docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md) for Sol-engine, Spectrum, Sage, Motion Context, and other component credits.
+| Project | Authors / links |
+|---------|-----------------|
+| Spectrum MiniMax H3 (audio fix v0.2.1) | [xmarre/ComfyUI-Spectrum-MiniMax-H3](https://github.com/xmarre/ComfyUI-Spectrum-MiniMax-H3) |
+| H3 Motion Context | [NikoDemon80/ComfyUI-H3-Motion-Context](https://github.com/NikoDemon80/ComfyUI-H3-Motion-Context) |
+| Motion Context MultiRef | [seitanism/ComfyUI-H3-Motion-Context-MultiRef](https://github.com/seitanism/ComfyUI-H3-Motion-Context-MultiRef) |
+| MiniMax H3 Contex Loop | [ethanfel/ComfyUI-MiniMaxH3-Contex-Loop](https://github.com/ethanfel/ComfyUI-MiniMaxH3-Contex-Loop) |
+| NKD Preview Tools | [Nekodificador/ComfyUI-NKD-Preview-Tools](https://github.com/Nekodificador/ComfyUI-NKD-Preview-Tools) |
+
+Also: Sol-engine / SolAttn / Sage / heretic TE — see [docs/CREDITS.md](docs/CREDITS.md) and [docs/H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md).

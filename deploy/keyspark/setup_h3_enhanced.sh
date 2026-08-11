@@ -66,6 +66,28 @@ REMOTE
       "$host:$H3_DIR/ComfyUI/custom_nodes/ComfyUI-H3-Motion-Context/"
   fi
 
+  # 2026-08 H3 upgrades: Contex-Loop (scene A/V chain), MultiRef+custom KF, NKD preview
+  for pack in \
+    ComfyUI-MiniMaxH3-Contex-Loop \
+    ComfyUI-H3-Motion-Context-MultiRef \
+    ComfyUI-NKD-Preview-Tools
+  do
+    if [[ -d "$SRC_COMFY/custom_nodes/$pack" ]]; then
+      rsync -a --delete --exclude '__pycache__' --exclude '.git' \
+        "$SRC_COMFY/custom_nodes/$pack/" \
+        "$host:$H3_DIR/ComfyUI/custom_nodes/$pack/"
+      echo "  synced $pack -> $host"
+    fi
+  done
+
+  # Realism-People LoRA (optional quality; bf16 LoRA on int8 DiT — A/B)
+  if [[ -f "$SRC_COMFY/models/loras/h3-realism-people-t2v-i2v-r2v.safetensors" ]]; then
+    ssh "$host" "mkdir -p $H3_DIR/ComfyUI/models/loras"
+    rsync -a --info=stats2 \
+      "$SRC_COMFY/models/loras/h3-realism-people-t2v-i2v-r2v.safetensors" \
+      "$host:$H3_DIR/ComfyUI/models/loras/" || true
+  fi
+
   # heretic TE
   ssh "$host" "mkdir -p $H3_DIR/ComfyUI/models/text_encoders/H3"
   rsync -a --info=stats2 "$HERETIC_TE" \

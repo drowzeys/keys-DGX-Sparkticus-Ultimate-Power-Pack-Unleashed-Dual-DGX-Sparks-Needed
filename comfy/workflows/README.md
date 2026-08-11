@@ -7,6 +7,7 @@ Dual-node MiniMax-H3 quality multishot packages. Dual-serve co-tenancy foundatio
 
 | Package | Path | Engine | Length class | Status |
 |---------|------|--------|--------------|--------|
+| **Anime 2K bench** | [anime_2k_bench/](./anime_2k_bench/) | `h3-spans.py` master-K0 + **ESRGAN×2** | ~5s (3×39f @704×1280 → ~1408×2560) | ✅ Proven dual `0811_012837` · full stack + optional realism |
 | **Bee FPV rain** | [bee_fpv_rain_20s/](./bee_fpv_rain_20s/) | `h3-spans.py` master-K0 FL2VA | ~18–20s (6×73f) | ✅ Proven dual `0808_231552` |
 | **JC Power Pack promo** | [jc_promo_powerpack_30s/](./jc_promo_powerpack_30s/) | `h3-talkinghead.py` ref2va | ~30s (10×73f) | ✅ Proven dual `0808_220007` |
 | **Will Smith spaghetti** | [will_smith_spaghetti_15s/](./will_smith_spaghetti_15s/) | `h3-talkinghead.py` ref2va | ~15s multishot | ✅ Multishot path |
@@ -31,7 +32,10 @@ More plan JSON (student story, HP pigeon, etc.): [../plans/](../plans/)
 - Heretic TE · Sage · Sol-engine/SolAttn/Triton · Spectrum **v0.2.1** audio fix · FBC · ESRGAN on spans  
 - **`H3_TURBO=0`** — Turbo is **not** for quality  
 - Co-tenant span cap **≤73f** with ESRGAN  
-- Nodes: `10.100.10.2:8188,10.100.10.3:8188`  
+- **2K path:** native legal size (e.g. **704×1280**) → ESRGAN×2 → ~**1408×2560** — [docs/H3_UPGRADES_2K.md](../../docs/H3_UPGRADES_2K.md)  
+- Motion/A-V chain upgrades: Contex-Loop · MultiRef · NKD (restart Comfy after install)  
+- Optional realism LoRA: `REALISM=1` on anime_2k_bench  
+- Nodes: override `HEAD`/`WORKER` (lab `.2`+`.3` or live `.1`+`.5`)  
 - Dual-serve profile: ablit **888k** / util **0.76**
 
 ## Future work
