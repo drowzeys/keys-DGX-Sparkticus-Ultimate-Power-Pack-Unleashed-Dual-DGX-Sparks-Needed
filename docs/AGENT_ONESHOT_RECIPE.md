@@ -1,7 +1,7 @@
 # AGENT ONE-SHOT RECIPE  
 ## Point agent at this repo → full dual-boot + upgraded dual H3 + 2K parallel
 
-**Repo (GitHub):** https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed  
+**Repo (GitHub):** https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed  
 
 **H3 pinned package (Hugging Face):** https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks  
 
@@ -42,7 +42,7 @@ video client  ──►  H3 heretic         HEAD:8188  ║  WORKER:8188
 
 | Resource | URL |
 |----------|-----|
-| **This Power Pack (bring-up + dual-boot)** | https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed |
+| **This Power Pack (bring-up + dual-boot)** | https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed |
 | **keys-2k H3 package (pinned stack + 2K workflows)** | https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks |
 | **H3 stack manifest** | HF `manifest/H3_STACK_MANIFEST.json` (also Power Pack `docs/H3_UPGRADES_2K.md`) |
 | **Docker image (when published)** | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811` |
@@ -119,7 +119,7 @@ export RECIPE="${RECIPE:-$HOME/DeepSeek-v4-Flash-DSpark-2x-DGX-Spark-0731}"
 
 ### --- CLONE / UPDATE POWER PACK ---
 PP="${POWER_PACK_DIR:-$HOME/keys-power-pack}"
-REPO_URL="https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git"
+REPO_URL="https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git"
 if [[ ! -d "$PP/.git" ]]; then
   git clone "$REPO_URL" "$PP"
 else

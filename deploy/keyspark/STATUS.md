@@ -41,7 +41,7 @@
 ## Ops
 
 ```bash
-ROOT=~/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed/deploy/keyspark
+ROOT=~/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed/deploy/keyspark
 source $ROOT/profile.ablit-heretic-dual-nodes-1-5.env
 export ENV_SRC=$ROOT/env.ablit-cotenancy-888k-u076-nodes-1-5
 export STACK=ablit ENHANCE_H3=0

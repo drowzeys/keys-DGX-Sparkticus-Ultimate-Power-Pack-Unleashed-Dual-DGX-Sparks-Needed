@@ -201,8 +201,8 @@ lists the new classes.
 ## 9. Quick start for users
 
 ```bash
-git clone https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git
-cd keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed
+git clone https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git
+cd keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed
 
 # 1) dual-serve bring-up (Tony order: DS4 → H3)
 export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy-888k-u076

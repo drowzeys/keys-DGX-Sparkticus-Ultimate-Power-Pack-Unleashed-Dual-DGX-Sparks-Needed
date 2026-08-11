@@ -40,7 +40,7 @@ Secondary: confirm solo-H3 continuous ceilings when **DSV4F is down** (~100 Gi
 ### Credit
 
 - **Dual-serve co-tenancy:** Tony / [@tonyd2wild](https://github.com/tonyd2wild) — [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)  
-- Power Pack repo: [keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed…](https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed)  
+- Power Pack repo: [keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed…](https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed)  
 - Prompts: [MiniMax H3 VIDEO_PROMPT_WRITING_GUIDE](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md) via `~/comfy/h3_prompt_guide.py`
 
 ### Proven co-tenant multishot anchors

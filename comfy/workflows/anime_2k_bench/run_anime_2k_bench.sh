@@ -32,7 +32,7 @@ else
 fi
 
 SPANS="$ROOT/scripts/h3-spans.py"
-[[ -f "$SPANS" ]] || SPANS="$HOME/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed/comfy/h3-spans.py"
+[[ -f "$SPANS" ]] || SPANS="$HOME/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed/comfy/h3-spans.py"
 [[ -f "$SPANS" ]] || SPANS="$HOME/comfy/h3-spans.py"
 
 echo "=== anime 2K bench ==="

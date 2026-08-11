@@ -39,7 +39,7 @@ real pores, white ribbed tank top. Portrait {W}x{H}. Slow languid motion.
 
 ONE continuous shot (~30s). She holds camera with green eyes, turns for a look-back smile, then
 faces camera and speaks clearly with natural lip-sync (soft American voice, natural not synthetic):
-"I want you to get keys DGX Sparkticus Utimate Power Pack Unleashed — dual DGX Sparks needed —
+"I want you to get keys DGX Sparkticus Ultimate Power Pack Unleashed — dual DGX Sparks needed —
 running both DeepSeek Version Four Flash and MiniMax H3 abliterated with all the speed upgrades,
 multi-shot, seamless transition, turbo dual sampling — because that is what I want.
 And… is this what you want in return?"
@@ -158,7 +158,7 @@ def main():
         f"turbo=0 dual_turbo=0\n"
         f"upgrades=Sage+SolAttn+Spectrum+FBC+ESRGAN_x2+heretic_TE\n"
         f"total_wall_s={wall:.1f}\n"
-        f"note=continuous JC promo naming keys-DGX-Sparkticus Utimate Power Pack Unleashed\n"
+        f"note=continuous JC promo naming keys-DGX-Sparkticus Ultimate Power Pack Unleashed\n"
     )
     print(f"DONE wall={wall:.0f}s → {dest}", flush=True)
     print(f"TIMING {OUT / 'TIMING.txt'}", flush=True)

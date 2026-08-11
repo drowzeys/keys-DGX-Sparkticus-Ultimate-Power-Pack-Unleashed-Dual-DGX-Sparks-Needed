@@ -1,4 +1,4 @@
-# keys-DGX-Sparkticus Utimate Power Pack Unleashed  
+# keys-DGX-Sparkticus Ultimate Power Pack Unleashed  
 ## (Dual DGX-Sparks Needed)
 
 **Contributors:** **[@tonyd2wild](https://github.com/tonyd2wild)** (Tony — dual-serve foundation) · [@drowzeys](https://github.com/drowzeys) (Power Pack)  
@@ -30,8 +30,8 @@ That recipe is the **single source of truth** for:
 
 ```bash
 # Human/operator minimal (after weights + Anemll image exist on both Sparks)
-git clone https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git
-cd keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed
+git clone https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git
+cd keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed
 export HEAD=10.100.10.2 WORKER=10.100.10.3   # or your pair
 export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy-888k-u076 STACK=ablit
 bash deploy/keyspark/bringup.sh              # DS4 ablit first, then dual H3

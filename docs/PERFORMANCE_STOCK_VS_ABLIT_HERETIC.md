@@ -1,6 +1,6 @@
 # Performance: Stock dual-serve vs Ablit DS4 + Heretic H3
 
-**Repo:** [keys-DGX-Sparkticus Utimate Power Pack Unleashed (Dual DGX-Sparks Needed)](https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed)  
+**Repo:** [keys-DGX-Sparkticus Ultimate Power Pack Unleashed (Dual DGX-Sparks Needed)](https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed)  
 **Hardware:** 2× NVIDIA DGX Spark GB10 (121 GiB UMA) · fabric `.2` head + `.3` worker  
 **Never** use `.1` / 5482 for this stack.
 

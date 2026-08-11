@@ -304,7 +304,7 @@ def jc_continuous_i2va_powerpack(
 ) -> str:
     """Official-guide continuous JC Power Pack promo (~30s I2VA)."""
     dialogue = (
-        "I want you to get keys DGX Sparkticus Utimate Power Pack Unleashed — dual DGX Sparks needed — "
+        "I want you to get keys DGX Sparkticus Ultimate Power Pack Unleashed — dual DGX Sparks needed — "
         "running both DeepSeek Version Four Flash and MiniMax H3 abliterated with all the speed upgrades, "
         "multi-shot, seamless transition, quality dense sampling — because that is what I want. "
         "And… is this what you want in return?"

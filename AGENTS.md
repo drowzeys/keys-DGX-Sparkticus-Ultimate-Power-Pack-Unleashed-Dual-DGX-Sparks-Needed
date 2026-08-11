@@ -14,7 +14,7 @@ Bring up on **two** DGX Sparks:
 
 | | |
 |--|--|
-| This repo | https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed |
+| This repo | https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed |
 | keys-2k H3 HF package | https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks |
 | Tony dual-serve | https://github.com/tonyd2wild/ds4-h3-video-gen-factory |
 
