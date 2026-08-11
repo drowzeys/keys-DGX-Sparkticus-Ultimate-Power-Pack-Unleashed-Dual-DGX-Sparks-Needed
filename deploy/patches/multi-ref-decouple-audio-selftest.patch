@@ -1,0 +1,82 @@
+diff --git a/patch_layout.py b/patch_layout.py
+index 5156447..19e9bbf 100644
+--- a/patch_layout.py
++++ b/patch_layout.py
+@@ -127,6 +127,12 @@ def _fixup_audio(layout, text_len, refs):
+     Ordinary Ref2VA refs may appear before it. The marked Motion Context
+     audio ref MUST be last.
+     """
++    if not _AUDIO_TIMELINE_OK:
++        raise RuntimeError(
++            "h3_motion_context: MC timeline-audio placement is DISABLED on "
++            "this core (its self-test failed against the current audio row "
++            "packing). Keyframe anchors and ordinary Ref2VA audio refs still "
++            "work; only marked timeline-audio refs are unavailable.")
+     marked_idx = [i for i, r in enumerate(refs)
+                   if r.get(MC_AUDIO_KEY) is not None]
+     if len(marked_idx) != 1:
+@@ -168,7 +174,11 @@ def _fixup_audio(layout, text_len, refs):
+             sel[a:b] = False
+ 
+     count = int(sel.sum())
+-    if count < rt or count > 8 * rt:
++    # Core packs audio two latent steps per row ([32, 2, T] latents), so a
++    # ref spanning rt time units occupies ceil(rt/2) rows. Accept that
++    # packing; the semantic checks below (exact row set, uniform shift)
++    # still guard against real misplacement.
++    if count < max(1, rt // 2) or count > 8 * rt:
+         raise RuntimeError(
+             "h3_motion_context: found %d rows in the marked audio ref slot "
+             "[%.4f, %.4f) for %d latent steps, expected between %d and %d. "
+@@ -197,7 +207,10 @@ def _patched_init(self, text_len, latent_t, latent_h, latent_w, audio_t,
+     # neither marked: stock graph, leave it exactly as built
+ 
+ 
+-def _self_test():
++_AUDIO_TIMELINE_OK = True
++
++
++def _self_test(audio=True):
+     """Prove the rewrite reproduces stock positions before committing.
+ 
+     Builds the two anchors stock code already supports, once the stock way
+@@ -279,6 +292,9 @@ def _self_test():
+     if any(abs(s - shifts[0]) > tol for s in shifts):
+         raise RuntimeError("ref shifted anchors unevenly: %s" % shifts)
+ 
++    if not audio:
++        return
++
+     # audio timeline placement: rebuild layout d with the ref marked and
+     # require that exactly the rows in the ref's coordinate slot moved,
+     # all by one uniform shift, with every other row bit-identical.
+@@ -385,14 +401,25 @@ def apply_patch():
+         _LOG.warning("h3_motion_context: MiniMax H3 model module missing expected "
+                      "attributes, patch not applied")
+         return False
++    global _AUDIO_TIMELINE_OK
+     _orig_init = mm.PackedLayout.__init__
+     try:
+         _self_test()
+     except Exception as exc:
+-        _orig_init = None
+-        _LOG.warning("h3_motion_context: self-test failed (%s), patch not applied. "
+-                     "Interior keyframe anchors unavailable.", exc)
+-        return False
++        # The timeline-audio feature can fail its self-test independently of
++        # the keyframe anchors (core audio row packing changed). Retry with
++        # the audio section skipped: if keyframe anchors alone pass, enable
++        # them and hard-disable timeline audio instead of blocking everything.
++        try:
++            _self_test(audio=False)
++        except Exception as exc2:
++            _orig_init = None
++            _LOG.warning("h3_motion_context: self-test failed (%s), patch not applied. "
++                         "Interior keyframe anchors unavailable.", exc2)
++            return False
++        _AUDIO_TIMELINE_OK = False
++        _LOG.warning("h3_motion_context: timeline-audio self-test failed (%s); "
++                     "keyframe anchors ENABLED, MC timeline-audio DISABLED.", exc)
+     mm.PackedLayout.__init__ = _patched_init
+     _applied = True
+     _LOG.info("h3_motion_context: interior keyframe anchors enabled")

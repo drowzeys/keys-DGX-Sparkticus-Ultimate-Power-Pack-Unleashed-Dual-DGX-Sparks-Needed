@@ -23,7 +23,7 @@ Usage:
       [--la 175 --lb 175 --lw 39] [--width 576 --height 768] [--seed 1000] \
       [--nodes 10.100.10.2:8188,10.100.10.3:8188] [--out path.mp4]
 """
-import argparse, json, mimetypes, subprocess, sys, threading, time, urllib.parse, urllib.request, uuid
+import argparse, json, mimetypes, os, subprocess, sys, threading, time, urllib.parse, urllib.request, uuid
 from pathlib import Path
 
 OUTDIR = Path.home() / "comfy" / "weld_out"
@@ -107,7 +107,26 @@ def weld_clip(template, args, prompt, length, seed, prefix, ctx_video_name, anch
     return wf
 
 
+def _apply_cfg(wf):
+    """Audio fix (docs/H3_AUDIO_FIX_CFG5.md): guidance-free sampling babbles H3
+    audio, so convert every BasicGuider to CFGGuider 5.0 with a zeroed negative.
+    Override strength with H3_CFG (H3_CFG=1 restores guidance-free)."""
+    cfg = float(os.environ.get("H3_CFG", "5.0"))
+    if cfg == 1.0:
+        return wf
+    for k, v in list(wf.items()):
+        if v.get("class_type") == "BasicGuider":
+            pos = v["inputs"]["conditioning"]
+            z = f"{k}_zeroneg"
+            wf[z] = {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": pos}}
+            wf[k] = {"class_type": "CFGGuider", "inputs": {
+                "model": v["inputs"]["model"], "positive": pos,
+                "negative": [z, 0], "cfg": cfg}}
+    return wf
+
+
 def submit(node, wf):
+    wf = _apply_cfg(wf)
     r = json.loads(api(node, "/prompt", json.dumps({"prompt": wf}).encode(),
                        {"Content-Type": "application/json"}))
     if r.get("error") or r.get("node_errors"):

@@ -1,0 +1,37 @@
+{
+ "_readme": "h3-spans-v2 music-video plan. len(spans) must equal ceil(song_duration / (span_len/24)); len(keyframes) = len(spans)+1. Ship your own song path.",
+ "song": "/home/keyspark/Music/your_song.mp3",
+ "unet": "minimax_h3_ref2va_realism070_int8_convrot_localmerge.safetensors",
+ "kf_unet": "minimax_h3_fl2va_realism070_int8_convrot_localmerge.safetensors",
+ "identity_prompt": "your recurring performer/protagonist description",
+ "style": "Photorealistic live-action cinema, 35mm film grain, natural anamorphic lens, 24fps, 180 degree shutter, elegant music-video cinematography. No cartoon, no text, no subtitles, no watermark.",
+ "lighting": "your world's lighting",
+ "tone": "your emotional arc",
+ "audio_bed": "one-line description of the song (genre, tempo, mood)",
+ "width": 1280,
+ "height": 704,
+ "kf_frames": 9,
+ "span_len": 124,
+ "seed": 12345,
+ "keyframes": [
+  {
+   "prompt": "opening composition"
+  },
+  {
+   "prompt": "second composition"
+  },
+  {
+   "prompt": "closing composition"
+  }
+ ],
+ "spans": [
+  {
+   "motion": "camera+subject from KF0 to KF1",
+   "audio": "optional section note (build/drop/outro)"
+  },
+  {
+   "motion": "camera+subject from KF1 to KF2",
+   "audio": ""
+  }
+ ]
+}
