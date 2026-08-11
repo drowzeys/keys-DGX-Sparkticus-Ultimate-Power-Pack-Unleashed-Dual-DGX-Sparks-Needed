@@ -7,7 +7,7 @@ Dual-node MiniMax-H3 quality multishot packages. Dual-serve co-tenancy foundatio
 
 | Package | Path | Engine | Length class | Status |
 |---------|------|--------|--------------|--------|
-| **Anime 2K bench** | [anime_2k_bench/](./anime_2k_bench/) | `h3-spans.py` master-K0 + **ESRGAN×2** | ~5s (3×39f @704×1280 → ~1408×2560) | ✅ Proven dual `0811_012837` · full stack + optional realism |
+| **Anime 2K bench** | [anime_2k_bench/](./anime_2k_bench/) | `h3-spans.py` master-K0 + **async ESRGAN×2** | ~5s (3×39f @704×1280 → ~1408×2560) | ✅ `0811_012837` native · **`0811_072314` async 2K** |
 | **Bee FPV rain** | [bee_fpv_rain_20s/](./bee_fpv_rain_20s/) | `h3-spans.py` master-K0 FL2VA | ~18–20s (6×73f) | ✅ Proven dual `0808_231552` |
 | **JC Power Pack promo** | [jc_promo_powerpack_30s/](./jc_promo_powerpack_30s/) | `h3-talkinghead.py` ref2va | ~30s (10×73f) | ✅ Proven dual `0808_220007` |
 | **Will Smith spaghetti** | [will_smith_spaghetti_15s/](./will_smith_spaghetti_15s/) | `h3-talkinghead.py` ref2va | ~15s multishot | ✅ Multishot path |
@@ -18,7 +18,8 @@ More plan JSON (student story, HP pigeon, etc.): [../plans/](../plans/)
 
 | Script | Role |
 |--------|------|
-| `h3-spans.py` | Multishot KF → FL2VA spans, **MiniMax official prompt guide** |
+| `h3-spans.py` | Multishot KF → FL2VA spans + **`--upscale-async`** (Claude) |
+| `upscale2k.py` | Standalone RealESRGAN×2 via Comfy API |
 | `h3-talkinghead.py` | Face-lock ref2va parallel spans |
 | `h3_prompt_guide.py` | Official H3 VIDEO_PROMPT_WRITING_GUIDE helpers |
 | `h3-weld.py` | Shared Comfy submit / wait / stitch helpers |

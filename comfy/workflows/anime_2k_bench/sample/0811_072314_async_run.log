@@ -1,0 +1,18 @@
+run 0811_072314: 4 keyframes -> 3 spans @704x1280, nodes 10.100.10.1:8188+10.100.10.5:8188
+[plan] identity ref...
+  [identity] done in 120s -> 0811_072314_id.mp4
+[plan] reusing 4 keyframes (skip generation): ['0811_012837_kf0.png', '0811_012837_kf1.png', '0811_012837_kf2.png', '0811_012837_kf3.png']
+[render] 3 spans in parallel + async x2 upscale...
+  [span1] done in 272s -> 0811_072314_span1.mp4
+  [span0] done in 280s -> 0811_072314_span0.mp4
+  [x2 span0] done in 72s -> 0811_072314_span0_x2.mp4
+  [x2 span1] done in 72s -> 0811_072314_span1_x2.mp4
+  [span2] done in 272s -> 0811_072314_span2.mp4
+  [x2 span2] done in 64s -> 0811_072314_span2_x2.mp4
+[render] 3 spans done in 10.1 min (serial would be ~15+ min)
+[x2] all 3 spans upscaled (overlapped with rendering)
+
+DONE: /home/keyspark/Videos/h3-benchmark/spans-anime2k-async/0811_072314_final.mp4  (4.8s, 11.3 MB)
+total wall: 12.2 min  (4 kf plan + 3 parallel spans)
+keyframes: /home/keyspark/Videos/h3-benchmark/spans-anime2k-async/0811_072314_kf0.png, /home/keyspark/Videos/h3-benchmark/spans-anime2k-async/0811_072314_kf1.png, /home/keyspark/Videos/h3-benchmark/spans-anime2k-async/0811_072314_kf2.png, /home/keyspark/Videos/h3-benchmark/spans-anime2k-async/0811_072314_kf3.png
+END rc=0

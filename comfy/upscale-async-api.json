@@ -1,0 +1,65 @@
+{
+ "1": {
+  "class_type": "LoadVideo",
+  "inputs": {
+   "file": "INPUT_VIDEO.mp4"
+  }
+ },
+ "2": {
+  "class_type": "GetVideoComponents",
+  "inputs": {
+   "video": [
+    "1",
+    0
+   ]
+  }
+ },
+ "3": {
+  "class_type": "UpscaleModelLoader",
+  "inputs": {
+   "model_name": "RealESRGAN_x2plus.pth"
+  }
+ },
+ "4": {
+  "class_type": "ImageUpscaleWithModel",
+  "inputs": {
+   "upscale_model": [
+    "3",
+    0
+   ],
+   "image": [
+    "2",
+    0
+   ]
+  }
+ },
+ "5": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "images": [
+    "4",
+    0
+   ],
+   "fps": [
+    "2",
+    2
+   ],
+   "audio": [
+    "2",
+    1
+   ]
+  }
+ },
+ "6": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "video": [
+    "5",
+    0
+   ],
+   "filename_prefix": "video/upscale_x2",
+   "format": "mp4",
+   "codec": "h264"
+  }
+ }
+}

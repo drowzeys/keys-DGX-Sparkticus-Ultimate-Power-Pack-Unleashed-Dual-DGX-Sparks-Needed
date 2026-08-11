@@ -21,6 +21,7 @@ breaking DS4 co-tenancy.
 | Cloud MiniMax “native 2K” API | N/A (hosted) | Closed weights / credits |
 | Open int8 convrot denoise at 2K | ❌ | OOM / illegal dims / hard caps |
 | **704×1280 denoise → ESRGAN ×2 → ~1408×2560** | ✅ | **Power Pack path** |
+| **`--upscale-async`** (Claude 2026-08-11) | ✅ | Decoupled ×2 on free nodes; overlaps remaining spans |
 | 720×1280 | ❌ | Not multiple of 32 — kills jobs |
 
 **Rule:** native width/height must be multiples of **32**. Prefer **704×1280**
@@ -31,6 +32,28 @@ Native (legal)     ESRGAN×2        Delivery label
 704 × 1280    →    1408 × 2560     “2K” portrait
 864 × 480     →    1728 × 960      “2K-class” landscape
 ```
+
+### Async upscale workflow (default for anime_2k_bench)
+
+```bash
+# engine
+python3 comfy/h3-spans.py --plan … --upscale-async --nodes HEAD:8188,WORKER:8188 …
+
+# package runner (UPSCALE_MODE=async is default)
+bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
+
+# single finished clip
+python3 comfy/upscale2k.py /path/clip.mp4 10.100.10.1:8188 video/clip_x2
+```
+
+| Flag | Behavior |
+|------|----------|
+| `--upscale-async` | Spans clean (low UMA); each free node drains finished spans through ESRGAN×2; stitch uses `*_x2.mp4` |
+| `--upscale` | Inline ESRGAN in span graph (higher peak memory) |
+| Graph | `comfy/upscale-async-api.json` / `anime_2k_bench/graphs/upscale-async-api.json` |
+
+**Lab (async 2K):** run `0811_072314` · ~**12.2 min** wall · final **1408×2560** ·  
+`comfy/workflows/anime_2k_bench/sample/0811_072314_final_1408x2560_async.mp4`
 
 ---
 

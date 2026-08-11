@@ -40,33 +40,59 @@ Details: [docs/H3_UPGRADES_2K.md](../../../docs/H3_UPGRADES_2K.md) · [docs/H3_Q
 # Power Pack dual H3 up (example live pair .1 + .5)
 export HEAD=10.100.10.1 WORKER=10.100.10.5
 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
+# default UPSCALE_MODE=async  →  h3-spans.py --upscale-async
 
 # classic lab pair
 HEAD=10.100.10.2 WORKER=10.100.10.3 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
 
 # with Realism-People LoRA (file must be in Comfy models/loras/ on both nodes)
-REALISM=1 HEAD=10.100.10.1 WORKER=10.100.10.5 \
+REALISM=1 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
+
+# upscale modes
+UPSCALE_MODE=async  bash …/run_anime_2k_bench.sh   # default — Claude upgrade
+UPSCALE_MODE=inline bash …/run_anime_2k_bench.sh   # ESRGAN inside span graph
+UPSCALE_MODE=none   bash …/run_anime_2k_bench.sh   # native only
+
+# reuse prior keyframes (skip KF gen)
+REUSE_KF=~/Videos/h3-benchmark/spans-anime2k/0811_012837_kf*.png \
   bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
 ```
 
-Outputs: `~/Videos/anime_2k_bench/{runid}_final.mp4` (+ KF pngs / span mp4s)
+Outputs: `~/Videos/anime_2k_bench/{runid}_final.mp4` (+ span + `_x2` clips when async)
+
+### Why `--upscale-async` (Claude upgrade)
+
+| Mode | Memory under DS4 co-tenant | Wall |
+|------|----------------------------|------|
+| **async** (default) | Spans stay native; ESRGAN runs as free capacity appears | Upscale overlaps remaining spans; only last ×2 on critical path |
+| inline `--upscale` | ESRGAN in same graph as denoise | Higher peak UMA |
+| none | Native only | Fastest, not delivery 2K |
+
+Standalone single-clip helper: `comfy/upscale2k.py` · graph `graphs/upscale-async-api.json`
 
 ---
 
-## Proven sample (keyspark lab 2026-08-11)
+## Proven samples (keyspark lab 2026-08-11)
+
+### A) Native parallel (no async x2) — `0811_012837`
 
 | Field | Value |
 |-------|--------|
-| Run id | `0811_012837` |
-| Nodes | `.1` + `.5` (co-tenant DS4 ablit 888k @ util 0.76) |
-| Native | **704×1280** · 4 KF master-parallel · 3 spans |
-| Wall | **~18.8 min** (KF plan + parallel spans **8.9 min** vs ~13+ serial) |
-| Span times | ~264–296 s each |
-| Sample final | [sample/0811_012837_final_704x1280.mp4](./sample/0811_012837_final_704x1280.mp4) |
-| Log | [sample/0811_012837_run.log](./sample/0811_012837_run.log) |
+| Nodes | `.1` + `.5` co-tenant DS4 |
+| Native | **704×1280** · master-parallel · 3 spans |
+| Wall | **~18.8 min** |
+| Sample | [sample/0811_012837_final_704x1280.mp4](./sample/0811_012837_final_704x1280.mp4) |
 
-> This sample was recorded **native 704×1280**. Re-run with this package’s
-> `--upscale` graphs to land **~1408×2560** delivery 2K (ESRGAN on spans).
+### B) **Async upscale 2K** — `0811_072314` (Claude upgrade)
+
+| Field | Value |
+|-------|--------|
+| Mode | parallel spans + **async ESRGAN×2** |
+| Delivery | **~1408×2560** (×2 on spans, then stitch) |
+| Wall | **~12.2 min** (reused prior KFs; spans ~10.1 min with overlapped x2) |
+| x2 time | ~64–72 s / span (overlapped) |
+| Sample | [sample/0811_072314_final_1408x2560_async.mp4](./sample/0811_072314_final_1408x2560_async.mp4) |
+| Log | [sample/0811_072314_async_run.log](./sample/0811_072314_async_run.log) |
 
 ---
 

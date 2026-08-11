@@ -121,6 +121,13 @@ def main():
                          "parallel so it adds no serial pass. Watch memory on co-resident DSV4F.")
     ap.add_argument("--span-workflow", default=str(_find("jc-baseline-workflow-api.json")),
                     help="span template when --upscale (has ESRGAN x2 inline)")
+    ap.add_argument("--upscale-async", action="store_true", dest="upscale_async",
+                    help="decoupled ESRGAN x2: spans render clean (low memory); each finished span is "
+                         "upscaled by whichever node has run out of span work, overlapping the remaining "
+                         "renders. Only the last span's upscale sits on the critical path. Stitch uses "
+                         "the x2 files. Mutually exclusive with --upscale.")
+    ap.add_argument("--upscale-model", default="RealESRGAN_x2plus.pth",
+                    help="upscale model filename in ComfyUI models/upscale_models (for --upscale-async)")
     ap.add_argument("--te", choices=list(W.TE_FILES), default="keep")
     ap.add_argument("--kf-mode", choices=["master-parallel", "chain", "rooted"], default="master-parallel",
                     dest="kf_mode",
@@ -139,6 +146,8 @@ def main():
     if not a.plan:
         sys.exit("need --plan FILE (or --emit-example)")
 
+    if a.upscale and a.upscale_async:
+        sys.exit("--upscale (inline) and --upscale-async are mutually exclusive")
     plan = json.loads(Path(a.plan).expanduser().read_text())
     kfs, spans = plan["keyframes"], plan["spans"]
     if len(spans) != len(kfs) - 1:
@@ -248,17 +257,63 @@ def main():
         return
 
     # ---- Phase 2: render spans FLF2V(KF[i]->KF[i+1]) in parallel across nodes ----
-    print(f"[render] {len(spans)} spans in parallel...", flush=True)
+    print(f"[render] {len(spans)} spans in parallel"
+          + (" + async x2 upscale" if a.upscale_async else "") + "...", flush=True)
     results = {}
     errs = []
     lock = threading.Lock()
     idx = {"n": 0}
+    ux_results, ux_claimed = {}, set()
+
+    def upscale_wf(video_name, prefix):
+        return {
+            "1": {"class_type": "LoadVideo", "inputs": {"file": video_name}},
+            "2": {"class_type": "GetVideoComponents", "inputs": {"video": ["1", 0]}},
+            "3": {"class_type": "UpscaleModelLoader", "inputs": {"model_name": a.upscale_model}},
+            "4": {"class_type": "ImageUpscaleWithModel",
+                  "inputs": {"upscale_model": ["3", 0], "image": ["2", 0]}},
+            "5": {"class_type": "CreateVideo",
+                  "inputs": {"images": ["4", 0], "fps": ["2", 2], "audio": ["2", 1]}},
+            "6": {"class_type": "SaveVideo",
+                  "inputs": {"video": ["5", 0], "filename_prefix": prefix,
+                             "format": "mp4", "codec": "h264"}},
+        }
+
+    def upscale_worker(node):
+        # Runs on a node only after it has no span work left; drains finished spans.
+        while True:
+            with lock:
+                if errs:
+                    return
+                todo = [i for i in results if i not in ux_claimed]
+                if todo:
+                    i = min(todo); ux_claimed.add(i)
+                elif len(ux_claimed) >= len(spans):
+                    return
+                else:
+                    i = None
+            if i is None:
+                time.sleep(3); continue
+            try:
+                name = f"{runid}_span{i}_src.mp4"
+                W.upload_image(node, results[i], name)
+                dest = OUT / f"{runid}_span{i}_x2.mp4"
+                W.wait_and_fetch(node, W.submit(node, upscale_wf(name, f"video/{runid}_span{i}_x2")),
+                                 dest, tag=f"x2 span{i}")
+                with lock:
+                    ux_results[i] = dest
+            except Exception as e:
+                with lock:
+                    errs.append(f"x2 span{i}: {e}")
+                return
 
     def worker(node):
         while True:
             with lock:
-                if errs or idx["n"] >= len(spans):
+                if errs:
                     return
+                if idx["n"] >= len(spans):
+                    break
                 i = idx["n"]; idx["n"] += 1
             try:
                 wf = W.base_clip(span_template, args, span_prompt(plan, spans[i]),
@@ -272,6 +327,8 @@ def main():
                 with lock:
                     errs.append(f"span{i}: {e}")
                 return
+        if a.upscale_async:
+            upscale_worker(node)
 
     t0 = time.time()
     threads = [threading.Thread(target=worker, args=(n,)) for n in nodes]
@@ -281,6 +338,11 @@ def main():
         sys.exit("SPANS FAILED:\n  " + "\n  ".join(errs))
     print(f"[render] {len(spans)} spans done in {(time.time()-t0)/60:.1f} min "
           f"(serial would be ~{len(spans)*(time.time()-t0)/max(len(nodes),1)/60:.0f}+ min)", flush=True)
+    if a.upscale_async:
+        if len(ux_results) != len(spans):
+            sys.exit(f"UPSCALE-ASYNC incomplete: {len(ux_results)}/{len(spans)} spans upscaled")
+        print(f"[x2] all {len(spans)} spans upscaled (overlapped with rendering)", flush=True)
+        results = ux_results
 
     # ---- Phase 3: stitch. Each span ends on KF[i+1]; next starts on it -> drop dup, xfade audio ----
     d = a.blend_frames / fps

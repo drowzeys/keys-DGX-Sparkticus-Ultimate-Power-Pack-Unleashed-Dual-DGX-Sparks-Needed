@@ -160,11 +160,13 @@ print("SPECTRUM_AUDIO_FIX_OK", sys.argv[1])
 ' "$ip"
 done
 
-### --- 2K PARALLEL QUALITY SAMPLE (master-K0 + ESRGAN×2) ---
+### --- 2K PARALLEL QUALITY SAMPLE (master-K0 + async ESRGAN×2) ---
 export H3_TURBO=0 H3_DUAL_TURBO=0
+# default UPSCALE_MODE=async  (Claude upgrade: spans native, ×2 overlapped)
 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
-# Optional realism LoRA (weights must exist on both nodes):
+# Optional:
 # REALISM=1 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
+# UPSCALE_MODE=inline bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
 
 echo "DONE — DS4 ablit + dual H3 heretic + 2K parallel path exercised"
 echo "Credit Tony: https://github.com/tonyd2wild/ds4-h3-video-gen-factory"
