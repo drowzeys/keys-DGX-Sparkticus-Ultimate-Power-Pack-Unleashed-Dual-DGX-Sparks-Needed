@@ -2,6 +2,9 @@
 
 **Status:** shipped in Power Pack (2026-08-11)  
 **Sample workflow:** [comfy/workflows/anime_2k_bench/](../comfy/workflows/anime_2k_bench/)  
+**Hugging Face package (pinned stack + scripts):** https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks  
+**Docker (pinned Comfy+nodes):** `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811`  
+**Agent one-shot (DS4+H3+2K):** [AGENT_ONESHOT_RECIPE.md](./AGENT_ONESHOT_RECIPE.md)  
 **Dual-serve foundation:** [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory) (Tony)
 
 This note is the operator + agent map for the post–Power-Pack H3 quality

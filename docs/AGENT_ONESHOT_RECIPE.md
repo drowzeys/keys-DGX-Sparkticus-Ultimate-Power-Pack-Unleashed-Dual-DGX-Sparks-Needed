@@ -1,324 +1,279 @@
 # AGENT ONE-SHOT RECIPE  
-## Power Pack dual-boot — DSV4F DSpark 0731 ablit + MiniMax-H3 heretic (concurrency=2)
+## Point agent at this repo → full dual-boot + upgraded dual H3 + 2K parallel
 
-**Repo:** https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed  
-**Audience:** coding agents — follow **exactly**. Do not improvise util, start order, or node IPs.
+**Repo (GitHub):** https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed  
+
+**H3 pinned package (Hugging Face):** https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks  
+
+**Audience:** coding agents — follow **exactly**. Do not improvise util, start order, node IPs, or pull random “latest” H3 nodes.
 
 ---
 
-### ⭐⭐⭐ REQUIRED — HUGE CREDIT TO TONY (dual-serve is his)
+## What “one shot” delivers (definition of done)
 
-**Tony / [tonyd2wild](https://github.com/tonyd2wild) made dual-serve possible.**  
-Without his factory there is no co-tenancy stack to bring up.
+When this recipe finishes successfully, the fleet has:
 
-| | |
-|--|--|
-| **Upstream (STAR FIRST)** | **https://github.com/tonyd2wild/ds4-h3-video-gen-factory** |
-| **Author** | **[Tony / tonyd2wild](https://github.com/tonyd2wild)** |
+| Layer | Result |
+|-------|--------|
+| **DS4** | DSV4F DSpark **0731 abliterated** TP=2 · `deepseek-v4-flash-0731-ablit-l10-35-anchorstock` |
+| **Context** | **888k lucky** · `max_model_len=909312` |
+| **Util** | **`GPU_MEMORY_UTILIZATION=0.76`** (H3 headroom; hard cap **0.85**) |
+| **H3 ×2** | Heretic TE · Comfy **0.31.1** · Sage + Sol + Spectrum **v0.2.1 audio fix** · FBC · Motion/Contex-Loop/MultiRef · ESRGAN |
+| **Parallel** | Fleet concurrency **2** = one heavy job per Spark |
+| **2K path** | Native **704×1280** → ESRGAN×2 → ~**1408×2560** · master-K0 multishot |
 
-Tony owns: DS4-first→H3-second order, util ~0.78 co-tenancy, `--disable-pinned-memory`,
-fleet concurrency=2, idle/1×/2× H3 C1–C6 benches, and the dual-Spark factory design.
+```text
+Hermes / apps ──►  DS4 ablit OpenAI   HEAD:8888/v1
+video client  ──►  H3 heretic         HEAD:8188  ║  WORKER:8188
+                   arm A (parallel)              arm B
+```
 
-This Power Pack only adds ablit DS4 + heretic H3 + parallel quality scripts **on top**.  
-Full write-up: **[CREDITS.md](./CREDITS.md)**.
+---
 
-**Every user-facing summary from an agent MUST include:**
+### ⭐ REQUIRED credit (every user-facing summary)
 
 > Dual-serve DS4 + dual H3 on two DGX Sparks was made possible by **Tony (tonyd2wild)** —  
-> [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory).
-
-Measured results (pre/post ablit, H3 upgrade, sequential vs parallel):  
-→ **[KEYSPARK_RESULTS.md](./KEYSPARK_RESULTS.md)**
+> [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory).  
+> This Power Pack adds ablit + heretic + 2K parallel quality on top.
 
 ---
 
-## 0. Goal (definition of done)
+## Links agents must use (do not substitute old forks)
 
-On **two** DGX Sparks:
+| Resource | URL |
+|----------|-----|
+| **This Power Pack (bring-up + dual-boot)** | https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed |
+| **keys-2k H3 package (pinned stack + 2K workflows)** | https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks |
+| **H3 stack manifest** | HF `manifest/H3_STACK_MANIFEST.json` (also Power Pack `docs/H3_UPGRADES_2K.md`) |
+| **Docker image (when published)** | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811` |
+| **Tony dual-serve origin** | https://github.com/tonyd2wild/ds4-h3-video-gen-factory |
+| **DS4 Anemll runtime image** | `ghcr.io/anemll/dspark-vllm-gx10:0.1.1` |
+| **Ablit weights (example)** | https://huggingface.co/drowzeys/keys-DeepSeekV4-Flash-GA-0731-Dspark-Abliterated-32-32 (or lab path `dsv4f-0731-ablit-l10-35-anchorstock`) |
+| **Heretic TE** | https://huggingface.co/sakamakismile/Qwen3-VL-32B-Heretic-MiniMax-H3-NVFP4 |
+| **H3 weights packs** | https://huggingface.co/Comfy-Org/MiniMax-H3 · https://huggingface.co/Kijai/MiniMax-H3_comfy |
 
-| Service | Endpoint | Must show |
-|---------|----------|-----------|
-| DS4 ablit OpenAI API | `http://10.100.10.2:8888/v1/models` | `deepseek-v4-flash-0731-ablit-l10-35-anchorstock` |
-| **Context** | same `/v1/models` → `max_model_len` | **909312 = 888k (lucky number)** |
-| **GPU mem util** | env `GPU_MEMORY_UTILIZATION` | **0.76** — **room for H3 to shine** (do not raise to 0.85 on co-tenant) |
-| H3 Comfy heretic | `http://10.100.10.2:8188/system_stats` | HTTP 200 |
-| H3 Comfy heretic | `http://10.100.10.3:8188/system_stats` | HTTP 200 |
-| Video path | `bash deploy/keyspark/run_quality_parallel.sh` | writes ~10 s mp4 under `~/Videos/` |
-
-**Power Pack default serve:** DSV4F DSpark **0731 abliterated** @ **888k** + util **0.76**  
-(`deploy/keyspark/env.ablit-cotenancy-888k-u076`).  
-**Fleet H3 concurrency = 2** = one heavy job per node, both nodes at once.  
-**Never** schedule two full FLF jobs on a single Spark under DS4 co-tenancy.
+**Do not** clone obsolete repo names (`keys-abliterated-heretic-…`) unless the user still has that local path — **this** GitHub URL is canonical.
 
 ---
 
-## 1. Inventory (fixed topology)
+## 0. Topology (export before anything)
 
-| Role | Host | Fabric IP | Do not use |
-|------|------|-----------|------------|
-| DS4 head TP0 + H3 arm A | spark-7552 | **10.100.10.2** | `.1`, 5482 |
-| DS4 worker TP1 + H3 arm B | spark-0060 | **10.100.10.3** | `.1`, 5482 |
-
-SSH as `keyspark@10.100.10.2` / `keyspark@10.100.10.3` (passwordless assumed).
-
----
-
-## 2. Hard rules (violation = broken stack)
-
-1. **DS4 first, H3 second.** Wait until `/v1/models` is healthy before any Comfy launch.
-2. **Power Pack util = `GPU_MEMORY_UTILIZATION=0.76`** with **`MAX_MODEL_LEN=909312` (888k lucky)**  
-   so **heretic H3 has room to shine** on the same two Sparks.  
-   Tony’s original factory often uses ~0.78 @ 1M; we intentionally trade a bit of ctx/KV budget for H3.  
-   Fleet hard cap **0.85** — **never raise above 0.85.** Do not squeeze past 0.85 for more ctx/seqs.
-3. H3 flags: **`--disable-pinned-memory` only**. Do **not** pass `--reserve-vram` while co-tenanting.
-4. Teardown order: **stop H3 on both nodes → then stop DS4**.
-5. Spectrum requires **ComfyUI ≥ 0.30.1** (`time_shift_slope`). On 0.30.0 set Spectrum off or upgrade.
-6. Only nodes **.2 and .3**.
-
----
-
-## 3. Prerequisites (once per fleet)
-
-### 3.1 Clone this fork
+Pick **one** pair of Sparks. Both roles on the **same** pair.
 
 ```bash
-git clone https://github.com/drowzeys/keys-abliterated-heretic-Dual-Boot-DSV4F-Dspark0731-with-MiniMax-H3-concurrency-2.git \
-  ~/ds4-h3-video-gen-factory
-cd ~/ds4-h3-video-gen-factory
+# Classic lab pair
+export HEAD=10.100.10.2 WORKER=10.100.10.3
+
+# Alternate live pair (example keyspark)
+# export HEAD=10.100.10.1 WORKER=10.100.10.5
+
+export HEAD_SSH=keyspark@$HEAD WORKER_SSH=keyspark@$WORKER
+export RECIPE="${RECIPE:-$HOME/DeepSeek-v4-Flash-DSpark-2x-DGX-Spark-0731}"
 ```
 
-### 3.2 DS4 DSpark recipe tree (Anemll image)
-
-```bash
-# Expected path (edit only if your lab differs — then export RECIPE=...)
-ls ~/DeepSeek-v4-Flash-DSpark-2x-DGX-Spark-0731/start-deepseek-v4-flash-dspark.sh
-docker image inspect ghcr.io/anemll/dspark-vllm-gx10:0.1.1 >/dev/null
-```
-
-### 3.3 Weights
-
-| Set | Path under `~/.cache/huggingface/` |
-|-----|--------------------------------------|
-| Ablit champion (default dual-boot) | `dsv4f-0731-ablit-l10-35-anchorstock/` |
-| Stock 0731 (optional STACK=stock) | `dsv4f-0731-stock/` |
-
-Both head and worker must see the same cache path (or synced).
-
-### 3.4 H3 tree per node
-
-```bash
-# On each of .2 and .3:
-test -d ~/h3-cotenancy/ComfyUI
-# After setup_h3_enhanced: heretic TE symlink + custom nodes present
-```
-
-If missing, run `bash deploy/keyspark/setup_h3_enhanced.sh` (copies heretic TE, Sol-Attn, Spectrum, KJNodes, upscaler weights, restarts Comfy).
-
-### 3.5 Network
-
-- Head serves DS4 on **8888** (fabric IP 10.100.10.2).
-- H3 on **8188** each node.
-- NCCL fabric settings are already in `env.ablit-cotenancy` (roce / enp1s0f1 — do not invent new NIC names without measuring).
+SSH passwordless as `keyspark` to both. Fabric NCCL NICs are in the env file (do not invent NIC names).
 
 ---
 
-## 4. One-shot bring-up (ablit + heretic)
+## 1. Hard rules (violation = broken stack)
 
-```bash
-cd ~/ds4-h3-video-gen-factory
-
-# Power Pack default: DSV4F 0731 ablit @ 888k (lucky) + util 0.76 → H3 headroom
-export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy-888k-u076
-export STACK=ablit
-bash deploy/keyspark/bringup.sh
-
-# Classic 1M @ 0.78 ablit (less H3 headroom):
-# export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy
-# bash deploy/keyspark/bringup.sh
-
-# Stock 0731 instead:
-# STACK=stock bash deploy/keyspark/bringup.sh
-
-# If heretic nodes already installed and you only need restart:
-# ENHANCE_H3=0 bash deploy/keyspark/bringup.sh
-```
-
-**What bringup does (in order):**
-
-1. Installs env as `$RECIPE/.env.dspark` on head+worker  
-2. Prep stock bind-mounts / docker image presence  
-3. Drop page caches  
-4. Start DS4 TP=2 (worker-first inside recipe script); wait ≤600s for `/v1/models`  
-5. `setup_h3_enhanced.sh` (default) or `launch_h3_dual.sh` → Comfy on both nodes  
-6. `status.sh`
-
-### 4.1 Verify
-
-```bash
-bash deploy/keyspark/status.sh
-curl -s http://10.100.10.2:8888/v1/models | jq '.data[0] | {id, max_model_len}'
-# expect:
-#   id: deepseek-v4-flash-0731-ablit-l10-35-anchorstock
-#   max_model_len: 909312   # 888k lucky
-# env must show GPU_MEMORY_UTILIZATION=0.76 (H3 room to shine)
-grep GPU_MEMORY_UTILIZATION ~/DeepSeek-v4-Flash-DSpark-2x-DGX-Spark-0731/.env.dspark
-curl -sf http://10.100.10.2:8188/system_stats >/dev/null && echo H3.2_OK
-curl -sf http://10.100.10.3:8188/system_stats >/dev/null && echo H3.3_OK
-```
-
-Object-info smoke (heretic chain nodes):
-
-```bash
-for ip in 10.100.10.2 10.100.10.3; do
-  curl -sf "http://$ip:8188/object_info" | python3 -c '
-import sys,json
-d=json.load(sys.stdin)
-need=["PathchSageAttentionKJ","SolAttnPatch","SpectrumApplyMiniMaxH3","H3FirstBlockCache","MiniMaxH3ImageToVideo"]
-print(sys.argv[1], {n:(n in d) for n in need})
-' "$ip"
-done
-```
+1. **DS4 first → H3 second.** Wait until `http://$HEAD:8888/v1/models` is healthy before any Comfy/Docker H3.  
+2. **`GPU_MEMORY_UTILIZATION=0.76`** + **`MAX_MODEL_LEN=909312`** (Power Pack default). Never **> 0.85**.  
+3. H3: **`--disable-pinned-memory --reserve-vram 48 --vram-headroom 10`**. Never CLI `--use-sage-attention`.  
+4. Teardown: **H3 both nodes → then DS4**.  
+5. **One heavy video job per Spark** under co-tenancy.  
+6. Spectrum **v0.2.1** with `offline_smoothing_replay=true` · `audio_blend_weight=0`.  
+7. **Turbo off** for quality (`H3_TURBO=0`).  
+8. Do **not** `git clone` “latest” Spectrum/Motion/Contex from main without the **manifest pins**.
 
 ---
 
-## 5. Patches & enhancements (what this fork adds)
+## 2. Prerequisites (once per fleet)
 
-| Component | Path | Purpose |
-|-----------|------|---------|
-| Ablit DS4 env | `deploy/keyspark/env.ablit-cotenancy` | ablit weights, util 0.78, H3_FLEET_CONCURRENCY=2 |
-| Stock env | `deploy/keyspark/env.cotenancy` | Tony stock 0731 profile |
-| Dual-boot profile | `deploy/keyspark/profile.ablit-heretic-dual.env` | video job env |
-| Enhanced graph | `deploy/keyspark/enhanced_graph.py` | Sage→Sol→Spectrum→FBC→ESRGAN, heretic TE, FLF |
-| H3 setup | `deploy/keyspark/setup_h3_enhanced.sh` | heretic TE symlink, custom nodes, Comfy 0.30.1 |
-| Sequential video | `deploy/keyspark/hp_dragon_dual.py` | best seam, ~2× wall |
-| **Parallel quality video** | `deploy/keyspark/keyframe_dual_flf.py` | concurrency=2, quality-first default |
-| Runner | `deploy/keyspark/run_quality_parallel.sh` | preflight + parallel pipeline |
-| Bringup/teardown/status | `deploy/keyspark/*.sh` | order-safe ops |
+| Need | Check |
+|------|--------|
+| This repo | `git clone` canonical GitHub URL → e.g. `~/keys-power-pack` |
+| DS4 recipe tree | `$RECIPE/start-deepseek-v4-flash-dspark.sh` |
+| Anemll image | `docker image inspect ghcr.io/anemll/dspark-vllm-gx10:0.1.1` on both nodes |
+| Ablit weights | `~/.cache/huggingface/dsv4f-0731-ablit-l10-35-anchorstock/` on **both** (or bind-mount same path) |
+| Stock 0731 | For bind-mount preflight (bringup checks stock visibility) |
+| H3 models | fl2va + ref2va int8, heretic TE, video+audio VAE, RealESRGAN_x2plus — see HF package `scripts/fetch_weights.sh` |
 
-### H3 graph chain (post-upgrade)
-
-```
-UNET (minimax_h3_fl2va_pruned_int8_convrot)
-  → PathchSageAttentionKJ (sage auto)
-  → SolAttnPatch (tau 1.3)
-  → SpectrumApplyMiniMaxH3          # needs Comfy ≥0.30.1
-  → H3FirstBlockCache
-  → MiniMaxH3ImageToVideo (+ optional first/last frame)
-  → VAE decode → RealESRGAN_x2plus → CreateVideo
-TE: H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors
-```
-
-### Quality-first parallel algorithm (default)
-
-```
-Phase 0  PARALLEL  .2: I0 human full steps (optional H3_I0_REF face seed)
-                   .3: I1 mid dragon full steps
-                   # I0 is NOT last_frame-constrained to I1 (protects face)
-Phase 1  serial    I2 end dragon first=I1
-Phase 2  PARALLEL  .2: FLF I0→I1 full 5s   ‖  .3: FLF I1→I2 full 5s
-Phase 3  stitch    xfade → ~10s 1728×960
-```
-
-Fast mode (worse faces): `H3_QUALITY_ID=0`.
+If H3 models are missing, agents must fetch/place them **before** declaring success (not optional for video).
 
 ---
 
-## 6. Run video (one shot)
+## 3. ONE-SHOT copy-paste (native Power Pack path)
 
-```bash
-cd ~/ds4-h3-video-gen-factory
-
-# Quality dual-H3 ~10s (recommended)
-bash deploy/keyspark/run_quality_parallel.sh
-
-# Seed face from a known-good frame / prior clip
-H3_I0_REF=~/Videos/some_good_face.png \
-  bash deploy/keyspark/run_quality_parallel.sh
-
-# Skip ESRGAN if faces look over-processed
-H3_UPSCALE=0 bash deploy/keyspark/run_quality_parallel.sh
-
-# Sequential (tightest continuity, ~2× wall)
-PYTHONPATH=deploy/keyspark python3 deploy/keyspark/hp_dragon_dual.py
-```
-
-Outputs default: `~/Videos/hp_dragon_parallel_q/` · timing sidecar `TIMING.txt`.
-
----
-
-## 7. Point Hermes / apps at ablit DS4
-
-```yaml
-# ~/.hermes/config.yaml (example)
-model:
-  base_url: http://10.100.10.2:8888/v1
-  # model id as served:
-  # deepseek-v4-flash-0731-ablit-l10-35-anchorstock
-```
-
-Restart Hermes gateway after change.
-
----
-
-## 8. Teardown / restart
-
-```bash
-bash deploy/keyspark/teardown.sh          # H3 then DS4
-bash deploy/keyspark/bringup.sh           # full dual-boot again
-SKIP_H3=1 bash deploy/keyspark/bringup.sh # DS4 only
-SKIP_DS4=1 bash deploy/keyspark/bringup.sh # H3 only (only if DS4 already up)
-```
-
----
-
-## 9. Failure playbook (agent checklist)
-
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| DS4 OOM / won't load | H3 started first | teardown H3; drop caches; bringup DS4 first |
-| Spectrum crash `time_shift_slope` | Comfy &lt; 0.30.1 | upgrade Comfy or `H3_SPECTRUM=0` |
-| H3 OOM mid-render | 2 jobs one node / util too high | one job/node; keep util 0.78 |
-| Bad Harry face | cheap scout locked FLF | `H3_QUALITY_ID=1` + optional `H3_I0_REF` |
-| Stock model name on API | wrong env | `STACK=ablit` bringup; check `.env.dspark` |
-| Worker missing image | docker only on head | `docker save \| ssh worker docker load` (bringup does this) |
-| util set &gt; 0.85 | policy violation | **stop and lower**; reduce max_model_len / max_num_seqs instead |
-
----
-
-## 10. Do not
-
-- Touch `.1` / 5482 for this dual-boot.
-- Raise `GPU_MEMORY_UTILIZATION` above **0.85**.
-- Run two full 5 s FLF graphs on the same Spark with DS4 loaded.
-- Skip DS4 health wait before H3.
-- Commit secrets, HF tokens, or raw multi‑GB weights into the repo.
-
----
-
-## 11. Speed expectations (see KEYSPARK_RESULTS.md)
-
-| Workload | Ballpark |
-|----------|----------|
-| DS4 stock idle C1 | ~89 tok/s |
-| DS4 stock + idle H3 C1 | ~84 tok/s |
-| DS4 ablit + H3 co-res peak decode | ~81–83 tok/s (≈ stock) |
-| DS4 C1 while **2× H3 rendering** | ~28 tok/s |
-| 10 s video sequential basic | ~11.3 min @ 832×480 |
-| 10 s video parallel enhanced | **~10.4 min @ 1728×960** |
-| 10 s sequential enhanced (est.) | ~14.2 min @ 1728×960 |
-
----
-
-## 12. Agent copy-paste block
+**Preferred when lab already has `~/h3-cotenancy` or will run `setup_h3_enhanced`.**
 
 ```bash
 set -euo pipefail
-REPO=https://github.com/drowzeys/keys-abliterated-heretic-Dual-Boot-DSV4F-Dspark0731-with-MiniMax-H3-concurrency-2.git
-test -d ~/ds4-h3-video-gen-factory || git clone "$REPO" ~/ds4-h3-video-gen-factory
-cd ~/ds4-h3-video-gen-factory
-git pull --ff-only || true
+
+### --- CONFIG (edit pair if needed) ---
+export HEAD="${HEAD:-10.100.10.2}"
+export WORKER="${WORKER:-10.100.10.3}"
+export HEAD_SSH="keyspark@${HEAD}"
+export WORKER_SSH="keyspark@${WORKER}"
+export RECIPE="${RECIPE:-$HOME/DeepSeek-v4-Flash-DSpark-2x-DGX-Spark-0731}"
+
+### --- CLONE / UPDATE POWER PACK ---
+PP="${POWER_PACK_DIR:-$HOME/keys-power-pack}"
+REPO_URL="https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git"
+if [[ ! -d "$PP/.git" ]]; then
+  git clone "$REPO_URL" "$PP"
+else
+  git -C "$PP" pull --ff-only || true
+fi
+cd "$PP"
+
+### --- DUAL-BOOT: DS4 ablit 888k@0.76 THEN dual heretic H3 ---
+export ENV_SRC="$PP/deploy/keyspark/env.ablit-cotenancy-888k-u076"
+# If using .1/.5 pair instead:
+# export ENV_SRC="$PP/deploy/keyspark/env.ablit-cotenancy-888k-u076-nodes-1-5"
+export STACK=ablit
+export ENHANCE_H3=1
 bash deploy/keyspark/bringup.sh
 bash deploy/keyspark/status.sh
-bash deploy/keyspark/run_quality_parallel.sh
-echo "DONE — check ~/Videos/hp_dragon_parallel_q/"
+
+### --- VERIFY DEFINITION OF DONE ---
+curl -sf "http://${HEAD}:8888/v1/models" | python3 -c '
+import sys,json
+d=json.load(sys.stdin); m=d["data"][0]
+assert "ablit" in m["id"], m
+assert m.get("max_model_len")==909312, m
+print("DS4_OK", m["id"], "ctx", m["max_model_len"])
+'
+for ip in "$HEAD" "$WORKER"; do
+  curl -sf "http://${ip}:8188/system_stats" >/dev/null && echo "H3_OK $ip"
+done
+# Spectrum audio-fix default
+for ip in "$HEAD" "$WORKER"; do
+  curl -sf "http://${ip}:8188/object_info/SpectrumApplyMiniMaxH3" | python3 -c '
+import sys,json
+j=json.load(sys.stdin); k=next(iter(j))
+bag=j[k]["input"].get("required",{})|j[k]["input"].get("optional",{})
+f=bag["offline_smoothing_replay"]
+d=f[1].get("default") if isinstance(f[1],dict) else None
+assert d is True, d
+print("SPECTRUM_AUDIO_FIX_OK", sys.argv[1])
+' "$ip"
+done
+
+### --- 2K PARALLEL QUALITY SAMPLE (master-K0 + ESRGAN×2) ---
+export H3_TURBO=0 H3_DUAL_TURBO=0
+bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
+# Optional realism LoRA (weights must exist on both nodes):
+# REALISM=1 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
+
+echo "DONE — DS4 ablit + dual H3 heretic + 2K parallel path exercised"
+echo "Credit Tony: https://github.com/tonyd2wild/ds4-h3-video-gen-factory"
 ```
+
+---
+
+## 4. ONE-SHOT alternate — Docker H3 from HF keys-2k package
+
+Use when you want **pinned Comfy+nodes** via container (weights still bind-mounted).
+
+```bash
+set -euo pipefail
+export HEAD="${HEAD:-10.100.10.2}" WORKER="${WORKER:-10.100.10.3}"
+export MODELS_DIR="${MODELS_DIR:-$HOME/keys-2k-minimax-h3-parallel/models}"
+
+# A) DS4 still from Power Pack bringup with SKIP_H3=1
+PP="${POWER_PACK_DIR:-$HOME/keys-power-pack}"
+cd "$PP"
+export ENV_SRC=$PP/deploy/keyspark/env.ablit-cotenancy-888k-u076 STACK=ablit
+SKIP_H3=1 bash deploy/keyspark/bringup.sh   # DS4 only until /v1/models OK
+
+# B) Pull keys-2k H3 package + image
+curl -fsSL https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks/raw/main/scripts/one_command_pull.sh | bash
+# or: git clone https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks
+K2K="${K2K_DIR:-$HOME/keys-2k-minimax-h3-parallel}"
+bash "$K2K/scripts/fetch_weights.sh"   # heretic TE + ESRGAN; place DiT/VAE if missing
+bash "$K2K/scripts/run_dual_h3.sh"     # H3 containers on HEAD + WORKER
+bash "$K2K/scripts/verify_h3_stack.sh" "$HEAD"
+bash "$K2K/scripts/verify_h3_stack.sh" "$WORKER"
+bash "$K2K/scripts/run_anime_2k_bench.sh"
+```
+
+If `docker pull ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:…` fails, use native path §3 (`setup_h3_enhanced` + `launch_h3_dual`) until the image is public on GHCR.
+
+---
+
+## 5. What agents must **not** do
+
+| Don’t | Why |
+|-------|-----|
+| Start H3 before DS4 | Co-tenancy OOM / DS4 never loads |
+| Raise util above **0.85** (or above **0.76** on this profile without asking) | Steals UMA from H3 / fleet hard cap |
+| Clone random Spectrum / Motion Context from GitHub main | Misses **v0.2.1** audio fix and pins |
+| Use Turbo for “quality” deliverables | Speed-only |
+| Two full FLF jobs on **one** Spark under DS4 | OOM / thrash |
+| Report success without `/v1/models` + both `:8188` OK | Incomplete |
+
+---
+
+## 6. Point Hermes / apps at live DS4
+
+```yaml
+# ~/.hermes/config.yaml
+model:
+  default: deepseek-v4-flash-0731-ablit-l10-35-anchorstock
+  base_url: http://<HEAD>:8888/v1   # e.g. 10.100.10.1 or .2
+  context_length: 909312
+```
+
+```bash
+sudo $(which hermes) gateway restart --system
+```
+
+---
+
+## 7. Teardown
+
+```bash
+cd "${POWER_PACK_DIR:-$HOME/keys-power-pack}"
+HEAD=… WORKER=… bash deploy/keyspark/teardown.sh   # H3 then DS4
+# Docker H3:
+# ssh $HEAD 'docker rm -f keys-2k-h3'
+# ssh $WORKER 'docker rm -f keys-2k-h3'
+```
+
+---
+
+## 8. Failure playbook
+
+| Symptom | Fix |
+|---------|-----|
+| DS4 won’t load | Stop all H3; drop caches; DS4 first |
+| Spectrum missing / audio stutter | Force Spectrum **0.2.1**, `offline_smoothing_replay=true` |
+| 720×1280 dies | Use **704×1280** (×32); then ESRGAN×2 |
+| Worker no docker image | `docker save \| ssh worker docker load` (bringup does Anemll) |
+| util > 0.85 | **Stop**; lower util or max_model_len |
+| Missing ablit / H3 weights | Fetch per HF package + ablit HF/lab paths; do not invent |
+
+---
+
+## 9. Docs map
+
+| Doc | Use |
+|-----|-----|
+| [H3_UPGRADES_2K.md](./H3_UPGRADES_2K.md) | 2K + A/V fixes + Contex-Loop |
+| [H3_QUALITY_STACK.md](./H3_QUALITY_STACK.md) | Full node checklist |
+| [PARALLEL_MASTER_K0.md](./PARALLEL_MASTER_K0.md) | Why parallel multishot |
+| [CREDITS.md](./CREDITS.md) | Tony first |
+| [../comfy/workflows/anime_2k_bench/](../comfy/workflows/anime_2k_bench/) | 2K sample workflow |
+
+---
+
+## 10. Honest scope for agents
+
+**Yes — if** the two Sparks have (or the agent installs) Anemll image, ablit weights, H3 DiT/TE/VAE/ESRGAN, fabric SSH, and follows DS4→H3 order, **one shot from this repo yields**:
+
+1. DSV4F DSpark **0731 abliterated** @ 888k / util 0.76  
+2. **Two** MiniMax-H3 **heretic** instances with upgrades + audio fix  
+3. Parallel master-K0 + **2K upscale** workflow ready  
+
+**No magic** without weights or without two free Sparks — agents must fetch/place assets and report any missing prerequisite instead of claiming success.

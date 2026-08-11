@@ -6,6 +6,43 @@ Full list: **[CONTRIBUTORS.md](CONTRIBUTORS.md)** · shout-out: **[docs/CREDITS.
 
 ---
 
+## 🤖 Agents / one-shot dual-boot
+
+**Point your agent at this GitHub repo** and tell it to follow:
+
+# → **[`docs/AGENT_ONESHOT_RECIPE.md`](docs/AGENT_ONESHOT_RECIPE.md)**
+
+That recipe is the **single source of truth** for:
+
+| Outcome | Detail |
+|---------|--------|
+| **DS4** | DSV4F DSpark **0731 abliterated** · 888k · util **0.76** · API `:8888` |
+| **H3 ×2** | Heretic TE · Spectrum **v0.2.1 audio fix** · Sage/Sol/FBC · Contex-Loop/MultiRef · co-tenant flags |
+| **Parallel + 2K** | master-K0 dual-Spark spans · native **704×1280** → ESRGAN×2 → ~**1408×2560** |
+
+| Resource | Link |
+|----------|------|
+| Agent one-shot | [docs/AGENT_ONESHOT_RECIPE.md](docs/AGENT_ONESHOT_RECIPE.md) |
+| **keys-2k H3 package (HF)** | https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks |
+| H3 upgrades / 2K | [docs/H3_UPGRADES_2K.md](docs/H3_UPGRADES_2K.md) |
+| Sample 2K workflow | [comfy/workflows/anime_2k_bench/](comfy/workflows/anime_2k_bench/) |
+| Docker image (pinned H3 stack) | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811` |
+
+```bash
+# Human/operator minimal (after weights + Anemll image exist on both Sparks)
+git clone https://github.com/drowzeys/keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed.git
+cd keys-DGX-Sparkticus-Utimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed
+export HEAD=10.100.10.2 WORKER=10.100.10.3   # or your pair
+export ENV_SRC=$PWD/deploy/keyspark/env.ablit-cotenancy-888k-u076 STACK=ablit
+bash deploy/keyspark/bringup.sh              # DS4 ablit first, then dual H3
+bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh   # parallel 2K path
+```
+
+**Yes:** with two Sparks, SSH, Anemll image, ablit + H3 weights in place, one agent run of `AGENT_ONESHOT_RECIPE.md` brings up **ablit DS4 + two heretic H3** with upgrades/fixes and the **2K parallel** workflow.  
+**No:** without weights or a free pair — agents must fetch assets and report gaps (see recipe §10).
+
+---
+
 ## ⭐ HUGE CREDIT — Tony made dual-serve possible
 
 > ### This Power Pack does **not** invent dual DGX Spark co-tenancy.
