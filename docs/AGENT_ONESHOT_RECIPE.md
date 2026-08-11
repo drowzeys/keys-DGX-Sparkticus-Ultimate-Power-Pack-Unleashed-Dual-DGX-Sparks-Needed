@@ -84,7 +84,8 @@ SSH passwordless as `keyspark` to both. Fabric NCCL NICs are in the env file (do
 5. **One heavy video job per Spark** under co-tenancy.  
 6. Spectrum **v0.2.1** with `offline_smoothing_replay=true` · `audio_blend_weight=0`.  
 7. **Turbo off** for quality (`H3_TURBO=0`).  
-8. Do **not** `git clone` “latest” Spectrum/Motion/Contex from main without the **manifest pins**.
+8. Do **not** `git clone` “latest” Spectrum/Motion/Contex from main without the **manifest pins**.  
+9. **Audio-bearing renders: CFG 5.0** (`CFGGuider` + `ConditioningZeroOut` negative — never `BasicGuider`). Guidance-free sampling produces fluent-gibberish speech on every ComfyUI H3 stack. See [H3_AUDIO_FIX_CFG5.md](./H3_AUDIO_FIX_CFG5.md).
 
 ---
 

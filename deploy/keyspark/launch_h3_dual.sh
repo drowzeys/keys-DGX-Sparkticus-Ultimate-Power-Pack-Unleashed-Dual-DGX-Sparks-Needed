@@ -38,7 +38,9 @@ export CUDA_HOME=\${CUDA_HOME:-/usr/local/cuda-13.0}
 cd /home/keyspark/h3-cotenancy/ComfyUI
 # Co-tenant with DS4 @ ~0.78 util: soft VRAM budget so H3 offloads before
 # eating the whole UMA pool (same defaults on HEAD and WORKER).
-exec .venv/bin/python main.py \\
+# choom +800: under memory pressure the kernel/earlyoom kills this render
+# process first, never the co-tenant DS4 serve.
+exec choom -n 800 -- .venv/bin/python main.py \\
   --listen 0.0.0.0 --port 8188 \\
   --disable-pinned-memory \\
   --reserve-vram ${H3_RESERVE_VRAM} \\

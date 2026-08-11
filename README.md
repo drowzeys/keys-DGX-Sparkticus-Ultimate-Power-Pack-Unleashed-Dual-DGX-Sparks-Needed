@@ -25,6 +25,7 @@ That recipe is the **single source of truth** for:
 | Agent one-shot | [docs/AGENT_ONESHOT_RECIPE.md](docs/AGENT_ONESHOT_RECIPE.md) |
 | **keys-2k H3 package (HF)** | https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks |
 | H3 upgrades / 2K | [docs/H3_UPGRADES_2K.md](docs/H3_UPGRADES_2K.md) |
+| **H3 speech audio fix (CFG 5)** | [docs/H3_AUDIO_FIX_CFG5.md](docs/H3_AUDIO_FIX_CFG5.md) |
 | Sample 2K workflow | [comfy/workflows/anime_2k_bench/](comfy/workflows/anime_2k_bench/) |
 | Docker image (pinned H3 stack) | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811` |
 
