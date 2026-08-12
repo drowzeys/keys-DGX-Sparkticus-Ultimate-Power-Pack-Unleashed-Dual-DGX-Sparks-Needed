@@ -76,6 +76,8 @@ The song-muxed final (`*_final_song.mp4`) is guaranteed:
 | Gibberish/babble audio | `h3-weld.py` `submit()` auto-converts BasicGuider → CFGGuider 5.0 + ConditioningZeroOut ([H3_AUDIO_FIX_CFG5.md](./H3_AUDIO_FIX_CFG5.md)); `H3_CFG=1` restores guidance-free |
 | Speech/onset roughness on a take | per-seed realization — re-roll the seed ([H3_AUDIO_FIX_CFG5.md](./H3_AUDIO_FIX_CFG5.md)) |
 | ref2va + EasyCache | leave EasyCache OFF for R2V (launch script default) |
+| Keyframes render as 2x2 collages / storyboard panels | your plan's GLOBAL style/lighting/identity fields must describe ONE scene — multi-world lighting text ("golden city; cold mansion; sunset beach") bakes a storyboard into every prompt, and the identity ref propagates it via master-parallel anchoring. Put per-scene lighting inside each keyframe/span prompt; add "ONE SINGLE CONTINUOUS SCENE... no split screen, no collage" to style; validate the identity image BEFORE burning render hours |
+| Waxy skin / teeth artifacts | include the realism LoRA trigger (`r34l1sm`) in style; direct "closed lips" smiles; use the full-strength realism merge for keyframes (stills) even if spans run 0.7 |
 
 ## Budgeting
 
