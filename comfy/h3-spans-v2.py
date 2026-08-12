@@ -364,6 +364,13 @@ def main():
                     errs.append(f"x2 span{i}: {e}")
                 return
 
+    def node_alive(node):
+        try:
+            W.api(node, "/system_stats", timeout=8)
+            return True
+        except Exception:
+            return False
+
     def worker(node):
         while True:
             with lock:
@@ -372,19 +379,29 @@ def main():
                 if idx["n"] >= len(spans):
                     break
                 i = idx["n"]; idx["n"] += 1
-            try:
-                L = spans[i].get("len", span_len)
-                wf = ref_span_clip(template, args, span_prompt(plan, spans[i], L), L,
-                                   seed + 100 + i, f"{runid}_span{i}",
-                                   kf_names[i], kf_names[i + 1], audio_names[i], span_unet)
-                dest = OUT / f"{runid}_span{i}.mp4"
-                W.wait_and_fetch(node, W.submit(node, wf), dest, timeout=7200, tag=f"span{i}")
-                with lock:
-                    results[i] = dest
-            except Exception as e:
-                with lock:
-                    errs.append(f"span{i}: {e}")
-                return
+            # co-tenant renders can be OOM-killed mid-span (the render process
+            # is the designated victim); bounded timeout + one retry + a
+            # liveness probe keep a single casualty from stalling the run
+            for attempt in (1, 2):
+                try:
+                    if not node_alive(node):
+                        raise RuntimeError(f"{node} not responding (ComfyUI down?)")
+                    L = spans[i].get("len", span_len)
+                    wf = ref_span_clip(template, args, span_prompt(plan, spans[i], L), L,
+                                       seed + 100 + i, f"{runid}_span{i}",
+                                       kf_names[i], kf_names[i + 1], audio_names[i], span_unet)
+                    dest = OUT / f"{runid}_span{i}.mp4"
+                    W.wait_and_fetch(node, W.submit(node, wf), dest, timeout=2400, tag=f"span{i}")
+                    with lock:
+                        results[i] = dest
+                    break
+                except Exception as e:
+                    print(f"  [span{i}] attempt {attempt} failed on {node}: {e}", flush=True)
+                    if attempt == 2:
+                        with lock:
+                            errs.append(f"span{i}: {e}")
+                        return
+                    time.sleep(30)
         if upscale:
             upscale_worker(node)
 
