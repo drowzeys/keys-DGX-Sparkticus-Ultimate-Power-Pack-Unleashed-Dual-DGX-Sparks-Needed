@@ -1,12 +1,12 @@
 {
- "_readme": "h3-spans-v2 music-video plan. len(spans) must equal ceil(song_duration / (span_len/24)); len(keyframes) = len(spans)+1. Ship your own song path.",
+ "_readme": "h3-spans-v2 music-video plan. RULES: len(spans) == ceil(song_seconds/(span_len/24)); keyframes = spans+1. GLOBAL fields (style/lighting/identity) must describe ONE scene/look \u2014 multi-scene text here bakes storyboard collages into every prompt (see docs/H3_MUSIC_VIDEO_V2.md gotchas). Put per-scene lighting inside each keyframe/span prompt. Validate the identity image before letting the run proceed.",
  "song": "/home/keyspark/Music/your_song.mp3",
  "unet": "minimax_h3_ref2va_realism070_int8_convrot_localmerge.safetensors",
- "kf_unet": "minimax_h3_fl2va_realism070_int8_convrot_localmerge.safetensors",
- "identity_prompt": "your recurring performer/protagonist description",
- "style": "Photorealistic live-action cinema, 35mm film grain, natural anamorphic lens, 24fps, 180 degree shutter, elegant music-video cinematography. No cartoon, no text, no subtitles, no watermark.",
- "lighting": "your world's lighting",
- "tone": "your emotional arc",
+ "kf_unet": "minimax_h3_fl2va_realism_int8_convrot_localmerge.safetensors",
+ "identity_prompt": "your recurring performer(s), ONE location, ONE moment \u2014 be explicit about age, ethnicity, hair, eyes, wardrobe; direct 'smiling softly with closed lips' to avoid teeth artifacts. Example: a young couple standing side by side on a quiet evening campus path under one warm streetlamp ...",
+ "style": "r34l1sm Photorealistic live-action cinema, 35mm film grain, natural anamorphic lens, 24fps, 180 degree shutter, elegant music-video cinematography. ONE SINGLE CONTINUOUS SCENE in one location, one camera. NATURAL SKIN TEXTURE with visible pores, real human skin, no waxy or plastic or CGI look. No cartoon, no split screen, no collage, no storyboard panels, no text, no signs, no posters, no logos, no subtitles, no watermark.",
+ "lighting": "natural motivated lighting true to the location and time of day, gentle filmic color grade",
+ "tone": "your emotional arc in one coherent register",
  "audio_bed": "one-line description of the song (genre, tempo, mood)",
  "width": 1280,
  "height": 704,
@@ -15,13 +15,13 @@
  "seed": 12345,
  "keyframes": [
   {
-   "prompt": "opening composition"
+   "prompt": "opening composition \u2014 include this scene's own lighting here, e.g. 'golden afternoon light'"
   },
   {
-   "prompt": "second composition"
+   "prompt": "second composition \u2014 its own lighting"
   },
   {
-   "prompt": "closing composition"
+   "prompt": "closing composition \u2014 its own lighting"
   }
  ],
  "spans": [
