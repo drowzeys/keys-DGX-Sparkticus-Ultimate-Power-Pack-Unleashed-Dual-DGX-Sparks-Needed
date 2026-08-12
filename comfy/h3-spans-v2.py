@@ -373,9 +373,18 @@ def main():
         cur = merged
     Path(cur).replace(gen_out)
 
+    # Song cut: NO dedup-frame drop — each span must start exactly at
+    # i*(span_len/fps) so visuals stay frame-locked to the real track for the
+    # whole song (dropping the duplicate boundary frame would slide the video
+    # ~1 frame earlier per cut, ~1.4s of beat-drift by the end). The doubled
+    # keyframe instant at each hard cut is an imperceptible 2-frame hold.
     song_out = OUT / f"{runid}_final_song.mp4"
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(gen_out), "-i", str(song),
-                    "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "256k",
+    concat_list = OUT / f"{runid}_concat.txt"
+    concat_list.write_text("".join(f"file '{results[i]}'\n" for i in range(len(spans))))
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+                    "-i", str(concat_list), "-i", str(song),
+                    "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-crf", "16",
+                    "-c:a", "aac", "-b:a", "256k",
                     "-af", "afade=t=out:st={:.2f}:d=1.5".format(max(dur - 1.5, 0)),
                     "-shortest", str(song_out)], check=True)
 
