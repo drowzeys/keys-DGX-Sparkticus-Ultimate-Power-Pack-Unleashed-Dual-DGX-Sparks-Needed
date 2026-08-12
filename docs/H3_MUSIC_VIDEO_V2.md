@@ -49,6 +49,23 @@ python3 comfy/h3-spans-v2.py --plan my_song_plan.json \
   --nodes 10.100.10.1:8188,10.100.10.5:8188 --outdir ~/Videos/my_mv
 ```
 
+## Audio guarantees (the point of v2)
+
+The song-muxed final (`*_final_song.mp4`) is guaranteed:
+
+1. **Zero audio seams, structurally.** The soundtrack is the ORIGINAL track laid over
+   the full timeline as one continuous stream. Generated audio never enters the final
+   mix — there is nothing to seam. (Any span-boundary audio texture you hear in
+   `*_final_gen.mp4` is the generated-audio REFERENCE cut, kept for comparison only —
+   it is not the deliverable.)
+2. **Zero beat drift.** The song cut concatenates spans WITHOUT dropping the duplicate
+   boundary frame, so span *i* starts exactly at `i x (span_len/fps)` — frame-locked to
+   its slice of the track for the entire song. (v1-style dedup would slide visuals one
+   frame earlier per cut: ~1.4 s of cumulative drift on a 3-minute song. The doubled
+   keyframe instant at each hard cut is an imperceptible 2-frame hold.)
+3. **One clean encode.** The source track is encoded once to 256k AAC at mux; no other
+   audio processing touches it.
+
 ## Mistakes this build already made for you
 
 | Gotcha | The fix (already in the shipped scripts) |
