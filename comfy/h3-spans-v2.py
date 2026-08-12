@@ -238,8 +238,15 @@ def main():
 
     kf_names = [None] * len(kfs)
     if a.reuse_kf_glob:
-        import glob
-        pngs = sorted(glob.glob(str(Path(a.reuse_kf_glob).expanduser())))
+        import glob, re
+
+        def kf_index(p):
+            m = re.search(r"kf(\d+)\.png$", p)
+            return int(m.group(1)) if m else 10**9
+
+        # numeric sort: lexicographic ordering scrambles kf10 before kf2 for
+        # unpadded names, silently mismapping every keyframe past index 9
+        pngs = sorted(glob.glob(str(Path(a.reuse_kf_glob).expanduser())), key=kf_index)
         if len(pngs) != len(kfs):
             sys.exit(f"--reuse-kf-glob matched {len(pngs)} but plan has {len(kfs)} keyframes")
         for i, p in enumerate(pngs):
