@@ -57,8 +57,12 @@ def probe_duration(path):
 
 def kf_prompt(plan, kf):
     import h3_prompt_guide as PG
+    # kf_style: keyframes are scene-establishing stills — texture-macro bait
+    # ("film grain", "visible pores") in the style can collapse them into
+    # abstract close-ups, so plans may supply a de-baited wide-framing style
+    # for keyframes while spans keep the full texture language.
     return PG.kf_t2va_or_i2va(
-        style=plan["style"], lighting=plan["lighting"], tone=plan["tone"],
+        style=plan.get("kf_style", plan["style"]), lighting=plan["lighting"], tone=plan["tone"],
         kf_prompt=kf["prompt"],
         audio_bed=plan.get("audio_bed", "Music video ambience."),
         has_first_frame=False)
@@ -140,7 +144,14 @@ def main():
     ap.add_argument("--no-upscale", action="store_true", help="skip the default async ESRGAN x2")
     ap.add_argument("--upscale-model", default="RealESRGAN_x2plus.pth")
     ap.add_argument("--te", choices=list(W.TE_FILES), default="keep")
-    ap.add_argument("--kf-mode", choices=["master-parallel", "chain", "rooted"], default="master-parallel")
+    ap.add_argument("--kf-mode", choices=["master-parallel", "chain", "rooted", "independent"],
+                    default="independent",
+                    help="independent (default): every keyframe is a pure text-to-video still from its own "
+                         "prompt — REQUIRED for multi-location story plans, where anchoring on a master "
+                         "frame makes scene-jumping keyframes wander into macro/wrong-scene shots. Keep "
+                         "cast consistency by embedding the full character description in every keyframe "
+                         "prompt. master-parallel/chain/rooted anchor keyframes as in v1 (fine for "
+                         "single-world plans).")
     ap.add_argument("--nodes", default="10.100.10.1:8188,10.100.10.5:8188")
     ap.add_argument("--outdir", default=str(Path.home() / "Videos" / "h3_spans_v2"))
     ap.add_argument("--blend-frames", type=int, default=3)
@@ -237,6 +248,30 @@ def main():
                 W.upload_image(n, Path(p), name)
             kf_names[i] = name
         print(f"[plan] reusing {len(pngs)} keyframes", flush=True)
+    elif a.kf_mode == "independent":
+        print(f"[plan] generating {len(kfs)} independent keyframes in parallel...", flush=True)
+        kerrs, kidx, klock = [], {"n": 0}, threading.Lock()
+
+        def kf_worker_ind(node):
+            while True:
+                with klock:
+                    if kerrs or kidx["n"] >= len(kfs):
+                        return
+                    i = kidx["n"]; kidx["n"] += 1
+                try:
+                    nm = gen_keyframe(node, i, None)
+                    with klock:
+                        kf_names[i] = nm
+                    print(f"  kf{i} planned", flush=True)
+                except Exception as e:
+                    with klock:
+                        kerrs.append(f"kf{i}: {e}")
+                    return
+
+        kts = [threading.Thread(target=kf_worker_ind, args=(n,)) for n in nodes]
+        [t.start() for t in kts]; [t.join() for t in kts]
+        if kerrs:
+            sys.exit("KEYFRAME PLAN FAILED:\n  " + "\n  ".join(kerrs))
     else:
         kf_names[0] = gen_keyframe(node0, 0, identity_name)
         print(f"[plan] kf0 planned (master); generating {len(kfs)-1} more (mode={a.kf_mode})...", flush=True)
