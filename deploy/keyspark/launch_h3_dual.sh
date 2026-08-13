@@ -21,8 +21,13 @@ DS4_HEALTH="${DS4_HEALTH:-http://${HEAD}:8888/v1/models}"
 H3_RESERVE_VRAM="${H3_RESERVE_VRAM:-48}"
 H3_VRAM_HEADROOM="${H3_VRAM_HEADROOM:-10}"
 
-if ! curl -sf -m 5 "$DS4_HEALTH" >/dev/null 2>&1; then
-  echo "WARNING: DS4 not healthy at $DS4_HEALTH — start DS4 FIRST."
+if [ "${FARM_MODE:-0}" = "1" ]; then
+  echo "FARM MODE: DS4 intentionally down — H3 gets the whole node (bf16-resident renders)."
+  # Full-precision models resident: no need to reserve for a co-tenant.
+  H3_RESERVE_VRAM="${H3_RESERVE_VRAM_FARM:-8}"
+  H3_VRAM_HEADROOM="${H3_VRAM_HEADROOM_FARM:-10}"
+elif ! curl -sf -m 5 "$DS4_HEALTH" >/dev/null 2>&1; then
+  echo "WARNING: DS4 not healthy at $DS4_HEALTH — start DS4 FIRST (or FARM_MODE=1 for render-farm use)."
   [ "${SKIP_CHECK:-0}" = "1" ] || exit 1
 fi
 

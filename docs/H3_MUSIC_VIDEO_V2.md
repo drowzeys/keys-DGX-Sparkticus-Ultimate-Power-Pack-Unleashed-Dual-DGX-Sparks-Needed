@@ -49,6 +49,29 @@ python3 comfy/h3-spans-v2.py --plan my_song_plan.json \
   --nodes 10.100.10.1:8188,10.100.10.5:8188 --outdir ~/Videos/my_mv
 ```
 
+## THE SEALED PRODUCTION CONFIG (ear/eye-verified 2026-08-13)
+
+```
+DiT:        minimax_h3_fl2va_pruned_bf16.safetensors  (keyframes AND spans — bf16 both)
+TE:         qwen3vl_32b_minimax_h3_int8_convrot.safetensors
+Graph:      full speed stack ON (Sol-Attn / FBC) — measured visually neutral
+Guidance:   H3_CFG=1 for mux-audio content (CFG 5 only when generated speech matters)
+Topology:   render-farm mode — bash deploy/keyspark/farm-mode.sh enter|exit
+Cost:       232 s per 158-frame span @864x480 on a solo GB10 (~4x faster than M3 Ultra
+            at matched quality); first full production: 30s film in 35 min incl. QC
+```
+
+Prompting doctrine that shipped it:
+- LLM prompt-ENHANCEMENT (co-resident DS4 as prompt-brain) is for atmosphere; critical
+  BLOCKING (body positions, which ear, hands-on-keys) must be RAW, action-first, and
+  capitalized — enhancement buries stage direction. Pre-bake enhanced prompts BEFORE
+  entering farm mode (the prompt-brain goes down with DS4).
+- Anchored in-scene keyframes resist pose changes (anchor gravity): generate
+  pose-change keyframes UNANCHORED with the scene described in full.
+- Perceptual audio: for story beats about hearing, mix the master itself (e.g. lowpass
+  + volume for deafness, acrossfade bloom at the reveal frame) and feed the SAME mix
+  as the span audio refs — the model acts to the sound arc it hears.
+
 ## Audio guarantees (the point of v2)
 
 The song-muxed final (`*_final_song.mp4`) is guaranteed:

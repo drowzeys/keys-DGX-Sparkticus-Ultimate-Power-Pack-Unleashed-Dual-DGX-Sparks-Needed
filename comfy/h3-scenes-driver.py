@@ -15,11 +15,11 @@ v2 = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(v2)
 W = v2.W
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--plan", default="/home/keyspark/comfy/your_scene_plan.json")
+ap.add_argument("--plan", default="/home/keyspark/comfy/hesitation_slow_plan.json")
 ap.add_argument("--phase", required=True, choices=["kf", "spans", "assemble"])
 ap.add_argument("--runid", help="required for spans/assemble (the kf phase prints one)")
 ap.add_argument("--nodes", default="10.100.10.1:8188,10.100.10.5:8188")
-ap.add_argument("--outdir", default=str(Path.home() / "Videos" / "h3_scenes"))
+ap.add_argument("--outdir", default=str(Path.home() / "Videos" / "hesitation_slow"))
 a = ap.parse_args()
 
 plan = json.loads(Path(a.plan).read_text())
@@ -42,14 +42,52 @@ def node_alive(node):
         return False
 
 
-def kf_template():
-    t = json.loads(json.dumps(template))
-    t[W.cid(t, "UNETLoader")]["inputs"]["unet_name"] = plan["kf_unet"]
+DS4 = "http://10.100.10.1:8888/v1/chat/completions"
+DS4_MODEL = "deepseek-v4-flash-0731-ablit-l10-35-anchorstock"
+ENH_SYS = ("You are a cinematographer writing generation prompts for the MiniMax-H3 video model. "
+           "Rewrite the user's shot description into ONE richer paragraph (70-110 words) obeying ALL rules: "
+           "photorealistic live-action romantic drama; ONE single continuous scene, one location, one camera; "
+           "slow unhurried camera and natural human movement; sharp in-focus natural faces, real skin; "
+           "no split screen, no collage, no text or signage anywhere; keep every stated character detail "
+           "(hair, eyes, wardrobe) EXACTLY as given and do not invent clothing; keep the stated camera move; "
+           "add concrete sensory detail that strengthens the same moment. Output ONLY the rewritten prompt.")
+
+def enhance(text):
+    """DSV4F prompt enrichment; falls back to the original text on any failure."""
+    import urllib.request
+    try:
+        body = json.dumps({"model": DS4_MODEL,
+                           "messages": [{"role": "system", "content": ENH_SYS},
+                                        {"role": "user", "content": text}],
+                           "max_tokens": 320, "temperature": 0.4}).encode()
+        req = urllib.request.Request(DS4, data=body, headers={"Content-Type": "application/json"})
+        r = json.loads(urllib.request.urlopen(req, timeout=180).read())
+        out = r["choices"][0]["message"]["content"].strip()
+        return out if len(out) > 40 else text
+    except Exception as e:
+        print(f"  [enhance] fallback ({e})", flush=True)
+        return text
+
+
+def apply_te(t):
+    te = plan.get("te_file")
+    if te:
+        t[W.cid(t, "CLIPLoader")]["inputs"]["clip_name"] = te
     return t
 
 
+def kf_template():
+    t = json.loads(json.dumps(template))
+    t[W.cid(t, "UNETLoader")]["inputs"]["unet_name"] = plan["kf_unet"]
+    return apply_te(t)
+
+
 def gen_kf(node, runid, i, first_name):
-    kfp = {"prompt": plan["keyframes"][i]["prompt"]}
+    base = plan["keyframes"][i]["prompt"]
+    if plan.get("enhance"):
+        cast = plan.get("cast_block", "")
+        base = enhance((cast + " SHOT: " + base) if cast else base)
+    kfp = {"prompt": base}
     prompt = v2.kf_prompt(plan, kfp)
     wf = W.base_clip(kf_template(), args, prompt, plan["kf_frames"], seed + i,
                      f"{runid}_kf{i}", first=first_name)
@@ -126,8 +164,11 @@ if a.phase == "spans":
                 try:
                     if not node_alive(node):
                         raise RuntimeError(f"{node} down")
-                    prompt = v2.span_prompt(plan, plan["spans"][j], span_len)
-                    wf = v2.ref_span_clip(template, args, prompt, span_len, seed + 500 + j,
+                    sp = dict(plan["spans"][j])
+                    if plan.get("enhance"):
+                        sp["motion"] = enhance(sp["motion"])
+                    prompt = v2.span_prompt(plan, sp, span_len)
+                    wf = v2.ref_span_clip(apply_te(json.loads(json.dumps(template))), args, prompt, span_len, seed + 500 + j,
                                           f"{runid}_span{j}", f"slow_{runid}_kf{kf_a}.png",
                                           f"slow_{runid}_kf{kf_b}.png", f"slow_{runid}_a{j}.wav",
                                           plan["unet"])
