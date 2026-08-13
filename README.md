@@ -28,7 +28,7 @@ That recipe is the **single source of truth** for:
 | **H3 speech audio fix (CFG 5)** | [docs/H3_AUDIO_FIX_CFG5.md](docs/H3_AUDIO_FIX_CFG5.md) |
 | **Music video v2 (real song + parallel 2K)** | [docs/H3_MUSIC_VIDEO_V2.md](docs/H3_MUSIC_VIDEO_V2.md) |
 | Sample 2K workflow | [comfy/workflows/anime_2k_bench/](comfy/workflows/anime_2k_bench/) |
-| Docker image (pinned H3 stack) | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811` |
+| Docker image (pinned H3 stack) | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260813` |
 
 ```bash
 # Human/operator minimal (after weights + Anemll image exist on both Sparks)
@@ -280,7 +280,7 @@ See upstream factory license where applicable. Model weights are **not** redistr
 ---
 
 **Bottom line:** **Tony (tonyd2wild) made dual-serve DS4 + dual H3 on two DGX Sparks possible.**  
-This Power Pack is a keyspark specialization (ablit + heretic + parallel quality).  
+This Power Pack is a keyspark specialization (ablit + sealed bf16/stock-TE + farm-mode parallel quality).  
 ⭐ [tonyd2wild/ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory)
 
 ## Five-node parallel — **~1 hour of film per day is possible**

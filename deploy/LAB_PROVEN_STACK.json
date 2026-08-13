@@ -1,0 +1,68 @@
+{
+ "name": "LAB_PROVEN_STACK",
+ "verified": "2026-08-13",
+ "claim": "This exact dual-Spark stack (.1 head + .5 worker, GB10 121GB UMA each) ran multi-day continuous production - three full music-video productions (27-158-frame spans each), dozens of keyframe boards, repeated farm-mode enter/exit cycles - with ZERO unmanaged OOM events. Render kills under co-tenancy were absorbed by the victim system and auto-retried as designed.",
+ "host": {
+  "kernel": "6.17.0-1029-nvidia",
+  "nvidia_driver": "580.173.02",
+  "torch": "2.13.0+cu130",
+  "cuda": "13.0",
+  "comfyui": "0.31.1"
+ },
+ "custom_nodes": {
+  "ComfyUI-H3-Motion-Context": "15fc6a7",
+  "ComfyUI-H3-Motion-Context-MultiRef": "545a94c (+ pack patch: decoupled audio-timeline self-test)",
+  "ComfyUI-H3-Multishot": "81b97bb",
+  "ComfyUI-KJNodes": "b8b887c",
+  "ComfyUI-MiniMaxH3-Contex-Loop": "c8038c1",
+  "ComfyUI-MiniMax-H3-Turbo": "55fee86 (installed; OFF for quality deliverables)",
+  "ComfyUI-NKD-Preview-Tools": "ecdea91",
+  "ComfyUI_sol-attn_Blackwell": "de7ffe3",
+  "ComfyUI-SolAttn_triton": "82e6fdf",
+  "ComfyUI-Spectrum-MiniMax-H3": "dc6e1b3 (v0.2.1, offline_smoothing_replay=true)"
+ },
+ "models": {
+  "finals_dit": "minimax_h3_fl2va_pruned_bf16.safetensors (40.2 GB)",
+  "draft_dit": [
+   "minimax_h3_fl2va_pruned_int8_convrot",
+   "minimax_h3_ref2va_pruned_int8_convrot"
+  ],
+  "realism_merges_draft": [
+   "fl2va_realism_int8_convrot_localmerge (1.0)",
+   "fl2va_realism070_int8_convrot_localmerge",
+   "ref2va_realism070_int8_convrot_localmerge"
+  ],
+  "text_encoder": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors (27.1 GB, STOCK - heretic retired)"
+ },
+ "memory_config": {
+  "co_tenant": {
+   "reserve_vram": 48,
+   "vram_headroom": 10,
+   "disable_pinned_memory": true,
+   "ds4_gpu_memory_utilization": 0.76,
+   "ds4_context": "888k (909312)"
+  },
+  "farm_mode": {
+   "reserve_vram": 8,
+   "vram_headroom": 10,
+   "ds4": "paused"
+  },
+  "victim_system": {
+   "earlyoom": "active",
+   "comfyui_choom": 800,
+   "ds4_oom_score_adj": -600
+  },
+  "rules": [
+   "one heavy H3 job per Spark under co-tenancy",
+   "DS4-first / H3-last bringup order",
+   "farm-mode exit does full teardown -> DS4 -> H3 (mandatory ordering)",
+   "orchestrate from a third machine (zero memory cost on render nodes)"
+  ]
+ },
+ "throughput_measured": {
+  "farm_bf16_sol_cfg1": "232 s per 158f span @ 864x480 per node (2 nodes parallel)",
+  "cotenant_int8": "~8.8 min/span",
+  "solo_int8": "~5.2 min/span",
+  "mac_m3ultra_native": "~16.6 min/span (reference)"
+ }
+}

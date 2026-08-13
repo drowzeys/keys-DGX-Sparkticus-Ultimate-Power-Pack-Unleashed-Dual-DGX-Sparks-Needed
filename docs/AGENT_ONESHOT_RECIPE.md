@@ -18,13 +18,16 @@ When this recipe finishes successfully, the fleet has:
 | **DS4** | DSV4F DSpark **0731 abliterated** TP=2 · `deepseek-v4-flash-0731-ablit-l10-35-anchorstock` |
 | **Context** | **888k lucky** · `max_model_len=909312` |
 | **Util** | **`GPU_MEMORY_UTILIZATION=0.76`** (H3 headroom; hard cap **0.85**) |
-| **H3 ×2** | Heretic TE · Comfy **0.31.1** · Sage + Sol + Spectrum **v0.2.1 audio fix** · FBC · Motion/Contex-Loop/MultiRef · ESRGAN |
+| **H3 ×2** | **STOCK int8-convrot TE** (heretic RETIRED) · **bf16 DiT finals** · Comfy **0.31.1** · Sage + Sol + Spectrum **v0.2.1 audio fix** · FBC · Motion/Contex-Loop/MultiRef · ESRGAN · **CFG 1 (CFG 5 speech)** |
 | **Parallel** | Fleet concurrency **2** = one heavy job per Spark |
 | **2K path** | Native **704×1280** → ESRGAN×2 → ~**1408×2560** · master-K0 multishot |
+| **OOM protection** | earlyoom + `choom -n 800` ComfyUI victim + DS4 `-600` — README “OOM & FREEZES” + `deploy/MEMORY_BUDGET.md` (MANDATORY on render nodes) |
+| **Farm mode** | `deploy/keyspark/farm-mode.sh enter/exit` — dual-Spark bf16-resident parallel renders; exit restores DS4 in the mandatory teardown→DS4→H3 order |
+| **Proven stack** | Replicate `deploy/LAB_PROVEN_STACK.json` (multi-day zero-OOM .1/.5 lab deployment) |
 
 ```text
 Hermes / apps ──►  DS4 ablit OpenAI   HEAD:8888/v1
-video client  ──►  H3 heretic         HEAD:8188  ║  WORKER:8188
+video client  ──►  H3 (stock TE)      HEAD:8188  ║  WORKER:8188
                    arm A (parallel)              arm B
 ```
 
@@ -34,7 +37,7 @@ video client  ──►  H3 heretic         HEAD:8188  ║  WORKER:8188
 
 > Dual-serve DS4 + dual H3 on two DGX Sparks was made possible by **Tony (tonyd2wild)** —  
 > [ds4-h3-video-gen-factory](https://github.com/tonyd2wild/ds4-h3-video-gen-factory).  
-> This Power Pack adds ablit + heretic + 2K parallel quality on top.
+> This Power Pack adds ablit + sealed bf16/stock-TE + farm-mode parallel + 2K quality on top.
 
 ---
 
@@ -45,11 +48,12 @@ video client  ──►  H3 heretic         HEAD:8188  ║  WORKER:8188
 | **This Power Pack (bring-up + dual-boot)** | https://github.com/drowzeys/keys-DGX-Sparkticus-Ultimate-Power-Pack-Unleashed-Dual-DGX-Sparks-Needed |
 | **keys-2k H3 package (pinned stack + 2K workflows)** | https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks |
 | **H3 stack manifest** | HF `manifest/H3_STACK_MANIFEST.json` (also Power Pack `docs/H3_UPGRADES_2K.md`) |
-| **Docker image (when published)** | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260811` |
+| **Docker image (when published)** | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260813` |
 | **Tony dual-serve origin** | https://github.com/tonyd2wild/ds4-h3-video-gen-factory |
 | **DS4 Anemll runtime image** | `ghcr.io/anemll/dspark-vllm-gx10:0.1.1` |
 | **Ablit weights (example)** | https://huggingface.co/drowzeys/keys-DeepSeekV4-Flash-GA-0731-Dspark-Abliterated-32-32 (or lab path `dsv4f-0731-ablit-l10-35-anchorstock`) |
-| **Heretic TE** | https://huggingface.co/sakamakismile/Qwen3-VL-32B-Heretic-MiniMax-H3-NVFP4 |
+| **Stock TE (SEALED — heretic retired)** | `text_encoders/qwen3vl_32b_minimax_h3_int8_convrot.safetensors` from https://huggingface.co/Comfy-Org/MiniMax-H3 |
+| **bf16 finals DiT (SEALED)** | `diffusion_models/minimax_h3_fl2va_pruned_bf16.safetensors` (+ ref2va) from Comfy-Org/MiniMax-H3 |
 | **H3 weights packs** | https://huggingface.co/Comfy-Org/MiniMax-H3 · https://huggingface.co/Kijai/MiniMax-H3_comfy |
 
 **Do not** clone obsolete repo names (`keys-abliterated-heretic-…`) unless the user still has that local path — **this** GitHub URL is canonical.
@@ -99,7 +103,7 @@ SSH passwordless as `keyspark` to both. Fabric NCCL NICs are in the env file (do
 | Anemll image | `docker image inspect ghcr.io/anemll/dspark-vllm-gx10:0.1.1` on both nodes |
 | Ablit weights | `~/.cache/huggingface/dsv4f-0731-ablit-l10-35-anchorstock/` on **both** (or bind-mount same path) |
 | Stock 0731 | For bind-mount preflight (bringup checks stock visibility) |
-| H3 models | fl2va + ref2va int8, heretic TE, video+audio VAE, RealESRGAN_x2plus — see HF package `scripts/fetch_weights.sh` |
+| H3 models | fl2va + ref2va **bf16 (finals) AND int8 (draft)**, **stock int8-convrot TE**, video+audio VAE, RealESRGAN_x2plus — see HF package `scripts/fetch_weights.sh` |
 
 If H3 models are missing, agents must fetch/place them **before** declaring success (not optional for video).
 
@@ -129,7 +133,7 @@ else
 fi
 cd "$PP"
 
-### --- DUAL-BOOT: DS4 ablit 888k@0.76 THEN dual heretic H3 ---
+### --- DUAL-BOOT: DS4 ablit 888k@0.76 THEN dual H3 (stock TE) ---
 export ENV_SRC="$PP/deploy/keyspark/env.ablit-cotenancy-888k-u076"
 # If using .1/.5 pair instead:
 # export ENV_SRC="$PP/deploy/keyspark/env.ablit-cotenancy-888k-u076-nodes-1-5"
@@ -170,7 +174,7 @@ bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
 # REALISM=1 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
 # UPSCALE_MODE=inline bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh
 
-echo "DONE — DS4 ablit + dual H3 heretic + 2K parallel path exercised"
+echo "DONE — DS4 ablit + dual H3 (stock int8-convrot TE) + 2K parallel path exercised"
 echo "Credit Tony: https://github.com/tonyd2wild/ds4-h3-video-gen-factory"
 ```
 
@@ -195,7 +199,7 @@ SKIP_H3=1 bash deploy/keyspark/bringup.sh   # DS4 only until /v1/models OK
 curl -fsSL https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks/raw/main/scripts/one_command_pull.sh | bash
 # or: git clone https://huggingface.co/drowzeys/keys-2k-MiniMax-H3-Parallel-Two-DGX-Sparks
 K2K="${K2K_DIR:-$HOME/keys-2k-minimax-h3-parallel}"
-bash "$K2K/scripts/fetch_weights.sh"   # heretic TE + ESRGAN; place DiT/VAE if missing
+bash "$K2K/scripts/fetch_weights.sh"   # stock TE + bf16/int8 DiT + ESRGAN from Comfy-Org
 bash "$K2K/scripts/run_dual_h3.sh"     # H3 containers on HEAD + WORKER
 bash "$K2K/scripts/verify_h3_stack.sh" "$HEAD"
 bash "$K2K/scripts/verify_h3_stack.sh" "$WORKER"
@@ -277,7 +281,7 @@ HEAD=… WORKER=… bash deploy/keyspark/teardown.sh   # H3 then DS4
 **Yes — if** the two Sparks have (or the agent installs) Anemll image, ablit weights, H3 DiT/TE/VAE/ESRGAN, fabric SSH, and follows DS4→H3 order, **one shot from this repo yields**:
 
 1. DSV4F DSpark **0731 abliterated** @ 888k / util 0.76  
-2. **Two** MiniMax-H3 **heretic** instances with upgrades + audio fix  
+2. **Two** MiniMax-H3 instances (**stock int8-convrot TE**, bf16 finals) with upgrades + audio fix  
 3. Parallel master-K0 + **2K upscale** workflow ready  
 
 **No magic** without weights or without two free Sparks — agents must fetch/place assets and report any missing prerequisite instead of claiming success.
