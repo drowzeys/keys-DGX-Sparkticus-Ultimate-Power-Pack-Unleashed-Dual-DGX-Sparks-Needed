@@ -85,3 +85,18 @@ done
 Render-farm mode: for long productions, PAUSE the DS4 serve during the render window
 (`deploy/keyspark/teardown.sh` / bringup are two commands) — a freed pair renders at
 solo speed x2 nodes, roughly 3x the co-tenant throughput. Resume DS4 after.
+
+## Fidelity verdict (measured, 2026-08-13): int8-convrot is DRAFT tier only
+
+Five-config isolation on one span (same seed/prompts): the int8-convrot DiT is the
+dominant quality tax — posterized paint-banding and a stylized grade that neither
+speed patches, CFG, TE choice, nor anchors explain. A PURE bf16 pipeline (bf16
+keyframes AND bf16 spans, `minimax_h3_fl2va_pruned_bf16.safetensors`, ~40 GB) lands
+in the same quality family as native h3.c on a Mac — at 392 s/span (864x480/158f)
+on a solo GB10, i.e. ~30% over int8 and ~2.5x faster than an M3 Ultra.
+
+Production tiers:
+- DRAFT: int8-convrot + speed patches (fastest; visibly stylized)
+- FINALS: pure-bf16, node free of co-tenants (bf16 DiT 40G + int8 TE 27G resident)
+- Keyframes MUST also be bf16 — FLF spans inherit their anchors' look; int8
+  keyframes poison a bf16 span.
