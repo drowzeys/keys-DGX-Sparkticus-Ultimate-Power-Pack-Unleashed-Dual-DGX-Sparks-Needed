@@ -82,6 +82,17 @@ The song-muxed final (`*_final_song.mp4`) is guaranteed:
 | Keyframes render as 2x2 collages / storyboard panels | your plan's GLOBAL style/lighting/identity fields must describe ONE scene — multi-world lighting text ("golden city; cold mansion; sunset beach") bakes a storyboard into every prompt, and the identity ref propagates it via master-parallel anchoring. Put per-scene lighting inside each keyframe/span prompt; add "ONE SINGLE CONTINUOUS SCENE... no split screen, no collage" to style; validate the identity image BEFORE burning render hours |
 | Waxy skin / teeth artifacts | in SPAN prompts (people-subject shots): include the realism LoRA trigger (`r34l1sm`) and the realism merge; direct "closed lips" smiles everywhere. Do NOT apply the trigger/merge to establishing keyframes — see the multi-location row above; keyframes run the stock checkpoint with the de-baited `kf_style` |
 
+## Text encoder: use STOCK int8, not heretic, not 4-bit
+
+The heretic Qwen3-VL fine-tune's own creator advises against using it for H3, and
+4-bit TEs (nvfp4/awq) visibly cost face naturalness and prompt adherence. Use
+`qwen3vl_32b_minimax_h3_int8_convrot.safetensors` (27.1 GB, Comfy-Org stock) — in
+same-seed A/B it turns stylized/vacant faces photographic. It streams via partial
+loading under co-tenancy (TE runs once per graph, so the cost is seconds per span).
+Bonus pattern: use your co-resident LLM (e.g. the DS4 serve) as a zero-memory
+prompt-brain — rewrite each shot prompt against your style rules before encoding
+(see h3-scenes-driver's `enhance`/`cast_block` plan fields).
+
 ## Scene-based slow-cinema mode (recommended for narrative videos)
 
 For story videos, machine-gun montage (every span a new location) reads disjointed.
