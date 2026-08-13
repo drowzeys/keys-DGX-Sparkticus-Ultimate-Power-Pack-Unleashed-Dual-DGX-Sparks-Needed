@@ -17,8 +17,8 @@ That recipe is the **single source of truth** for:
 | Outcome | Detail |
 |---------|--------|
 | **DS4** | DSV4F DSpark **0731 abliterated** · 888k · util **0.76** · API `:8888` |
-| **H3 ×2** | Heretic TE · Spectrum **v0.2.1 audio fix** · Sage/Sol/FBC · Contex-Loop/MultiRef · co-tenant flags |
-| **Parallel + 2K** | master-K0 dual-Spark spans · native **704×1280** → ESRGAN×2 → ~**1408×2560** |
+| **H3 ×2** | **Stock int8-convrot TE** (heretic retired) · **bf16 DiT finals** · Sol-engine/FBC · **CFG-5 speech fix** · Contex-Loop/MultiRef · co-tenant flags |
+| **Parallel + 2K** | **farm-mode dual-Spark bf16 spans** · native **704×1280** → ESRGAN×2 → ~**1408×2560** |
 
 | Resource | Link |
 |----------|------|
@@ -40,8 +40,59 @@ bash deploy/keyspark/bringup.sh              # DS4 ablit first, then dual H3
 bash comfy/workflows/anime_2k_bench/run_anime_2k_bench.sh   # parallel 2K path
 ```
 
-**Yes:** with two Sparks, SSH, Anemll image, ablit + H3 weights in place, one agent run of `AGENT_ONESHOT_RECIPE.md` brings up **ablit DS4 + two heretic H3** with upgrades/fixes and the **2K parallel** workflow.  
+**Yes:** with two Sparks, SSH, Anemll image, ablit + H3 weights in place, one agent run of `AGENT_ONESHOT_RECIPE.md` brings up **ablit DS4 + two H3 (stock int8-convrot TE)** with upgrades/fixes and the **2K parallel** workflow.  
 **No:** without weights or a free pair — agents must fetch assets and report gaps (see recipe §10).
+
+---
+
+## 🔥 SEALED PRODUCTION CONFIG (2026-08-13) — read this before anything below
+
+The measured, shipping configuration after the full fidelity + audio isolation campaign:
+
+| Piece | Sealed value | Why |
+|-------|--------------|-----|
+| **Text encoder** | **STOCK `qwen3vl_32b_minimax_h3_int8_convrot`** | **Heretic TE retired** — Heretic's own author does not recommend heretic models for H3; stock int8 TE measured equal-or-better |
+| **DiT (finals)** | **`minimax_h3_fl2va_pruned_bf16` (~40 GB)** + Sol-engine/SolAttn + FBC, **CFG 1** | int8-convrot DiT is the dominant quality tax (posterized banding, stylized grade) — **draft tier only**. Pure-bf16 (keyframes AND spans) lands in native-h3.c/Mac quality at **232 s/span** (864×480/158f) |
+| **Speech clips** | **CFG 5** + zeroed negative (auto via `h3-weld` submit, `H3_CFG` env) | Guidance-free H3 speech babbles in ComfyUI — [H3_AUDIO_FIX_CFG5.md](docs/H3_AUDIO_FIX_CFG5.md) |
+| **Dual parallel processing** | **Farm mode**: `deploy/keyspark/farm-mode.sh enter` → both Sparks render **bf16-resident in parallel** (DS4 paused), `exit` restores DS4 in the only ordering that works | ~3× co-tenant throughput; the pair beats an M3 Ultra ~4× at matched quality — [H3_MUSIC_VIDEO_V2.md](docs/H3_MUSIC_VIDEO_V2.md) |
+| **OOM management** | **earlyoom** + ComfyUI under `choom -n 800` (designated victim) + DS4 procs at **−600** + soft VRAM budget (`--reserve-vram 48 --vram-headroom 10 --disable-pinned-memory`) | A spike kills one retryable span render, never the LLM serve — profiles + budget math in [deploy/MEMORY_BUDGET.md](deploy/MEMORY_BUDGET.md) |
+
+Keyframes must be bf16 too — FLF spans inherit their anchors' look; int8 keyframes poison a bf16 span.
+
+---
+
+## ⚠️ OOM & FREEZES — READ THIS FIRST if your Spark locks up
+
+Most reported failures with this stack are **not bugs — they are unified-memory budget violations.** A GB10 has **121 GB UMA shared by everything**: DS4's weights+KV, H3's models, and your desktop. The co-tenant profile budgets to within a few GB of that pool, so an unbudgeted browser or a second render **will** freeze the node. Our reference lab runs this stack **for days without a lockup** using exactly four rules:
+
+**1. Budget the node honestly** — every GB your system uses comes out of the serve:
+
+| Your head node runs | System reserve | Set `GPU_MEMORY_UTILIZATION` |
+|---|---|---|
+| Headless (lab default) | 5–8 GB | **0.76** |
+| Light desktop / few services | 10–15 GB | **0.72** |
+| Full desktop (GUI, browser) | 15–20 GB | **0.66–0.68** |
+
+Full math + all knobs: **[deploy/MEMORY_BUDGET.md](deploy/MEMORY_BUDGET.md)**. Never exceed 0.85 util. If KV won't fit, lower `MAX_MODEL_LEN` before raising util.
+
+**2. Install the victim system (once per render node)** — make the *render* die, never the serve, never the node:
+
+```bash
+sudo apt-get install -y earlyoom && sudo systemctl enable --now earlyoom
+# ComfyUI already launches under `choom -n 800` via launch_h3_dual.sh (preferred OOM victim)
+# optionally shield DS4 explicitly:
+for pid in $(docker top $(docker ps -q --filter name=vllm-dspark) -eo pid | tail -n +2); do
+  echo -600 | sudo tee /proc/$pid/oom_score_adj >/dev/null
+done
+```
+
+With this installed, an over-budget spike kills **one span render** (which the drivers auto-retry) instead of freezing the box or killing DSV4F. An occasional span kill on long renders is the system **working as designed**.
+
+**3. One heavy H3 job per Spark under co-tenancy. Always.** The second render is what freezes nodes.
+
+**4. Long productions → farm mode, not co-tenancy.** `farm-mode.sh enter` pauses DS4 and gives H3 the whole node (bf16-resident, no partial-load pressure, ~3× throughput); `farm-mode.sh exit` restores DS4 **in the required order** (full teardown → DS4 first → H3 last — restarting DS4 while H3 holds memory crashes vLLM's worker init every time).
+
+Bonus (biggest free win): **orchestrate from a third machine** — drivers, ffmpeg, contact sheets all talk to the render pair over HTTP and add zero memory cost where it hurts.
 
 ---
 
@@ -84,7 +135,8 @@ Keyspark dual-boot specialization only:
 | Add-on | Detail |
 |--------|--------|
 | **Ablit DSV4F 0731** | L10–35 λ3.5 `wo_b` anchorstock · ~**−2%** decode vs stock |
-| **Heretic H3 TE** | `H3/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors` |
+| **H3 TE: stock int8-convrot** | `qwen3vl_32b_minimax_h3_int8_convrot.safetensors` — **heretic TE retired** (author-discouraged for H3); historical heretic docs kept for reference |
+| **bf16 finals + farm mode** | `minimax_h3_fl2va_pruned_bf16` on both Sparks in parallel via `deploy/keyspark/farm-mode.sh` — see sealed config above |
 | **Quality H3 stack** | **Sage** → **NVIDIA Sol-engine / SolAttn + Triton** → **Spectrum v0.2.1 audio fix** → **FBC** → **Motion Context / Contex-Loop / MultiRef** → ESRGAN — [H3_QUALITY_STACK.md](docs/H3_QUALITY_STACK.md) |
 | **2K via upscale + parallel** | Native **704×1280** → ESRGAN×2 → ~**1408×2560**; master-K0 dual-Spark — [H3_UPGRADES_2K.md](docs/H3_UPGRADES_2K.md) · [anime_2k_bench](comfy/workflows/anime_2k_bench/) |
 | **Realism-People LoRA** (optional) | `h3-realism-people-t2v-i2v-r2v` · `REALISM=1` on anime bench |
@@ -110,7 +162,7 @@ Keyspark dual-boot specialization only:
 | GPU mem util | **0.76** | **Deliberately under Tony’s ~0.78 / fleet 0.85** so **H3 has room to shine** on the same two Sparks |
 | Env file | `deploy/keyspark/env.ablit-cotenancy-888k-u076` | `MAX_MODEL_LEN=909312` · `GPU_MEMORY_UTILIZATION=0.76` |
 
-**Do not “optimize” this back to 1M @ 0.85** on co-tenant boxes — that steals UMA from heretic H3 video and invites OOM.
+**Do not “optimize” this back to 1M @ 0.85** on co-tenant boxes — that steals UMA from H3 video and invites OOM (see the OOM section above).
 
 ```text
 # served API (head)
@@ -129,8 +181,8 @@ http://10.100.10.2:8888/v1
 | Nodes | `.2` head + `.3` worker only (never steal a 3rd for co-tenancy) |
 | **DSV4F DSpark 0731 abliterated** | L10–35 anchorstock, TP=2, API `:8888` |
 | **Context** | **888k lucky** (`max_model_len=909312`) |
-| **GPU mem util** | **0.76** — makes room for **heretic H3** to shine (fleet hard cap **0.85**) |
-| H3 | ComfyUI 0.31.1 · **heretic TE** · Sage + Sol-engine/SolAttn/Triton + Spectrum **audio fix** + FBC + Motion Context |
+| **GPU mem util** | **0.76** — makes room for **H3** to shine (fleet hard cap **0.85**) |
+| H3 | ComfyUI 0.31.1 · **stock int8-convrot TE** (heretic retired) · Sage + Sol-engine/SolAttn/Triton + Spectrum **audio fix** + FBC + Motion Context · **bf16 DiT for finals** |
 | Spectrum | **v0.2.1**, `offline_smoothing_replay=true` (**audio fix**) |
 | Turbo LoRA | **Off for quality** (dense 20-step path only) |
 | H3 soft VRAM | `--reserve-vram 48 --vram-headroom 10 --disable-pinned-memory` |
