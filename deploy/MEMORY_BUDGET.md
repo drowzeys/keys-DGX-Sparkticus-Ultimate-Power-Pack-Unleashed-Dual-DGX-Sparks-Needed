@@ -71,3 +71,17 @@ while true; do
   sleep 120
 done
 ```
+
+## Measured: the co-tenancy tax (same scene, same settings, 2026-08-12)
+
+158-frame span at 864x480, CFG 5, int8 TE, identical prompts:
+
+| Renderer | Per-span |
+|---|---|
+| GB10 solo (no DS4 co-tenant, everything resident) | **~5.2 min** |
+| GB10 under DS4 co-tenancy (partial-loading, reserve-vram 48) | ~8.8 min (+70%) |
+| Mac Studio M3 Ultra, native h3.c (serial, guidance-free) | ~16.6 min |
+
+Render-farm mode: for long productions, PAUSE the DS4 serve during the render window
+(`deploy/keyspark/teardown.sh` / bringup are two commands) — a freed pair renders at
+solo speed x2 nodes, roughly 3x the co-tenant throughput. Resume DS4 after.
