@@ -1,0 +1,160 @@
+{
+ "song": "/home/keyspark/Music/Hesitation.mp3",
+ "unet": "minimax_h3_fl2va_pruned_bf16.safetensors",
+ "te_file": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+ "width": 864,
+ "height": 480,
+ "kf_frames": 22,
+ "clip_duration": 10.0,
+ "seed": 61803,
+ "man": "the young man - early twenties American, tousled chestnut-brown hair, blue-grey eyes, light stubble, fair skin, worn light-blue denim jacket over a white tee",
+ "woman": "the young woman - early twenties Eastern European, long honey-blonde hair, green eyes, high cheekbones, fair freckled skin, elegant cream coat",
+ "style": "Photorealistic live-action cinema, elegant tender romantic-drama cinematography, real human skin, natural faces, sharp focus. CANDID observed moment: the subjects are absorbed in each other and their world and NEVER look at the camera. No cartoon, no split screen, no collage, no text, no watermark.",
+ "acts": {
+  "act1": {
+   "node": "NODE_A:8188",
+   "clips": [
+    {
+     "kf_first": "a1_meet",
+     "kf_last": "a1_walk",
+     "motion": "THEY MEET: on the golden campus path his armful of books slips and scatters; she stops and kneels to help him gather them; their eyes meet over the books and both smile; he helps her up and they begin walking together, talking easily."
+    },
+    {
+     "kf_last": "a1_lamp",
+     "motion": "They walk on together through the campus as the light turns amber, talking and laughing, her shoulder bumping his; the path flows past them; they slow to a stop beneath an old lamp post and he gently tucks a strand of hair behind her ear."
+    },
+    {
+     "kf_last": "a1_dancestart",
+     "motion": "By the lamp post at dusk he offers his hand with a playful bow; she laughs and takes it; they come face to face holding both hands, beginning to sway - the first steps of a dance under the trees."
+    },
+    {
+     "kf_last": "a1_dance",
+     "motion": "THEY DANCE on the campus path in the last golden light - he spins her, her cream coat flaring, both laughing, completely lost in each other, leaves drifting around them."
+    },
+    {
+     "kf_last": "a1_hall",
+     "motion": "THE WORLD CHANGES AROUND THEM WHILE THEY KEEP DANCING: the couple continue the same spinning dance without ever stopping as the golden campus dissolves into a grand cold dining hall under a crystal chandelier; at the far end her silver-haired father SHAKES HIS HEAD in stern disapproval at a long table where only he and her mother sit; the couple dance on, oblivious, then slowly notice the cold room around them."
+    },
+    {
+     "kf_last": "a1_seated",
+     "motion": "The dance dies under the parents' cold stares: the couple stop dancing, compose themselves, and take their seats side by side across the long table from her father and mother; stiff silence, untouched porcelain, the chandelier cold above."
+    },
+    {
+     "kf_last": "a1_argument",
+     "motion": "THE ARGUMENT IGNITES: the father speaks with contempt, gesturing at the young man's worn jacket; the mother's face twists in disgust; the young man's jaw tightens until HE SHOVES BACK HIS CHAIR AND STANDS IN ANGER, flinging his napkin onto the plate; the young woman reaches for his arm in alarm."
+    },
+    {
+     "kf_last": "a1_stormout",
+     "motion": "HE STORMS OUT: the young man strides away from the table toward the tall double doors, fists clenched, never looking back; the young woman rises from her chair reaching after him, calling; the parents remain seated, cold and unmoved, as the doors swing."
+    }
+   ]
+  },
+  "act2_him": {
+   "node": "NODE_A:8188",
+   "clips": [
+    {
+     "kf_first": "h_street",
+     "kf_last": "h_rooftop",
+     "motion": "ALONE: the young man walks a rainy night street with his hands jammed in his jacket pockets, head down, streetlights smearing in the wet; THE WORLD SHIFTS AROUND HIM as the street dissolves into a small city rooftop at night where he leans on the parapet alone, city lights blurred and distant."
+    },
+    {
+     "kf_last": "h_room",
+     "motion": "The rooftop night dissolves into his small dim student room: he lies on the narrow bed staring at the ceiling, one arm behind his head, restless; the desk lamp burns low over unopened books."
+    },
+    {
+     "kf_last": "h_campus",
+     "motion": "His room fades into the campus path - the same path where they met - but now grey and empty; he walks it alone, slowing at the old lamp post, touching it briefly, remembering; nobody else anywhere."
+    },
+    {
+     "kf_last": "h_decide",
+     "motion": "HE DECIDES: his eyes lift from the lamp post with sudden resolve; he pulls his jacket tight, turns, and strides away with purpose, jaw set, faster with every step - a man who has made up his mind."
+    }
+   ]
+  },
+  "act2_her": {
+   "node": "NODE_A:8188",
+   "clips": [
+    {
+     "kf_first": "w_bedroom",
+     "kf_last": "w_window",
+     "motion": "ALONE: the young woman sits on her bedroom floor against the foot of the bed among scattered printed photographs of the two of them, one warm lamp; she rises slowly and drifts to the tall window, pressing her palm to the cold glass, rain outside."
+    },
+    {
+     "kf_last": "w_dinner",
+     "motion": "Her bedroom dissolves into the long formal dining table: she sits alone with her silent parents, staring at her untouched plate, pushing food without eating; the chandelier cold; nobody speaks."
+    },
+    {
+     "kf_last": "w_photo",
+     "motion": "The dinner table fades back into her lamplit bedroom: she holds one printed photograph of the two of them with both hands, tracing his face with her thumb, quiet tears starting."
+    },
+    {
+     "kf_last": "w_decide",
+     "motion": "SHE DECIDES: she wipes her tears with the back of her hand, stands with sudden resolve, pulls a small leather travel bag from under the bed and begins packing - quick, certain movements, done hesitating."
+    }
+   ]
+  },
+  "act3": {
+   "node": "NODE_A:8188",
+   "clips": [
+    {
+     "kf_first": "r_market",
+     "kf_last": "r_run",
+     "motion": "THE REUNION: a waking morning market street in soft early light; he wanders in from the left among the stalls, she from the right; across the crowd their eyes find each other and both freeze - then her face breaks open and SHE RUNS to him."
+    },
+    {
+     "kf_last": "r_embrace",
+     "motion": "She crashes into his arms; the fierce embrace holds and holds among the stalls, her face buried in his shoulder, his hand in her hair, both laughing and crying at once; the market flows around them."
+    },
+    {
+     "kf_last": "r_map",
+     "motion": "THE RAIN IS OVER AND THE SUN BREAKS THROUGH: still holding her, he reaches into his jacket pocket and pulls out a folded paper map; he unfolds it between them and his finger traces to a far place on the coast; she leans over the map, laughs through her tears and nods yes."
+    },
+    {
+     "kf_last": "r_road",
+     "motion": "THE WORLD CHANGES AROUND THEM AS THEY GO: hand in hand they walk out of the market and the street dissolves around them into an open coastal road between dunes and beach grass, bags on their shoulders, the first glints of sea ahead, both grinning at each other."
+    },
+    {
+     "kf_last": "r_beach",
+     "motion": "The dunes open onto a vast empty beach at golden hour: they drop their bags, kick off their shoes, and walk barefoot down to the waterline hand in hand - no other people anywhere in the world."
+    },
+    {
+     "kf_last": "r_lace",
+     "motion": "They sit at the waterline as the sun lowers; her head tips onto his shoulder WITHOUT ANY HESITATION and her hand laces into his open hand on the warm sand between them, no pause; both faces ease into quiet joy."
+    },
+    {
+     "kf_last": "r_end",
+     "motion": "She turns and kisses him freely in the sunset glow; then foreheads together they sway gently with the waves as a very slow pullback leaves their two silhouettes leaning into one another at the far waterline, the sun melting into the sea, one bright star appearing - free, together, unbothered by the world."
+    }
+   ]
+  }
+ },
+ "keyframes": {
+  "a1_meet": "A golden evening college campus path lined with old trees: the young man kneeling gathering scattered books, the young woman kneeling opposite helping him, their eyes just meeting over the books, both beginning to smile, low warm sun through the leaves - he on the LEFT, she on the RIGHT.",
+  "a1_walk": "The same golden campus path: the couple walking side by side away down the path talking, her shoulder bumping his, book bags carried loosely, warm amber light - he on the LEFT, she on the RIGHT, neither facing the camera.",
+  "a1_lamp": "The same campus path at dusk beneath an old iron lamp post just glowing on: he gently tucks a strand of her honey-blonde hair behind her ear, both smiling softly at each other in profile - he on the LEFT, she on the RIGHT.",
+  "a1_dancestart": "The same campus path at dusk: the couple face to face holding both hands beginning to sway into a dance, her coat swaying, both laughing at each other, lamp glow and last sunlight - he on the LEFT, she on the RIGHT.",
+  "a1_dance": "The same golden campus path: the couple MID-DANCE at a frozen clean beat - he holding her hand high, she just finishing a turn, her cream coat flaring, BOTH FACES SHARP AND IN FOCUS, both laughing - he on the LEFT, she on the RIGHT.",
+  "a1_hall": "A VERY WIDE SHOT of a grand mansion dining hall under a crystal chandelier, cold elegant light, camera far back showing the whole room: the couple small-to-medium in the frame MID-DANCE on the open polished floor at the LEFT - he holding her hand high, she finishing a turn, full bodies visible - and at the RIGHT side of the hall one long formal table where EXACTLY TWO PEOPLE sit alone: her silver-haired father SHAKING HIS HEAD in disapproval and her mother in pearls watching coldly. The rest of the vast hall is EMPTY polished floor - no other guests, no servants, no crowd. Neither dancer looks at the camera.",
+  "a1_seated": "The SAME vast palace dining hall as before: tall windows with blue-teal and gold drapes, crystal chandelier, gleaming parquet floor, the hall EMPTY of everyone except the people described - no background tables, no other diners, no guests, no servants. A SIDE VIEW along the single long dining table: the young couple SEATED side by side on the near side - he nearer the camera, she beside him - and her silver-haired father and her mother in pearls SEATED opposite, EXACTLY FOUR PEOPLE, everyone in profile or three-quarter view, NOBODY facing the camera, stiff silence, untouched food on porcelain.",
+  "a1_argument": "The same dining table: THE YOUNG MAN ON HIS FEET IN ANGER, chair shoved back behind him, napkin flung down, face flushed, glaring across the table; the young woman beside him still seated, reaching for his arm in alarm; the father mid-gesture with a stern contemptuous face, the mother's face twisted in disgust - EXACTLY FOUR PEOPLE, no one else.",
+  "a1_stormout": "A WIDE SHOT from the far end of the vast palace dining hall (tall windows, blue-teal and gold drapes, crystal chandelier, gleaming parquet) - NOBODY NEAR THE CAMERA: the young man in his denim jacket mid-stride storming away from the dinner table toward tall double doors, back to camera, fists clenched; the young woman in her cream coat standing risen beside her chair reaching after him. AT THE TABLE SIT ONLY TWO ELDERLY PEOPLE AND NOBODY ELSE: her silver-haired father and her dark-haired mother in pearls. Every other chair is EMPTY. Four people total in the frame. Nobody looks at the camera.",
+  "h_street": "ONLY ONE PERSON: the young man ALONE walking a rainy night city street, hands jammed in the pockets of his denim jacket, head down, wet streetlights smearing behind him, rain in his hair. No other person anywhere in the frame, and he does not face the camera.",
+  "h_rooftop": "ONLY ONE PERSON: the young man ALONE on a small city rooftop at night, seen from the SIDE in STRICT PROFILE leaning on the parapet, his face turned fully away toward the blurred distant city lights, shoulders hunched against the wind. He does NOT face the camera at all - profile or back of head only. No other person anywhere.",
+  "h_room": "ONLY ONE PERSON: the young man ALONE lying on a narrow bed in a small dim student room, staring at the ceiling, one arm behind his head, a desk lamp burning low over unopened books, posters curling on the wall. No other person anywhere in the frame.",
+  "h_campus": "ONLY ONE PERSON: the young man ALONE on the campus path - grey overcast daylight, the path empty - standing by the old iron lamp post with one hand resting on it, head bowed, remembering. No other person anywhere in the frame.",
+  "h_decide": "ONLY ONE PERSON: the young man ALONE striding away down the grey campus path with sudden purpose, jacket pulled tight, jaw set with resolve, mid-stride, eyes forward. No other person anywhere in the frame, not facing the camera.",
+  "w_bedroom": "ONLY ONE PERSON: the young woman ALONE sitting on the floor of her grand bedroom against the foot of the bed among scattered printed photographs, one warm lamp, eyes down and sad. The young man appears ONLY inside the small printed photographs. No other person in the room.",
+  "w_window": "ONLY ONE PERSON: the young woman ALONE at the tall bedroom window at night, her palm pressed flat to the cold rain-streaked glass, her breath fogging it, face in profile, sad. No other person anywhere in the frame.",
+  "w_dinner": "The long formal dining table in cold chandelier light: the young woman seated staring down at an untouched plate, pushing food with a silver fork, and her silver-haired father and pearl-wearing mother seated silent and far - EXACTLY THREE PEOPLE, no one else, heavy silence.",
+  "w_photo": "ONLY ONE PERSON in the room: the young woman ALONE on her lamplit bedroom floor beside the upholstered cream bed, holding ONE printed photograph in both hands - and the photograph clearly shows THE YOUNG COUPLE TOGETHER LAUGHING, her and the chestnut-haired young man in his denim jacket, arms around each other. She traces the photo with her thumb, quiet tears on her cheeks. The young man exists ONLY inside the printed photo.",
+  "w_decide": "ONLY ONE PERSON: the young woman ALONE in THE SAME grand bedroom as before - upholstered cream headboard, the same warm bedside lamp, scattered photographs still on the floor - kneeling at an open small leather travel bag, packing folded clothes with quick certain movements, tears wiped, face set with resolve. No other person anywhere.",
+  "r_market": "A WIDE SHOT down a waking morning market street in soft early light, stalls and awnings on both sides, a thin crowd between: the young man SMALL on the FAR LEFT of the frame beside a stall and the young woman SMALL on the FAR RIGHT across the street - AT LEAST TWENTY METERS OF STREET AND CROWD BETWEEN THEM - both FROZEN mid-step, turned toward each other, recognition visible in their postures across the distance. They are NOT together, NOT close; wide separation. Nobody looks at the camera.",
+  "r_run": "The same market street: the young woman IN MID-RUN toward the young man, cream coat flying open, hair streaming, several steps still between them; he stands turned toward her with his arms beginning to open, surprise and joy breaking across his face - he on the LEFT, she arriving from the RIGHT.",
+  "r_embrace": "The same market street: the two locked in a fierce embrace among the stalls - HER FACE FULLY BURIED in his shoulder, hidden; HIS eyes CLOSED, his cheek pressed against her hair, his hand in her hair - both holding on hard, morning light warm around them. NEITHER FACE toward the camera: her face invisible, his eyes shut.",
+  "r_map": "THE SUN FULLY OUT over the drying market street: standing close together - he on the LEFT, she on the RIGHT - he holds a folded paper map unfolded between them, his finger on a spot on the coastline; she holds the map's other edge leaning into his shoulder, smiling through wet eyes.",
+  "r_road": "An open coastal road between grassy dunes in warm afternoon light: the couple walking away from camera hand in hand with travel bags on their shoulders, the first silver glints of sea ahead between the dunes - he on the LEFT, she on the RIGHT.",
+  "r_beach": "A vast empty beach at golden hour seen from FAR BEHIND: ONE couple only - the young man and young woman - small in the frame, walking away from camera barefoot toward the waterline hand in hand, their bags and shoes dropped in the foreground sand, gold light on the water. THEY APPEAR EXACTLY ONCE; no second couple, no other people anywhere, backs to camera.",
+  "r_lace": "The golden beach at the waterline, a SIDE VIEW in profile: the couple seated close on the sand facing the sea, her head resting on his shoulder, his open hand palm-up on the sand between them with her fair hand laced into it, waves beyond - he on the LEFT, she on the RIGHT.",
+  "r_end": "A very wide shot of the vast beach at last light: two tiny distant silhouettes at the far waterline leaning into one another as the sun melts into the sea, one bright star appearing in a rose and amber sky, no faces visible, no other people - the man on the LEFT, the woman on the RIGHT."
+ }
+}

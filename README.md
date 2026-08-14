@@ -27,6 +27,7 @@ That recipe is the **single source of truth** for:
 | H3 upgrades / 2K | [docs/H3_UPGRADES_2K.md](docs/H3_UPGRADES_2K.md) |
 | **H3 speech audio fix (CFG 5)** | [docs/H3_AUDIO_FIX_CFG5.md](docs/H3_AUDIO_FIX_CFG5.md) |
 | **Music video v2 (real song + parallel 2K)** | [docs/H3_MUSIC_VIDEO_V2.md](docs/H3_MUSIC_VIDEO_V2.md) |
+| **🆕 Infinite-Continuation v6 (continuous takes, world-morphs)** | [docs/H3_INFINITE_CONTINUATION_V6.md](docs/H3_INFINITE_CONTINUATION_V6.md) |
 | Sample 2K workflow | [comfy/workflows/anime_2k_bench/](comfy/workflows/anime_2k_bench/) |
 | Docker image (pinned H3 stack) | `ghcr.io/drowzeys/keys-2k-minimax-h3-parallel-two-dgx-sparks:0.31.1-pp20260813` |
 

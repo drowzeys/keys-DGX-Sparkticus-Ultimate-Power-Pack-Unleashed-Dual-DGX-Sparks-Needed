@@ -26,6 +26,7 @@ Do not present keyspark dual-boot as the original factory.
 - **OOM management is not optional**: earlyoom active, ComfyUI under `choom -n 800`, DS4 procs at `-600`, one heavy job per Spark — see README “OOM & FREEZES” + `deploy/MEMORY_BUDGET.md`  
 - **Replicate the proven lab stack, don't improvise**: exact node hashes, model files, memory flags, and measured throughput of the multi-day zero-OOM .1/.5 deployment are snapshotted in `deploy/LAB_PROVEN_STACK.json`  
 - Spectrum **v0.2.1** audio fix; **no Turbo** for quality  
+- **Continuation chains (v6 pipeline)**: one hook owner per ComfyUI process — Motion-Context packs disabled AND no `SolAttnPatch` graphs in a chain process; solo-cast prompts for solo chains; see `docs/H3_INFINITE_CONTINUATION_V6.md`  
 - Do not invent “latest” custom_node clones — use Power Pack setup or HF keys-2k pins (proven hashes in `deploy/LAB_PROVEN_STACK.json`)  
 
 ## Video pipeline (default) — master-K0 multishot + 2K upscale
