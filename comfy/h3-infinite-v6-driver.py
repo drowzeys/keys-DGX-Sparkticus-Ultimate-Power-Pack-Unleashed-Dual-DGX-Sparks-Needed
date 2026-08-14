@@ -203,6 +203,7 @@ if __name__ == "__main__":
     ap.add_argument("--act")
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--from", dest="start_from", type=int, default=0)
+    ap.add_argument("--kf-node")
     a = ap.parse_args()
     if a.phase == "kf":
         if a.kf_node:
